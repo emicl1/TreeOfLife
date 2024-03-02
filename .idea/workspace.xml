@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="281bfbe3-4a9c-4b6d-8cb3-61975c027df4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="281bfbe3-4a9c-4b6d-8cb3-61975c027df4" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,7 +13,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitLabMergeRequestsSettings"><![CDATA[{}]]></component>
+  <component name="GitLabMergeRequestsSettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "first": "git@gitlab.fel.cvut.cz:B232_B0B36PJV/michaal4.git",
+    "second": "ad05a026-060e-4544-92cc-b4474235f4c1"
+  }
+}]]></component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{}]]></component>
   <component name="KubernetesApiProvider"><![CDATA[{}]]></component>
   <component name="ProjectColorInfo"><![CDATA[{
@@ -32,8 +35,12 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
     "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.stylelint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "/home/alex/IdeaProjects/JavaProject/src/main/java/fel/Main.java",
     "vue.rearranger.settings.migration": "true"
@@ -43,6 +50,7 @@
     <attachedChunks>
       <set>
         <option value="bundled-js-predefined-1d06a55b98c1-db596990d856-JavaScript-IU-241.14024.14" />
+        <option value="jdk-21.0.2-openjdk-21.0.2-49964104c9db-5ed76ac7" />
       </set>
     </attachedChunks>
   </component>
@@ -54,9 +62,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1709379757098</updated>
-      <workItem from="1709379758188" duration="5000" />
+      <workItem from="1709379758188" duration="382000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
