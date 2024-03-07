@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="281bfbe3-4a9c-4b6d-8cb3-61975c027df4" name="Changes" comment="" />
+    <list default="true" id="281bfbe3-4a9c-4b6d-8cb3-61975c027df4" name="Changes" comment="first test">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,17 +16,47 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitLabMergeRequestsSettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "first": "git@gitlab.fel.cvut.cz:B232_B0B36PJV/michaal4.git",
-    "second": "ad05a026-060e-4544-92cc-b4474235f4c1"
+  <component name="GitLabMergeRequestFiltersHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPENED&quot;,
+      &quot;author&quot;: {
+        &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAuthorFilterValue&quot;,
+        &quot;username&quot;: &quot;michaal4&quot;,
+        &quot;fullname&quot;: &quot;Alex Olivier Michaud&quot;
+      },
+      &quot;assignee&quot;: {
+        &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,
+        &quot;username&quot;: &quot;michaal4&quot;,
+        &quot;fullname&quot;: &quot;Alex Olivier Michaud&quot;
+      }
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPENED&quot;,
+    &quot;author&quot;: {
+      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAuthorFilterValue&quot;,
+      &quot;username&quot;: &quot;michaal4&quot;,
+      &quot;fullname&quot;: &quot;Alex Olivier Michaud&quot;
+    },
+    &quot;assignee&quot;: {
+      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,
+      &quot;username&quot;: &quot;michaal4&quot;,
+      &quot;fullname&quot;: &quot;Alex Olivier Michaud&quot;
+    }
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+}</component>
+  <component name="GitLabMergeRequestsSettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;first&quot;: &quot;git@gitlab.fel.cvut.cz:B232_B0B36PJV/michaal4.git&quot;,
+    &quot;second&quot;: &quot;ad05a026-060e-4544-92cc-b4474235f4c1&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{}</component>
+  <component name="KubernetesApiProvider">{}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2d8BJv9e5gnhSvopcmNSLxywM6K" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -35,6 +68,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/alex/IdeaProjects/JavaProject",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.stylelint": "true",
     "node.js.detected.package.tslint": "true",
@@ -62,12 +96,46 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1709379757098</updated>
-      <workItem from="1709379758188" duration="382000" />
+      <workItem from="1709379758188" duration="649000" />
+      <workItem from="1709726347855" duration="11000" />
+      <workItem from="1709803066712" duration="521000" />
     </task>
+    <task id="LOCAL-00001" summary="first test">
+      <option name="closed" value="true" />
+      <created>1709380164243</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1709380164243</updated>
+    </task>
+    <task id="LOCAL-00002" summary="first test">
+      <option name="closed" value="true" />
+      <created>1709380174282</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1709380174282</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first test" />
+    <option name="LAST_COMMIT_MESSAGE" value="first test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
