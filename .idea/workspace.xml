@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281bfbe3-4a9c-4b6d-8cb3-61975c027df4" name="Changes" comment="first test">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/key" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/key.pub" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,13 +59,16 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2d8BJv9e5gnhSvopcmNSLxywM6K" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
@@ -98,7 +102,7 @@
       <updated>1709379757098</updated>
       <workItem from="1709379758188" duration="649000" />
       <workItem from="1709726347855" duration="11000" />
-      <workItem from="1709803066712" duration="521000" />
+      <workItem from="1709803066712" duration="1987000" />
     </task>
     <task id="LOCAL-00001" summary="first test">
       <option name="closed" value="true" />
@@ -116,7 +120,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709380174282</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="first test">
+      <option name="closed" value="true" />
+      <created>1709804467459</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1709804467459</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -134,6 +146,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="first test" />
     <option name="LAST_COMMIT_MESSAGE" value="first test" />
   </component>
