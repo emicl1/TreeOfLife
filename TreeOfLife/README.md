@@ -48,19 +48,39 @@ platformy a propasti.
 
 **Seznam NPCs**: Sova, Bytosti lesa, Vlk, Komáři, Brouci,
 
-### Ovládání a herní mechaniky:
-Hlavní postava: pohyb WSAD, útok myš levý tlačítko, skákání mezerník. Inventář E, spojení pomocí „crafting table“
-v pravo v inventáři. Mapa lesa Q.
+### Uživatelská příručka:
+Po spuštění hry se zobrazí menu, kde je možnost začít novou hru, načíst starou hru, nebo hru ukončit.
+Po začátku nové hry se zobrazí úvodní scéna, kde se hráč seznámí s příběhem hry.
+Hra se ovládá pomocí klávesnice a myši, pohyb postavy je pomocí kláves WSAD, skákání mezerník, útok myš levé tlačítko.
+Zobrazení mapy pomocí klávesy M a inventář pomocí klávesy E.
+Hra bude mít 3 lokace, 2 typy nepřátel a 1 boss fight.
 
 
-### Technické požadavky:
+
+
+### Technické informace:
  - hra bude tvořena za pomocí LibGDX a Javy
+ - na zprocesování json souborů bude použita knihovna Jackson
  - hra bude 2D s vlastní grafikou
+ - logika a kostra hry je v balíčku `src/tree.of.life.logic`
+ - grafika je v balíčku assets
+ - Architektura hry je MVC
 
 
 
 
+### Spuštění hry:
+Stačí spustit soubor `desktop/src/tree/of/life/desktop/DesktopLauncher.java` a hra se spustí.
 
-### diagram:
+
+
+### diagram tříd:
+v diagramu tříd je vidět jak jsou jednotlivé třídy propojeny a jak spolu komunikují.
+
+
 
 ![diagram](package.png)
+
+### Závěr:
+Hra je zatím ve fázi vývoje, ale základní kostra hry je již hotová. Hra bude mít 3 lokace, 2 typy nepřátel a 1 boss fight.
+Hra bude mít vlastní grafiku a bude se ovládat pomocí klávesnice a myši.
