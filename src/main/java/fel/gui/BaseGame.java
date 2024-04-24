@@ -8,18 +8,14 @@ public abstract class BaseGame extends Game{
     protected Stage mainStage;
     private static BaseGame game;
 
-    public void create(){
-        mainStage = new Stage();
-        initialize();
+    public BaseGame()
+    {
+        game = this;
     }
 
-    public abstract void initialize();
-
-    public void render(){
-
+    public static void setActiveScreen(BaseScreen s)
+    {
+        game.setScreen(s);
     }
-
-    public abstract void update(float dt);
-
 
 }
