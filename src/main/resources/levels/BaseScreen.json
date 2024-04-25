@@ -1,0 +1,11 @@
+{
+  "background": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/homelocation/treetrunk.jpg",
+  "groundImage": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/eastwoods/kamen.png",
+     "ground": [{
+       "x": 0,
+       "y": 0,
+       "width": 29,
+       "height": 2
+    }]
+
+}
