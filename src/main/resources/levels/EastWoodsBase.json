@@ -1,0 +1,10 @@
+{
+  "background": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/eastwoods/redforest.jpg",
+  "groundImage": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/eastwoods/kamen.png",
+  "ground": [
+    {"x": 0, "y": 0, "width": 29, "height": 2},
+    {"x": 26, "y": 2, "width": 5, "height": 3},
+    {"x": -1, "y": 2, "width": 6, "height": 2}
+    ]
+
+}
