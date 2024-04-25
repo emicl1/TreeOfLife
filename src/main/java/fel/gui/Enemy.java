@@ -1,6 +1,5 @@
 package fel.gui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,27 +7,30 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
-import javax.swing.*;
 import java.util.Objects;
 
-public class Enemy extends Actor {
-    private Animation<TextureRegion> walkAnimation;
+public class Enemy{
+    public Animation<TextureRegion> walkAnimation;
 
-    private Body body;
-    private String currentState;
-    private float leftBoundary;
-    private float rightBoundary;
-    private String [] pathToAnimations;
+    public Body body;
+    public String currentState;
+    public float leftBoundary;
+    public float rightBoundary;
+    public String [] pathToAnimations;
+    public boolean isFacingRight = true;
 
-    private float speedPatrol = 2.0f;
-    private float speedFollow = 4.0f;
+    public float speedPatrol = 2.0f;
+    public float speedFollow = 4.0f;
+    public float speedPatrolOriginal = 2.0f;
+    public float speedFollowOriginal = 4.0f;
 
-    private Vector2 startPosition;
-    private World world;
+
+    public Vector2 startPosition;
+    public World world;
+    public float boxWidth = 1.6f;
+    public float boxHeight = 0.95f;
 
     public Enemy(World world, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary) {
         this.pathToAnimations = pathToAnimations;
@@ -41,7 +43,7 @@ public class Enemy extends Actor {
         this.body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox( 1.6f, 0.95f);
+        shape.setAsBox( boxWidth, boxHeight);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -53,28 +55,68 @@ public class Enemy extends Actor {
         body.setUserData(this);
         body.setActive(true);
 
-        Texture enemyTexture = new Texture("eastwoods/mnbrouk2.png");
-        Sprite enemySprite = new Sprite(enemyTexture);
-        enemySprite.setSize(1.6f, 0.6f);
-
     }
 
-    public void createEnemy(){
+    public Enemy(World world, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight) {
+        this.pathToAnimations = pathToAnimations;
+        this.leftBoundary = leftBoundary;
+        this.rightBoundary = rightBoundary;
+        this.currentState = "PATROLLING";
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(startPosition);
+        this.body = world.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox( boxWidth, boxHeight);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.3f;
+        body.createFixture(fixtureDef);
+        shape.dispose();
+
+        body.setUserData(this);
+        body.setActive(true);
+    }
+
+    public Enemy(World world, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight, float speedPatrol, float speedFollow) {
+        this.pathToAnimations = pathToAnimations;
+        this.leftBoundary = leftBoundary;
+        this.rightBoundary = rightBoundary;
+        this.currentState = "PATROLLING";
+        this.speedPatrolOriginal = speedPatrol;
+        this.speedFollowOriginal = speedFollow;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(startPosition);
+        this.body = world.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox( boxWidth, boxHeight);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.3f;
+        body.createFixture(fixtureDef);
+        shape.dispose();
+
+        body.setUserData(this);
+        body.setActive(true);
 
     }
 
 
     public void loadAnimationEnemy() {
-        Texture playerTextureMovement1 = new Texture("eastwoods/mnbrouk1.png");
-        Texture playerTextureMovement2 = new Texture("eastwoods/mnbrouk2.png");
-        Texture playerTextureMovement3 = new Texture("eastwoods/mnbrouk3.png");
-        Texture playerTextureMovement4 = new Texture("eastwoods/mnbrouk4.png");
-
         Array<TextureRegion> frames = new Array<>();
-        frames.add(new TextureRegion(playerTextureMovement1));
-        frames.add(new TextureRegion(playerTextureMovement2));
-        frames.add(new TextureRegion(playerTextureMovement3));
-        frames.add(new TextureRegion(playerTextureMovement4));
+
+        for (String path : pathToAnimations) {
+            Texture texture = new Texture(path);
+            frames.add(new TextureRegion(texture));
+        }
+
         walkAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
     }
 
@@ -92,18 +134,22 @@ public class Enemy extends Actor {
 
     private void updatePatrolling() {
         if (body.getPosition().x <= leftBoundary ) {
-            speedPatrol = 2f;
+            speedPatrol = speedPatrolOriginal;
+            isFacingRight = true;
         } else if (body.getPosition().x >= rightBoundary) {
-            speedPatrol = -2f;
+            speedPatrol = -1*speedPatrolOriginal;
+            isFacingRight = false;
         }
         body.setLinearVelocity(speedPatrol, body.getLinearVelocity().y);
     }
 
     private void updateFollowing(Vector2 playerPosition) {
         if (playerPosition.x < body.getPosition().x) {
-            speedFollow = -4f; // Ensure the enemy moves towards the player
+            speedFollow = -1*speedFollowOriginal; // Ensure the enemy moves towards the player
+            isFacingRight = false;
         }else {
-            speedFollow = 4f;
+            speedFollow = speedFollowOriginal;
+            isFacingRight = true;
         }
         body.setLinearVelocity(speedFollow, body.getLinearVelocity().y);
     }
@@ -111,15 +157,17 @@ public class Enemy extends Actor {
     public void draw(SpriteBatch batch, float stateTime) {
 
         TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime);
-
-        Texture texture = new Texture(Gdx.files.internal("eastwoods/mnbrouk2.png"));
         float PPM = 250f; // Pixels per meter for drawing
         float playerX = body.getPosition().x - currentFrame.getRegionWidth() * 0.5f / PPM;
         float playerY = body.getPosition().y - currentFrame.getRegionHeight() * 0.5f / PPM;
         float width = currentFrame.getRegionWidth() / PPM;
         float height = currentFrame.getRegionHeight() / PPM + 0.5f;
-        batch.draw(texture, 0 ,0 );
-        batch.draw(currentFrame, playerX, playerY, width, height);
+
+        if (!isFacingRight) {
+            batch.draw(currentFrame, playerX + width, playerY, -width, height);
+        } else
+            batch.draw(currentFrame, playerX, playerY, width, height);
+
     }
 
     public void setState(String state) {
@@ -130,6 +178,11 @@ public class Enemy extends Actor {
         if (playerPosition.x > leftBoundary && playerPosition.x < rightBoundary) {
             setState("FOLLOWING");
         } else {
+            if (speedPatrol < 0) {
+                isFacingRight = false;
+            } else {
+                isFacingRight = true;
+            }
             setState("PATROLLING");
         }
     }

@@ -1,10 +1,22 @@
 {
-  "background": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/eastwoods/redforest.jpg",
-  "groundImage": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/eastwoods/kamen.png",
+  "background": "eastwoods/redforest.jpg",
+  "groundImage": "eastwoods/kamen.png",
   "ground": [
     {"x": 0, "y": 0, "width": 29, "height": 2},
     {"x": 26, "y": 2, "width": 5, "height": 3},
     {"x": -1, "y": 2, "width": 6, "height": 2}
-    ]
-
+    ],
+  "gravityX": 0,
+  "gravityY": -17,
+  "smallBugs": [ {
+    "paths": ["eastwoods/mnbrouk1.png",
+      "eastwoods/mnbrouk2.png",
+      "eastwoods/mnbrouk3.png",
+      "eastwoods/mnbrouk4.png"],
+    "x": 8,
+    "y": 2,
+    "leftBound": 8,
+    "rightBound": 22
+  }
+  ]
 }

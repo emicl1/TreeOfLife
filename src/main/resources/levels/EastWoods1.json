@@ -1,0 +1,31 @@
+
+{
+  "background": "eastwoods/redforestdeeper.jpg",
+  "groundImage": "eastwoods/kamen.png",
+  "ground": [
+    {"x": 0, "y": 0, "width": 29, "height": 2},
+    {"x": 26, "y": 2, "width": 5, "height": 3},
+    {"x": -1, "y": 2, "width": 6, "height": 2}
+  ],
+  "gravityX": 0,
+  "gravityY": -17,
+  "bigBugs": [{
+    "paths": ["eastwoods/vlbrouk1.png",
+              "eastwoods/vlbrouk2.png",
+              "eastwoods/vlbrouk3.png",
+              "eastwoods/vlbrouk4.png"],
+    "attackPaths": ["eastwoods/vlbrouk1utok.png",
+                    "eastwoods/vlbrouk2utok.png",
+                    "eastwoods/vlbrouk3utok.png",
+                    "eastwoods/vlbrouk4utok.png"],
+    "x": 8,
+    "y": 2,
+    "leftBound": 10,
+    "rightBound": 22
+
+  }
+    ]
+}
+
+
+

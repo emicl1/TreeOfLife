@@ -6,6 +6,9 @@
        "y": 0,
        "width": 29,
        "height": 2
-    }]
+    }],
+
+  "gravityX": 0,
+  "gravityY": -17
 
 }

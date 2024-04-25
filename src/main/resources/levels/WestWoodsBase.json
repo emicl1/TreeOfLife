@@ -4,6 +4,8 @@
   "ground": [
     {"x": 0, "y": 0, "width": 29, "height": 2},
     {"x": 24, "y": 4, "width": 2, "height": 10}
-  ]
+  ],
+  "gravityX": 0,
+  "gravityY": -17
 
 }

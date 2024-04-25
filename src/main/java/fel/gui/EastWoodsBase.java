@@ -3,46 +3,43 @@ package fel.gui;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import fel.jsonFun.BigBugConfig;
 import fel.jsonFun.GroundConfig;
 import fel.jsonFun.LevelLoader;
+import fel.jsonFun.SmallBugConfig;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EastWoodsBase extends BaseScreen {
 
-    public Enemy enemy;
+    public List<EnemySmallBug> smallBugs;
+    public List<EnemyBigBug> bigBugs;
 
 
-    public EastWoodsBase(Game game, float x, float y) {
-        super(game, x, y);
+
+    public EastWoodsBase(Game game, float x, float y, String jsonPath) {
+        super(game, x, y, jsonPath);
     }
 
     @Override
     public void show() {
-        createCamera();
-        createWorld(0, -35f);
-
         LevelLoader levelLoader = new LevelLoader();
-        config = levelLoader.loadLevel("/home/alex/IdeaProjects/TreeOfLife/src/main/resources/levels/EastWoodsBase.json");
+        config = levelLoader.loadLevel(jsonPath);
+
+        createCamera();
+        createWorld(config.gravityX, config.gravityY);
 
         createBackgroundAndGround(config);
 
         loadAnimation();
 
+        smallBugs = new ArrayList<>();
+        bigBugs = new ArrayList<>();
+
         createPlayer(x, y);
-
-        String[] paths = {"eastwoods/mnbrouk1.png",
-                "eastwoods/mnbrouk2.png",
-                "eastwoods/mnbrouk3.png",
-                "eastwoods/mnbrouk4.png"};
-
-        Vector2 startPosition = new Vector2(6, 3);
-
-        enemy = new Enemy(world, paths, startPosition, 8f, 24f);
-        enemy.createEnemy();
-
-        enemy.loadAnimationEnemy();
+        createEnemies();
 
         for (GroundConfig ground : config.ground){
             createGroundFromRectangularShape(world, config.groundImage, ground.x, ground.y, ground.x + ground.width, ground.y + ground.height);
@@ -57,23 +54,63 @@ public class EastWoodsBase extends BaseScreen {
         camera.update();
     }
 
+    public void createEnemies(){
+        if (config.smallBugs != null){
+            for (SmallBugConfig smallBugConfig : config.smallBugs){
+                String[] paths = smallBugConfig.paths;
+                Vector2 startPosition = new Vector2(smallBugConfig.x, smallBugConfig.y);
+                EnemySmallBug enemy = new EnemySmallBug(world, paths, startPosition, smallBugConfig.leftBound, smallBugConfig.rightBound);
+                enemy.loadAnimationEnemy();
+                smallBugs.add(enemy);
+            }
+        }
+        if (config.bigBugs != null){
+            for (BigBugConfig bigBugConfig : config.bigBugs){
+                String[] paths = bigBugConfig.paths;
+                String[] attackPaths = bigBugConfig.attackPaths;
+                Vector2 startPosition = new Vector2(bigBugConfig.x, bigBugConfig.y);
+                EnemyBigBug enemy = new EnemyBigBug(world, paths, attackPaths, startPosition, bigBugConfig.leftBound, bigBugConfig.rightBound);
+                enemy.loadAnimationEnemy();
+                enemy.loadAttackAnimation();
+                bigBugs.add(enemy);
+            }
+        }
+    }
+
+
     @Override
     public void render(float delta) {
         handleInput(); // Handle user input
         updateGameLogic(delta); // Update game logic
-        enemy.update( player.getPosition());
+        if (smallBugs != null){
+            for(EnemySmallBug enemy : smallBugs){
+                enemy.update(player.getPosition());
+            }
+        }
+        if (bigBugs != null){
+            for(EnemyBigBug enemy : bigBugs){
+                enemy.update(player.getPosition());
+            }
+        }
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
         camera.update();
-        goToBase();
+        goToFunctions();
 
-        Texture texture = new Texture(Gdx.files.internal("eastwoods/mnbrouk2.png"));
-        Sprite sprite = new Sprite(texture);
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        enemy.draw(batch, stateTime);
         drawGameElements(); // Draw game elements
-        batch.draw(sprite, 0, 0);
+        if (smallBugs != null){
+            for (EnemySmallBug enemy : smallBugs){
+                enemy.draw(batch, stateTime);
+            }
+        }
+        if (bigBugs != null){
+            for (EnemyBigBug enemy : bigBugs){
+                enemy.draw(batch, stateTime);
+            }
+        }
         batch.end();
         isMoving = false;
         debugRenderer.render(world, camera.combined); // Debug rendering
@@ -88,14 +125,27 @@ public class EastWoodsBase extends BaseScreen {
 
     public void goToBase() {
         if (player.getPosition().x > 29 && player.getPosition().y < 10) {
-            game.setScreen(new BaseScreen(game, 2, 2));
+            game.setScreen(new BaseScreen(game, 2, 2, "levels/BaseScreen.json"));
         }
+    }
+
+    public void goToEastWood1() {
+        if (player.getPosition().x < 2 && player.getPosition().y < 6) {
+            game.setScreen(new EastWoods1(game, 28, 5, "levels/EastWoods1.json"));
+        }
+    }
+
+    public void goToFunctions() {
+        goToBase();
+        goToEastWood1();
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        enemy.dispose();
+        for (EnemySmallBug enemy : smallBugs){
+            enemy.dispose();
+        }
     }
 
 }

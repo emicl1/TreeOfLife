@@ -55,11 +55,14 @@ public class BaseScreen implements Screen {
 
     public LevelConfig config;
 
+    public String jsonPath;
 
-    public BaseScreen(Game game, float x, float y) {
+
+    public BaseScreen(Game game, float x, float y, String jsonPath) {
         this.game = game;
         this.x = x;
         this.y = y;
+        this.jsonPath = jsonPath;
     }
 
 
@@ -313,9 +316,8 @@ public class BaseScreen implements Screen {
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP) && isOnGround) {
-            System.out.println("Jumping");
             player.applyLinearImpulse(new Vector2(0, 55f), player.getWorldCenter(), true);
-            isOnGround = true;  // Prevent further jumps until grounded again
+            isOnGround = false;  // Prevent further jumps until grounded again
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
@@ -325,11 +327,12 @@ public class BaseScreen implements Screen {
 
     @Override
     public void show() {
-        createCamera();
-        createWorld(0, -17f);
-
         LevelLoader levelLoader = new LevelLoader();
-        config = levelLoader.loadLevel("/home/alex/IdeaProjects/TreeOfLife/src/main/resources/levels/BaseScreen.json");
+        config = levelLoader.loadLevel(jsonPath);
+
+        createCamera();
+        createWorld(config.gravityX, config.gravityY);
+
 
         createBackgroundAndGround(config);
         loadAnimation();
@@ -358,6 +361,7 @@ public class BaseScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         drawGameElements();
+
 
         batch.end();
         isMoving = false;
@@ -399,6 +403,7 @@ public class BaseScreen implements Screen {
     }
 
     public void drawOtherElements() {
+
         backgroundSprite.draw(batch);
         for (Sprite groundSprite : groundSprites) {
             groundSprite.draw(batch);
@@ -408,14 +413,14 @@ public class BaseScreen implements Screen {
     public void goToEastWoods(){
         Vector2 position = player.getPosition();
         if (position.x < 2 && position.y < 16) {
-            game.setScreen(new EastWoodsBase(game, 28, 5));
+            game.setScreen(new EastWoodsBase(game, 28, 5, "levels/EastWoodsBase.json"));
         }
     }
 
     public void goToWestWoods(){
         Vector2 position = player.getPosition();
         if (position.x > 28 && position.y < 6) {
-            game.setScreen(new WestWoodsBase(game, 2, 2));
+            game.setScreen(new WestWoodsBase(game, 2, 2, "levels/WestWoodsBase.json"));
         }
     }
 
@@ -450,6 +455,7 @@ public class BaseScreen implements Screen {
         for (Sprite groundSprite : groundSprites) {
             groundSprite.getTexture().dispose();
         }
+
     }
 
 }

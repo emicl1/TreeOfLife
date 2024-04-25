@@ -9,32 +9,10 @@ import fel.jsonFun.LevelLoader;
 public class WestWoodsBase extends BaseScreen {
 
 
-    public WestWoodsBase(Game game, float x, float y) {
-        super(game, x, y);
+    public WestWoodsBase(Game game, float x, float y, String jsonPath) {
+        super(game, x, y, jsonPath);
     }
 
-    @Override
-    public void show() {
-        createCamera();
-        createWorld(0, -30f);
-
-        LevelLoader levelLoader = new LevelLoader();
-        config = levelLoader.loadLevel("/home/alex/IdeaProjects/TreeOfLife/src/main/resources/levels/WestWoodsBase.json");
-
-        createBackgroundAndGround(config);
-
-        loadAnimation();
-
-        // Initialize the player
-        createPlayer(x, y);
-
-        createWorldBounds(31, 31 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
-
-
-
-        // Set background sprite to cover the screen
-        backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
-    }
 
     @Override
     public void render(float delta) {
@@ -56,7 +34,7 @@ public class WestWoodsBase extends BaseScreen {
     public void goToBase() {
         Vector2 position = player.getPosition();
         if (position.x < 2 && position.y < 6) {
-            game.setScreen(new BaseScreen(game, 22, 2));
+            game.setScreen(new BaseScreen(game, 22, 2, "levels/BaseScreen.json"));
         }
 
     }
