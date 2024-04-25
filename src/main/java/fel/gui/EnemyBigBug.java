@@ -44,7 +44,7 @@ public class EnemyBigBug extends Enemy{
             currentFrame = walkAnimation.getKeyFrame(stateTime);
         }
 
-        float PPM = 250f; // Pixels per meter for drawing
+        float PPM = 140f; // Pixels per meter for drawing
         float playerX = body.getPosition().x - currentFrame.getRegionWidth() * 0.5f / PPM;
         float playerY = body.getPosition().y - currentFrame.getRegionHeight() * 0.5f / PPM;
         float width = currentFrame.getRegionWidth() / PPM;

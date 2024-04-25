@@ -69,7 +69,7 @@ public class EastWoodsBase extends BaseScreen {
                 String[] paths = bigBugConfig.paths;
                 String[] attackPaths = bigBugConfig.attackPaths;
                 Vector2 startPosition = new Vector2(bigBugConfig.x, bigBugConfig.y);
-                EnemyBigBug enemy = new EnemyBigBug(world, paths, attackPaths, startPosition, bigBugConfig.leftBound, bigBugConfig.rightBound);
+                EnemyBigBug enemy = new EnemyBigBug(world, paths, attackPaths, startPosition, bigBugConfig.leftBound, bigBugConfig.rightBound, 2.2f, 1.5f, 1.5f, 5f);
                 enemy.loadAnimationEnemy();
                 enemy.loadAttackAnimation();
                 bigBugs.add(enemy);

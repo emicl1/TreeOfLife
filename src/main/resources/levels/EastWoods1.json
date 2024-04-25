@@ -8,7 +8,7 @@
     {"x": -1, "y": 2, "width": 6, "height": 2}
   ],
   "gravityX": 0,
-  "gravityY": -17,
+  "gravityY": -11,
   "bigBugs": [{
     "paths": ["eastwoods/vlbrouk1.png",
               "eastwoods/vlbrouk2.png",
