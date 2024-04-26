@@ -18,7 +18,6 @@ public class EastWoodsBase extends BaseScreen {
     public List<EnemyBigBug> bigBugs;
 
 
-
     public EastWoodsBase(Game game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
     }
@@ -33,12 +32,12 @@ public class EastWoodsBase extends BaseScreen {
 
         createBackgroundAndGround(config);
 
-        loadAnimation();
+        player = new Player(world, x, y);
 
         smallBugs = new ArrayList<>();
         bigBugs = new ArrayList<>();
 
-        createPlayer(x, y);
+
         createEnemies();
 
         for (GroundConfig ground : config.ground){
@@ -146,6 +145,10 @@ public class EastWoodsBase extends BaseScreen {
         for (EnemySmallBug enemy : smallBugs){
             enemy.dispose();
         }
+        for (EnemyBigBug enemy : bigBugs){
+            enemy.dispose();
+        }
+        player.dispose();
     }
 
 }

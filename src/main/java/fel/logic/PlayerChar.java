@@ -6,8 +6,8 @@ public class PlayerChar extends Character{
     private Locations[] exploredLocations;
     private Items[] inventory;
 
-    public PlayerChar(String name, int health, int attackDamage, boolean isAlive, int speed, int x, int y, Items[] items, Items[] abilities, Locations[] exploredLocations, Items[] inventory) {
-        super(name, health, attackDamage, isAlive, speed, x, y, items);
+    public PlayerChar(String name, int health, int attackDamage, boolean isAlive, int speed, Items[] items, Items[] abilities, Locations[] exploredLocations, Items[] inventory) {
+        super(name, health, attackDamage, isAlive, speed, items);
         this.abilities = abilities;
         this.exploredLocations = exploredLocations;
         this.inventory = inventory;

@@ -15,7 +15,7 @@ public class EnemyBigBug extends Enemy{
     public Animation<TextureRegion> attackAnimation;
 
     public EnemyBigBug(World world, String[] paths,  String []attackPath, Vector2 startPosition, float leftBound, float rightBound) {
-        super(world, paths, startPosition, leftBound, rightBound, 2.0f, 1.0f);
+        super(world, paths, startPosition, leftBound, rightBound, 2.0f, 1.2f);
         this.attackPaths = attackPath;
 
     }

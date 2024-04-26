@@ -1,0 +1,33 @@
+
+
+{
+  "standing": [
+    "player/duch1stat.png",
+    "player/duch2stat.png",
+    "player/duch3stat.png"
+  ],
+  "walking": ["eastwoods/mnbrouk1.png",
+    "eastwoods/mnbrouk2.png",
+    "eastwoods/mnbrouk3.png",
+    "eastwoods/mnbrouk4.png"
+  ],
+  "walkingWithSword": ["eastwoods/mnbrouk1.png",
+    "eastwoods/mnbrouk2.png",
+    "eastwoods/mnbrouk3.png",
+    "eastwoods/mnbrouk4.png"
+  ],
+  "standingWithSword": ["eastwoods/vlbrouk1.png",
+    "eastwoods/vlbrouk2.png",
+    "eastwoods/vlbrouk3.png",
+    "eastwoods/vlbrouk4.png"
+  ],
+
+    "attacking": ["eastwoods/vlbrouk1utok.png",
+    "eastwoods/vlbrouk2utok.png",
+    "eastwoods/vlbrouk3utok.png",
+    "eastwoods/vlbrouk4utok.png"
+    ],
+  "x": 15,
+  "y": 2
+
+}

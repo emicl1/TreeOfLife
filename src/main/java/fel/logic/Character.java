@@ -10,14 +10,11 @@ public class Character {
     private int y;
     public Items[] items;
 
-    public Character(String name, int health, int attackDamage, boolean isAlive, int speed, int x, int y, Items[] items){
+    public Character(String name, int health, int attackDamage, boolean isAlive, int speed, Items[] items){
         this.name = name;
         this.health = health;
         this.attackDamage = attackDamage;
         this.isAlive = isAlive;
-        this.speed = speed;
-        this.x = x;
-        this.y = y;
         this.items = items;
     }
 
@@ -76,26 +73,6 @@ public class Character {
         health += heal;
     }
 
-    public void move(int x, int y){
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX(){
-        return x;
-    }
-
-    public int getY(){
-        return y;
-    }
-
-    public void setX(int x){
-        this.x = x;
-    }
-
-    public void setY(int y){
-        this.y = y;
-    }
 
 
 

@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fel.jsonFun.GroundConfig;
@@ -33,19 +32,15 @@ public class BaseScreen implements Screen {
     public Box2DDebugRenderer debugRenderer;
     public OrthographicCamera camera;
     public Viewport viewport;
-    public Body player;
+    public Player player;
     public SpriteBatch batch;
-    public Sprite playerSprite, backgroundSprite;
-    private Texture playerTexture, backgroundTexture, playerTextureMovement1, playerTextureMovement2, playerTextureMovement3, playerTextureMovement4;
+    public Sprite backgroundSprite;
+    private Texture backgroundTexture;
 
     private List<Sprite> groundSprites = new ArrayList<>();
-    private Body[] groundBodies;
-    private boolean facingRight = true;
+    public boolean facingRight = true;
 
-    private Animation<TextureRegion> animation;
     public float stateTime;
-
-    private Animation<TextureRegion> walkRightAnimation;
 
     private boolean isOnGround;
 
@@ -74,20 +69,6 @@ public class BaseScreen implements Screen {
         }
     }
 
-    public void loadAnimation(){
-        playerTextureMovement1 = new Texture("eastwoods/mnbrouk1.png");
-        playerTextureMovement2 = new Texture("eastwoods/mnbrouk2.png");
-        playerTextureMovement3 = new Texture("eastwoods/mnbrouk3.png");
-        playerTextureMovement4 = new Texture("eastwoods/mnbrouk4.png");
-
-        Array<TextureRegion> frames = new Array<>();
-        frames.add(new TextureRegion(playerTextureMovement1));
-        frames.add(new TextureRegion(playerTextureMovement2));
-        frames.add(new TextureRegion(playerTextureMovement3));
-        frames.add(new TextureRegion(playerTextureMovement4));
-        walkRightAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
-
-    }
 
     public void createBackground(String path){
         backgroundTexture = new Texture(path);
@@ -148,30 +129,7 @@ public class BaseScreen implements Screen {
         camera.update();
     }
 
-    public void createPlayer(float x, float y) {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x, y);
 
-        player = world.createBody(bodyDef);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(1.6f, 0.95f);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        fixtureDef.friction = 0.4f;
-
-        Fixture playerFixture = player.createFixture(fixtureDef);
-        playerFixture.setUserData("player");
-        shape.dispose();
-
-        playerTexture = new Texture("/home/alex/IdeaProjects/TreeOfLife/src/main/resources/eastwoods/mnbrouk2.png");
-        playerSprite = new Sprite(playerTexture);
-        playerSprite.setSize(1.6f, 0.6f);
-
-    }
 
     public void createGround(String path) {
         float groundWidth = 2f;
@@ -304,24 +262,22 @@ public class BaseScreen implements Screen {
 
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.applyForceToCenter(-80, 0, true);
-            //player.applyLinearImpulse(new Vector2(-30, 0), player.getWorldCenter(), true);
+            player.moveLeft();
             facingRight = false;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            //player.applyLinearImpulse(new Vector2(30, 0), player.getWorldCenter(), true);
-            player.applyForceToCenter(80, 0, true);
+            player.moveRight();
             facingRight = true;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP) && isOnGround) {
-            player.applyLinearImpulse(new Vector2(0, 55f), player.getWorldCenter(), true);
+            player.jump();
             isOnGround = false;  // Prevent further jumps until grounded again
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            player.applyForceToCenter(0, -10, true);
+            player.playerBody.applyForceToCenter(0, -10, true);
         }
     }
 
@@ -335,10 +291,8 @@ public class BaseScreen implements Screen {
 
 
         createBackgroundAndGround(config);
-        loadAnimation();
 
-        // Initialize the player
-        createPlayer(x, y);
+        player = new Player(world, x, y);
 
         System.out.println((Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
@@ -374,33 +328,10 @@ public class BaseScreen implements Screen {
     }
 
     public void drawGameElements() {
-        TextureRegion currentFrame = getCurrentFrame();
         drawOtherElements();
-        drawPlayer(currentFrame);
-
+        player.drawPlayer(batch, stateTime, isMoving, true , false, facingRight);
     }
 
-    private TextureRegion getCurrentFrame() {
-        if (isMoving) {
-            return walkRightAnimation.getKeyFrame(stateTime, true);
-        } else {
-            return walkRightAnimation.getKeyFrame(0, false);
-        }
-    }
-
-    public void drawPlayer(TextureRegion currentFrame) {
-        float PPM = 250f; // Pixels per meter for drawing
-        float playerX = player.getPosition().x - currentFrame.getRegionWidth() * 0.5f / PPM;
-        float playerY = player.getPosition().y - currentFrame.getRegionHeight() * 0.5f / PPM;
-        float width = currentFrame.getRegionWidth() / PPM;
-        float height = currentFrame.getRegionHeight() / PPM + 0.5f;
-
-        if (facingRight) {
-            batch.draw(currentFrame, playerX, playerY, width, height);
-        } else {
-            batch.draw(currentFrame, playerX + width, playerY, -width, height); // Flip the sprite
-        }
-    }
 
     public void drawOtherElements() {
 
@@ -449,13 +380,13 @@ public class BaseScreen implements Screen {
         world.dispose();
         debugRenderer.dispose();
         batch.dispose();
-        playerTexture.dispose();
         backgroundTexture.dispose();
+
+        player.dispose();
 
         for (Sprite groundSprite : groundSprites) {
             groundSprite.getTexture().dispose();
         }
 
     }
-
 }

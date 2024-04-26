@@ -27,8 +27,6 @@ public class Enemy{
     public float speedFollowOriginal = 4.0f;
 
 
-    public Vector2 startPosition;
-    public World world;
     public float boxWidth = 1.6f;
     public float boxHeight = 0.95f;
 
