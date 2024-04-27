@@ -10,6 +10,8 @@
      ],
 
   "gravityX": 0,
-  "gravityY": -17
+  "gravityY": -17,
+  "groundHeight": 2,
+  "groundWidth": 2
 
 }

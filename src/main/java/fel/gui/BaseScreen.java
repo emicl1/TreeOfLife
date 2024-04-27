@@ -7,17 +7,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import fel.jsonFun.GroundConfig;
-import fel.jsonFun.LevelConfig;
-import fel.jsonFun.LevelLoader;
+import fel.jsonFun.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +35,9 @@ public class BaseScreen implements Screen {
     private Texture backgroundTexture;
 
     private List<Sprite> groundSprites = new ArrayList<>();
+    private List<MoveableObj> moveableObjs = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
+    private List<Button> buttons = new ArrayList<>();
     public boolean facingRight = true;
 
     public float stateTime;
@@ -53,11 +53,58 @@ public class BaseScreen implements Screen {
     public String jsonPath;
 
 
+
+    public Array<Body> bodiesToDestroy = new Array<Body>();
+    public Array<Door> doorsToClose = new Array<Door>();
+    public Array<Door> doorsToOpen = new Array<Door>();
+
+
     public BaseScreen(Game game, float x, float y, String jsonPath) {
         this.game = game;
         this.x = x;
         this.y = y;
         this.jsonPath = jsonPath;
+    }
+
+    public void createMoveableObj(LevelConfig config){
+        if (config.moveableObjs == null){
+            return;
+        }
+        for (MoveableObjConfig moveableObj : config.moveableObjs){
+            MoveableObj newMoveableObj = new MoveableObj(moveableObj);
+            newMoveableObj.loadSprite();
+            newMoveableObj.createBody(world);
+            moveableObjs.add(newMoveableObj);
+        }
+    }
+
+
+    public void createItems(LevelConfig config){
+        if (config.items == null){
+            return;
+        }
+        for (ItemConfig item : config.items){
+            Item newItem = new Item(item);
+            newItem.loadSprite();
+            newItem.createBody(world);
+            items.add(newItem);
+            System.out.println("Item created");
+        }
+    }
+
+    public void createButtons(LevelConfig config) {
+        if (config.buttons == null) {
+            return;
+        }
+
+        for (ButtonConfig button : config.buttons) {
+            System.out.println("Creating button");
+            Button newButton = new Button(button);
+            System.out.println(newButton.path);
+            newButton.loadSprite();
+            newButton.createBody(world);
+            buttons.add(newButton);
+        }
     }
 
 
@@ -84,11 +131,24 @@ public class BaseScreen implements Screen {
         ContactListener listener = new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
+                Fixture fixA = contact.getFixtureA();
+                Fixture fixB = contact.getFixtureB();
+
                 if (isFixturePlayer(contact.getFixtureA()) && isFixtureGround(contact.getFixtureB()) ||
                         isFixturePlayer(contact.getFixtureB()) && isFixtureGround(contact.getFixtureA())) {
                     groundContacts++;
                     isOnGround = true;
                 }
+                if ((isFixturePlayer(fixA) && isFixtureItem(fixB)) ||
+                        (isFixturePlayer(fixB) && isFixtureItem(fixA))) {
+                    System.out.println("Item collected");
+                    handleItemCollection(fixA, fixB);
+                }
+
+                if (isFixtureButton(fixA) || isFixtureButton(fixB)) {
+                    handleButtonsTouch(fixA, fixB);
+                }
+
             }
 
             @Override
@@ -101,6 +161,10 @@ public class BaseScreen implements Screen {
                         groundContacts = 0;  // Reset to prevent negative counts
                     }
                 }
+                if (isFixtureButton(contact.getFixtureA()) || isFixtureButton(contact.getFixtureB())) {
+                    handleButtonRelease(contact.getFixtureA(), contact.getFixtureB());
+                }
+
             }
 
             @Override
@@ -115,6 +179,54 @@ public class BaseScreen implements Screen {
         };
         world.setContactListener(listener);
     }
+
+    private void handleItemCollection(Fixture fixA, Fixture fixB) {
+        Fixture itemFixture = fixA.getUserData() instanceof Item ? fixA : fixB;
+
+        if (itemFixture.getUserData() instanceof Item) {
+            Item collectedItem = (Item) itemFixture.getUserData();
+            System.out.println("Item collected: " + collectedItem.name);
+            if (collectedItem.isCollectable) {
+                items.remove(collectedItem);
+                bodiesToDestroy.add(itemFixture.getBody());
+            }
+        } else {
+            System.out.println("Error: Non-item fixture involved in item collection");
+        }
+    }
+
+    private void handleButtonsTouch(Fixture fixA, Fixture fixB) {
+        Fixture buttonFixture = fixA.getUserData() instanceof Button ? fixA : fixB;
+
+        if (buttonFixture.getUserData() instanceof Button) {
+            Button button = (Button) buttonFixture.getUserData();
+            System.out.println("Button pressed");
+            Array<Door> doors = button.getDoors();
+            for (Door door : doors) {
+                doorsToClose.add(door);
+            }
+            button.isNotPressed = true;
+        } else {
+            System.out.println("Error: Non-button fixture involved in button press");
+        }
+    }
+
+    private void handleButtonRelease(Fixture fixA, Fixture fixB) {
+        Fixture buttonFixture = fixA.getUserData() instanceof Button ? fixA : fixB;
+
+        if (buttonFixture.getUserData() instanceof Button) {
+            Button button = (Button) buttonFixture.getUserData();
+            System.out.println("Button released");
+            Array<Door> doors = button.getDoors();
+            for (Door door : doors) {
+                doorsToOpen.add(door);
+            }
+            button.isNotPressed = false;
+        } else {
+            System.out.println("Error: Non-button fixture involved in button release");
+        }
+    }
+
 
     public void createCamera() {
         float w = 30;
@@ -132,8 +244,8 @@ public class BaseScreen implements Screen {
 
 
     public void createGround(String path) {
-        float groundWidth = 2f;
-        float groundHeight = 2f;
+        float groundWidth = config.groundWidth;
+        float groundHeight = config.groundHeight;
         int numGroundSegments = 13;
 
         Texture groundTexture = new Texture(path);
@@ -170,8 +282,8 @@ public class BaseScreen implements Screen {
     }
 
     public void createGroundFromRectangularShape(World world, String path, float x1, float y1, float x2, float y2) {
-        float groundWidth = 2f;  // Width of each ground segment
-        float groundHeight = 2f; // Height of each ground segment
+        float groundWidth = config.groundWidth;  // Width of each ground segment
+        float groundHeight = config.groundHeight; // Height of each ground segment
         Texture groundTexture = new Texture(path);
 
         int numGroundSegmentsX = (int) Math.ceil((x2 - x1) / groundWidth);
@@ -260,15 +372,27 @@ public class BaseScreen implements Screen {
         return fixture.getUserData() != null && fixture.getUserData().equals("ground");
     }
 
+    private boolean isFixtureItem(Fixture fixture) {
+        return fixture.getUserData() instanceof Item;
+    }
+
+    private boolean isFixtureButton(Fixture fixture) {
+        return fixture.getUserData() instanceof Button;
+    }
+
+    private boolean isFixtureMoveableObj(Fixture fixture) {
+        return fixture.getUserData() instanceof MoveableObj;
+    }
+
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             player.moveLeft();
-            facingRight = false;
+            facingRight = true;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.moveRight();
-            facingRight = true;
+            facingRight = false;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP) && isOnGround) {
@@ -292,15 +416,23 @@ public class BaseScreen implements Screen {
 
         createBackgroundAndGround(config);
 
-        player = new Player(world, x, y);
+        createPlayer();
+        createItems(config);
+        createMoveableObj(config);
+        createButtons(config);
 
         System.out.println((Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
-        createWorldBounds(31, 31 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+        createWorldBounds(31, 32 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
         // Set background sprite to cover the screen
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
     }
+
+    public void createPlayer(){
+        player = new Player(world, x, y, "player/Player.json");
+    }
+
 
     @Override
     public void render(float delta) {
@@ -325,7 +457,24 @@ public class BaseScreen implements Screen {
     public void updateGameLogic(float delta) {
         world.step(1/60f, 6, 2);
         stateTime += delta;
+
+        for (Body body : bodiesToDestroy) {
+            world.destroyBody(body);
+        }
+        bodiesToDestroy.clear();
+
+        for (Door door : doorsToClose) {
+            door.close();
+        }
+        doorsToClose.clear();
+
+        for (Door door : doorsToOpen) {
+            door.open();
+        }
+        doorsToOpen.clear();
     }
+
+
 
     public void drawGameElements() {
         drawOtherElements();
@@ -339,6 +488,27 @@ public class BaseScreen implements Screen {
         for (Sprite groundSprite : groundSprites) {
             groundSprite.draw(batch);
         }
+        if (items != null) {
+            for (Item item : items){
+                item.draw(batch);
+            }
+        }
+        if (moveableObjs != null) {
+            for (MoveableObj moveableObj : moveableObjs){
+                moveableObj.draw(batch);
+            }
+        }
+        if (buttons != null) {
+            for (Button button : buttons) {
+                button.draw(batch);
+                if (!button.isNotPressed) {
+                    for (Door door : button.getDoors()) {
+                        door.draw(batch);
+                    }
+                }
+            }
+        }
+
     }
 
     public void goToEastWoods(){
@@ -351,7 +521,8 @@ public class BaseScreen implements Screen {
     public void goToWestWoods(){
         Vector2 position = player.getPosition();
         if (position.x > 28 && position.y < 6) {
-            game.setScreen(new WestWoodsBase(game, 2, 2, "levels/WestWoodsBase.json"));
+            game.setScreen(new WestWoodsBase(game, 3, 2, "levels/WestWoodsBase.json"));
+            //game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
         }
     }
 
@@ -386,6 +557,18 @@ public class BaseScreen implements Screen {
 
         for (Sprite groundSprite : groundSprites) {
             groundSprite.getTexture().dispose();
+        }
+
+        for (Item item : items){
+            item.dispose();
+        }
+
+        for (MoveableObj moveableObj : moveableObjs){
+            moveableObj.dispose();
+        }
+
+        for (Button button : buttons) {
+            button.dispose();
         }
 
     }

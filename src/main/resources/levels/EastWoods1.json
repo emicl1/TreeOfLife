@@ -24,7 +24,9 @@
     "rightBound": 22
 
   }
-    ]
+    ],
+  "groundHeight": 2,
+  "groundWidth": 2
 }
 
 

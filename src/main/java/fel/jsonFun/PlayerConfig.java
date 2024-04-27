@@ -6,6 +6,9 @@ public class PlayerConfig {
     public String[] walkingWithSword;
     public String[] attacking;
     public String[] standingWithSword;
-    public float x;
-    public float y;
+    public float speed;
+    public float jumpSpeed;
+    public float boxWidth;
+    public float boxHeight;
+    public float PPM;
 }

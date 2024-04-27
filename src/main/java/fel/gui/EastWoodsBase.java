@@ -32,7 +32,7 @@ public class EastWoodsBase extends BaseScreen {
 
         createBackgroundAndGround(config);
 
-        player = new Player(world, x, y);
+        createPlayer();
 
         smallBugs = new ArrayList<>();
         bigBugs = new ArrayList<>();

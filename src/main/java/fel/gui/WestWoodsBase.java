@@ -20,8 +20,8 @@ public class WestWoodsBase extends BaseScreen {
         updateGameLogic(delta); // Update game logic
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
-        camera.update();
-        goToBase();
+        goToFunctions();
+
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -31,10 +31,30 @@ public class WestWoodsBase extends BaseScreen {
         debugRenderer.render(world, camera.combined); // Debug rendering
     }
 
+    @Override
+    public void createPlayer(){
+        System.out.println("Creating player");
+        player = new Player(world, x, y, "player/PlayerWestWoodsBase.json");
+    }
+
+    public void goToFunctions() {
+        GoToPuzzle();
+        goToBase();
+    }
+
+
+    public void GoToPuzzle() {
+        Vector2 position = player.getPosition();
+        if (position.x > 26 && position.y > 15) {
+            game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
+        }
+    }
+
+
     public void goToBase() {
         Vector2 position = player.getPosition();
         if (position.x < 2 && position.y < 6) {
-            game.setScreen(new BaseScreen(game, 22, 2, "levels/BaseScreen.json"));
+            game.setScreen(new BaseScreen(game, 24, 2, "levels/BaseScreen.json"));
         }
 
     }

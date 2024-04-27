@@ -14,12 +14,12 @@ public class Player {
 
     public World world;
     public Body playerBody;
-    public float x = 15;
-    public float y = 2;
+    public float x;
+    public float y;
     public float speed = 80;
     public float jumpSpeed = 55;
-    public float boxWidth = 1.6f;
-    public float boxHeight = 0.95f;
+    public float boxWidth;
+    public float boxHeight;
     public float PPM = 160;
 
     public Animation<TextureRegion> walkAnimation;
@@ -30,67 +30,25 @@ public class Player {
     PlayerConfig config;
 
 
-    public Player(World world) {
-        this.world = world;
-        makeConfig();
-        loadPlayerAnimations(config);
-        createPlayer();
-    }
 
-    public Player(World world, float x, float y) {
+    public Player(World world, float x, float y, String PlayerConfigPath) {
         this.world = world;
         this.x = x;
         this.y = y;
-        makeConfig();
+        makeConfig(PlayerConfigPath);
         loadPlayerAnimations(config);
+        this.speed = config.speed;
+        this.jumpSpeed = config.jumpSpeed;
+        this.boxWidth = config.boxWidth;
+        this.boxHeight = config.boxHeight;
+        this.PPM = config.PPM;
         createPlayer();
     }
 
 
-
-    public Player(World world, float x, float y, float speed, float jumpSpeed) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        this.jumpSpeed = jumpSpeed;
-        makeConfig();
-        loadPlayerAnimations(config);
-        createPlayer();
-
-    }
-
-    public Player(World world, float x, float y, float speed, float jumpSpeed, float boxWidth, float boxHeight) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        this.jumpSpeed = jumpSpeed;
-        this.boxWidth = boxWidth;
-        this.boxHeight = boxHeight;
-        makeConfig();
-        loadPlayerAnimations(config);
-        createPlayer();
-
-    }
-
-    public Player(World world, float x, float y, float speed, float jumpSpeed, float boxWidth, float boxHeight,  float PPM) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        this.jumpSpeed = jumpSpeed;
-        this.boxWidth = boxWidth;
-        this.boxHeight = boxHeight;
-        this.PPM = PPM;
-        makeConfig();
-        loadPlayerAnimations(config);
-        createPlayer();
-    }
-
-    private void makeConfig(){
+    private void makeConfig(String PlayerConfigPath){
         PlayerLoader playerLoader = new PlayerLoader();
-        config = playerLoader.loadPlayer("player/Player.json");
+        config = playerLoader.loadPlayer(PlayerConfigPath);
     }
 
 
@@ -101,7 +59,7 @@ public class Player {
         bodyDef.position.set(x, y);
 
         playerBody = world.createBody(bodyDef);
-
+        System.out.println(boxHeight + " " + boxWidth);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(boxWidth, boxHeight);
 
@@ -148,7 +106,7 @@ public class Player {
         for (String standingWithSwordPath : config.standingWithSword){
             frames.add(new TextureRegion(new Texture(standingWithSwordPath)));
         }
-        standingWithSwordAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
+        standingWithSwordAnimation = new Animation<>(0.3f, frames, Animation.PlayMode.LOOP);
     }
 
     public void loadAttackAnimation(PlayerConfig config){

@@ -18,5 +18,7 @@
     "leftBound": 8,
     "rightBound": 22
   }
-  ]
+  ],
+  "groundHeight": 2,
+  "groundWidth": 2
 }

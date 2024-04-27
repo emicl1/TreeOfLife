@@ -21,14 +21,14 @@
     "player/duchmecstat/duch3mecstat.png"
   ],
 
-    "attacking": ["eastwoods/vlbrouk1utok.png",
+  "attacking": ["eastwoods/vlbrouk1utok.png",
     "eastwoods/vlbrouk2utok.png",
     "eastwoods/vlbrouk3utok.png",
     "eastwoods/vlbrouk4utok.png"
-    ],
+  ],
   "speed": 80,
-  "jumpSpeed": 55,
-  "boxWidth": 1.6,
-  "boxHeight": 0.95,
-  "PPM": 160
+  "jumpSpeed": 70,
+  "boxWidth": 1.3,
+  "boxHeight": 0.9,
+  "PPM": 250
 }
