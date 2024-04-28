@@ -93,4 +93,8 @@ public class Object {
     public void dispose() {
         sprite.getTexture().dispose();
     }
+
+    public Body getBody() {
+        return body;
+    }
 }

@@ -36,6 +36,7 @@ public class Door extends Object{
 
     public void close() {
         body.setActive(false);
+
     }
 
 }

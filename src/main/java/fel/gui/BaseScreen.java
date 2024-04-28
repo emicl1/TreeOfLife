@@ -19,7 +19,7 @@ import fel.jsonFun.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseScreen implements Screen {
+public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     public Game game;
 
     public float x;
@@ -33,11 +33,16 @@ public class BaseScreen implements Screen {
     public SpriteBatch batch;
     public Sprite backgroundSprite;
     private Texture backgroundTexture;
+    public ContactListener listener;
 
     private List<Sprite> groundSprites = new ArrayList<>();
     private List<MoveableObj> moveableObjs = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
     private List<Button> buttons = new ArrayList<>();
+    public List<EnemySmallBug> smallBugs;
+    public List<EnemyBigBug> bigBugs;
+
+
     public boolean facingRight = true;
 
     public float stateTime;
@@ -45,8 +50,6 @@ public class BaseScreen implements Screen {
     private boolean isOnGround;
 
     public boolean isMoving = false;
-
-    private int groundContacts = 0;
 
     public LevelConfig config;
 
@@ -64,6 +67,29 @@ public class BaseScreen implements Screen {
         this.x = x;
         this.y = y;
         this.jsonPath = jsonPath;
+    }
+
+    public void createEnemies(){
+        if (config.smallBugs != null){
+            for (SmallBugConfig smallBugConfig : config.smallBugs){
+                String[] paths = smallBugConfig.paths;
+                Vector2 startPosition = new Vector2(smallBugConfig.x, smallBugConfig.y);
+                EnemySmallBug enemy = new EnemySmallBug(world, paths, startPosition, smallBugConfig.leftBound, smallBugConfig.rightBound);
+                enemy.loadAnimationEnemy();
+                smallBugs.add(enemy);
+            }
+        }
+        if (config.bigBugs != null){
+            for (BigBugConfig bigBugConfig : config.bigBugs){
+                String[] paths = bigBugConfig.paths;
+                String[] attackPaths = bigBugConfig.attackPaths;
+                Vector2 startPosition = new Vector2(bigBugConfig.x, bigBugConfig.y);
+                EnemyBigBug enemy = new EnemyBigBug(world, paths, attackPaths, startPosition, bigBugConfig.leftBound, bigBugConfig.rightBound, 2.2f, 1.5f, 1.5f, 5f);
+                enemy.loadAnimationEnemy();
+                enemy.loadAttackAnimation();
+                bigBugs.add(enemy);
+            }
+        }
     }
 
     public void createMoveableObj(LevelConfig config){
@@ -128,103 +154,36 @@ public class BaseScreen implements Screen {
         world = new World(new Vector2(gravityX, gravityY), true);
         debugRenderer = new Box2DDebugRenderer();
         batch = new SpriteBatch();
-        ContactListener listener = new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                Fixture fixA = contact.getFixtureA();
-                Fixture fixB = contact.getFixtureB();
-
-                if (isFixturePlayer(contact.getFixtureA()) && isFixtureGround(contact.getFixtureB()) ||
-                        isFixturePlayer(contact.getFixtureB()) && isFixtureGround(contact.getFixtureA())) {
-                    groundContacts++;
-                    isOnGround = true;
-                }
-                if ((isFixturePlayer(fixA) && isFixtureItem(fixB)) ||
-                        (isFixturePlayer(fixB) && isFixtureItem(fixA))) {
-                    System.out.println("Item collected");
-                    handleItemCollection(fixA, fixB);
-                }
-
-                if (isFixtureButton(fixA) || isFixtureButton(fixB)) {
-                    handleButtonsTouch(fixA, fixB);
-                }
-
-            }
-
-            @Override
-            public void endContact(Contact contact) {
-                if (isFixturePlayer(contact.getFixtureA()) && isFixtureGround(contact.getFixtureB()) ||
-                        isFixturePlayer(contact.getFixtureB()) && isFixtureGround(contact.getFixtureA())) {
-                    groundContacts--;
-                    if (groundContacts <= 0) {
-                        isOnGround = false;
-                        groundContacts = 0;  // Reset to prevent negative counts
-                    }
-                }
-                if (isFixtureButton(contact.getFixtureA()) || isFixtureButton(contact.getFixtureB())) {
-                    handleButtonRelease(contact.getFixtureA(), contact.getFixtureB());
-                }
-
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold manifold) {
-
-            }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-
-            }
-        };
+        listener = new MyContactListener(this);
         world.setContactListener(listener);
     }
 
-    private void handleItemCollection(Fixture fixA, Fixture fixB) {
-        Fixture itemFixture = fixA.getUserData() instanceof Item ? fixA : fixB;
-
-        if (itemFixture.getUserData() instanceof Item) {
-            Item collectedItem = (Item) itemFixture.getUserData();
-            System.out.println("Item collected: " + collectedItem.name);
-            if (collectedItem.isCollectable) {
-                items.remove(collectedItem);
-                bodiesToDestroy.add(itemFixture.getBody());
-            }
-        } else {
-            System.out.println("Error: Non-item fixture involved in item collection");
-        }
+    @Override
+    public void removeBody(Body body) {
+        bodiesToDestroy.add(body);
     }
 
-    private void handleButtonsTouch(Fixture fixA, Fixture fixB) {
-        Fixture buttonFixture = fixA.getUserData() instanceof Button ? fixA : fixB;
+    @Override
+    public void removeDoor(Door door) {
+        doorsToClose.add(door);
 
-        if (buttonFixture.getUserData() instanceof Button) {
-            Button button = (Button) buttonFixture.getUserData();
-            System.out.println("Button pressed");
-            Array<Door> doors = button.getDoors();
-            for (Door door : doors) {
-                doorsToClose.add(door);
-            }
-            button.isNotPressed = true;
-        } else {
-            System.out.println("Error: Non-button fixture involved in button press");
-        }
     }
 
-    private void handleButtonRelease(Fixture fixA, Fixture fixB) {
-        Fixture buttonFixture = fixA.getUserData() instanceof Button ? fixA : fixB;
+    @Override
+    public void removeItem(Item item) {
+        items.remove(item);
 
-        if (buttonFixture.getUserData() instanceof Button) {
-            Button button = (Button) buttonFixture.getUserData();
-            System.out.println("Button released");
-            Array<Door> doors = button.getDoors();
-            for (Door door : doors) {
-                doorsToOpen.add(door);
-            }
-            button.isNotPressed = false;
-        } else {
-            System.out.println("Error: Non-button fixture involved in button release");
-        }
+    }
+
+    @Override
+    public void changeOnGround(boolean isOnGround) {
+        BaseScreen.this.isOnGround = isOnGround;
+
+    }
+
+    @Override
+    public void doorsToOpen(Door door) {
+        doorsToOpen.add(door);
     }
 
 
@@ -364,25 +323,6 @@ public class BaseScreen implements Screen {
         verticalEdge.dispose();
     }
 
-    private boolean isFixturePlayer(Fixture fixture) {
-        return fixture.getUserData() != null && fixture.getUserData().equals("player");
-    }
-
-    private boolean isFixtureGround(Fixture fixture) {
-        return fixture.getUserData() != null && fixture.getUserData().equals("ground");
-    }
-
-    private boolean isFixtureItem(Fixture fixture) {
-        return fixture.getUserData() instanceof Item;
-    }
-
-    private boolean isFixtureButton(Fixture fixture) {
-        return fixture.getUserData() instanceof Button;
-    }
-
-    private boolean isFixtureMoveableObj(Fixture fixture) {
-        return fixture.getUserData() instanceof MoveableObj;
-    }
 
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -421,6 +361,12 @@ public class BaseScreen implements Screen {
         createMoveableObj(config);
         createButtons(config);
 
+        smallBugs = new ArrayList<>();
+        bigBugs = new ArrayList<>();
+
+
+        createEnemies();
+
         System.out.println((Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
         createWorldBounds(31, 32 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
@@ -441,8 +387,7 @@ public class BaseScreen implements Screen {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        goToEastWoods();
-        goToWestWoods();
+        goToFunctions();
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -472,6 +417,17 @@ public class BaseScreen implements Screen {
             door.open();
         }
         doorsToOpen.clear();
+
+        if (smallBugs != null){
+            for(EnemySmallBug enemy : smallBugs){
+                enemy.update(player.getPosition());
+            }
+        }
+        if (bigBugs != null){
+            for(EnemyBigBug enemy : bigBugs){
+                enemy.update(player.getPosition());
+            }
+        }
     }
 
 
@@ -479,6 +435,7 @@ public class BaseScreen implements Screen {
     public void drawGameElements() {
         drawOtherElements();
         player.drawPlayer(batch, stateTime, isMoving, true , false, facingRight);
+
     }
 
 
@@ -508,7 +465,22 @@ public class BaseScreen implements Screen {
                 }
             }
         }
+        if (smallBugs != null){
+            for (EnemySmallBug enemy : smallBugs){
+                enemy.draw(batch, stateTime);
+            }
+        }
+        if (bigBugs != null){
+            for (EnemyBigBug enemy : bigBugs){
+                enemy.draw(batch, stateTime);
+            }
+        }
 
+    }
+
+    public void goToFunctions(){
+        goToEastWoods();
+        goToWestWoods();
     }
 
     public void goToEastWoods(){
@@ -521,8 +493,8 @@ public class BaseScreen implements Screen {
     public void goToWestWoods(){
         Vector2 position = player.getPosition();
         if (position.x > 28 && position.y < 6) {
-            game.setScreen(new WestWoodsBase(game, 3, 2, "levels/WestWoodsBase.json"));
-            //game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
+            //game.setScreen(new WestWoodsBase(game, 3, 2, "levels/WestWoodsBase.json"));
+            game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
         }
     }
 
@@ -569,6 +541,13 @@ public class BaseScreen implements Screen {
 
         for (Button button : buttons) {
             button.dispose();
+        }
+
+        for (EnemySmallBug enemy : smallBugs){
+            enemy.dispose();
+        }
+        for (EnemyBigBug enemy : bigBugs){
+            enemy.dispose();
         }
 
     }

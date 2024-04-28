@@ -37,6 +37,7 @@ public class WestWoodsBase extends BaseScreen {
         player = new Player(world, x, y, "player/PlayerWestWoodsBase.json");
     }
 
+    @Override
     public void goToFunctions() {
         GoToPuzzle();
         goToBase();

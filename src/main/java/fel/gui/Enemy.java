@@ -47,10 +47,10 @@ public class Enemy{
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.3f;
-        body.createFixture(fixtureDef);
+        body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
 
-        body.setUserData(this);
+
         body.setActive(true);
 
     }
@@ -72,10 +72,11 @@ public class Enemy{
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.3f;
-        body.createFixture(fixtureDef);
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
 
-        body.setUserData(this);
+
         body.setActive(true);
     }
 
@@ -98,10 +99,10 @@ public class Enemy{
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.3f;
-        body.createFixture(fixtureDef);
+        body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
 
-        body.setUserData(this);
+
         body.setActive(true);
 
     }

@@ -13,7 +13,7 @@ public class WestWoodsPuzzle extends WestWoodsBase{
     }
 
     public void goToWestWoodsBase() {
-        if (player.getPosition().x < 2 && player.getPosition().y > 2) {
+        if (player.getPosition().x < 3 && player.getPosition().y > 2) {
             game.setScreen(new WestWoodsBase(game, 28, 6, "levels/WestWoodsBase.json"));
         }
     }
