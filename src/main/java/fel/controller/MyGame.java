@@ -9,6 +9,6 @@ public class MyGame extends Game {
 
     @Override
     public void create() {
-        this.setScreen(new BaseScreen(this, 15, 2, "levels/BaseScreen.json"));
+        this.setScreen(new BaseScreen(this, 15, 4, "levels/BaseScreen.json"));
     }
 }

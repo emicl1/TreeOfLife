@@ -73,7 +73,4 @@ public class Character {
         health += heal;
     }
 
-
-
-
 }

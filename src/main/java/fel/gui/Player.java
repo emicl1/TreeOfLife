@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -21,6 +22,12 @@ public class Player {
     public float boxWidth;
     public float boxHeight;
     public float PPM = 160;
+    public float density = 2f;
+    public float swordWidth;
+    public float swordHeight;
+
+    public Sword sword;
+    public boolean hasSword = false;
 
     public Animation<TextureRegion> walkAnimation;
     public Animation<TextureRegion> standingAnimation;
@@ -42,6 +49,9 @@ public class Player {
         this.boxWidth = config.boxWidth;
         this.boxHeight = config.boxHeight;
         this.PPM = config.PPM;
+        this.density = config.density;
+        this.swordWidth = config.swordWidth;
+        this.swordHeight = config.swordHeight;
         createPlayer();
     }
 
@@ -57,15 +67,18 @@ public class Player {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
+        bodyDef.fixedRotation = true;
 
         playerBody = world.createBody(bodyDef);
         System.out.println(boxHeight + " " + boxWidth);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(boxWidth, boxHeight);
 
+
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
+        fixtureDef.density = density;
+
         fixtureDef.friction = 0.4f;
 
         Fixture playerFixture = playerBody.createFixture(fixtureDef);
@@ -178,6 +191,35 @@ public class Player {
         playerBody.applyForceToCenter(speed, 0, true);
     }
 
+    public void initSword(){
+        sword = new Sword(playerBody.getPosition().x, playerBody.getPosition().y);
+        sword.createAndAttachSword(world, playerBody, swordWidth, swordHeight, boxHeight);
+        hasSword = true;
+    }
+
+    public void attack() {
+        if (sword != null) {
+            float currentAngle = sword.getAngle() % (2 * MathUtils.PI); // Normalize the angle
+            System.out.println("Current sword angle in degrees: " + MathUtils.radiansToDegrees * currentAngle);
+
+            // Calculate the target angle for 190 degrees in radians
+            float targetAngle = 179 * MathUtils.degreesToRadians;
+
+            // Check if the sword has not yet rotated the full 190 degrees
+            if (Math.abs(currentAngle) < targetAngle) {
+                sword.update(); // Continue to apply torque
+            }
+
+            // Once the sword rotates slightly more than 190 degrees, consider stopping the attack
+            if (Math.abs(currentAngle) >= targetAngle) {
+                sword.dispose(); // Dispose of the sword and remove it
+                sword = null; // Make sure to nullify the reference
+                System.out.println("Sword disposed after completing the attack rotation.");
+            }
+        } else {
+            System.out.println("Sword is null, cannot perform attack.");
+        }
+    }
 
     public void dispose(){
         for (TextureRegion region : walkAnimation.getKeyFrames()){

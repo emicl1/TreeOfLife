@@ -28,7 +28,10 @@
   ],
   "speed": 80,
   "jumpSpeed": 70,
-  "boxWidth": 1.3,
-  "boxHeight": 0.9,
+  "boxWidth": 0.4,
+  "boxHeight": 0.8,
+  "swordWidth": 0.3,
+  "swordHeight": 2,
+  "density": 3,
   "PPM": 250
 }

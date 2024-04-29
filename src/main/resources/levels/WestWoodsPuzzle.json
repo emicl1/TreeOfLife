@@ -36,7 +36,7 @@
 
   ],
   "moveableObjs": [{"path": "westwoods/objectToMove.jpg",
-    "x": 11, "y": 2, "width": 1.8, "height": 1.8, "density": 0.5 }],
+    "x": 11, "y": 6, "width": 1.8, "height": 1.8, "density": 0.5 }],
   "buttons": [{"path": "westwoods/stepButton.jpg",
     "x": 20, "y": 2.5, "width": 1, "height": 1, "doors": [
       {"path": "westwoods/stick.jpg", "x": 4, "y": 15, "width": 1, "height": 1}

@@ -11,4 +11,7 @@ public class PlayerConfig {
     public float boxWidth;
     public float boxHeight;
     public float PPM;
+    public float density;
+    public float swordWidth;
+    public float swordHeight;
 }

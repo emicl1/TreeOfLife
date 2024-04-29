@@ -44,6 +44,10 @@ public class MyContactListener implements ContactListener {
             System.out.println("Enemy touched");
         }
 
+        if ((isFixtureSword(fixA) || isFixtureSword(fixB)) && (isFixtureEnemy(fixA) || isFixtureEnemy(fixB))){
+            System.out.println("Sword touched enemy");
+        }
+
     }
 
     @Override
@@ -95,6 +99,10 @@ public class MyContactListener implements ContactListener {
 
     private boolean isFixtureEnemy(Fixture fixture) {
         return fixture.getUserData() instanceof Enemy;
+    }
+
+    private boolean isFixtureSword(Fixture fixture) {
+        return fixture.getUserData() instanceof Sword;
     }
 
     private void handleItemCollection(Fixture fixA, Fixture fixB) {

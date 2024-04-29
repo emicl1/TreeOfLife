@@ -36,7 +36,7 @@ public class EastWoodsBase extends BaseScreen {
 
     public void goToEastWood1() {
         if (player.getPosition().x < 2 && player.getPosition().y < 6) {
-            game.setScreen(new EastWoods1(game, 28, 5, "levels/EastWoods1.json"));
+            game.setScreen(new EastWoods1(game, 27, 6, "levels/EastWoods1.json"));
         }
     }
 

@@ -343,6 +343,12 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             player.playerBody.applyForceToCenter(0, -10, true);
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            if (player.sword == null) {
+                player.initSword();
+            }
+            player.attack();
+        }
     }
 
     @Override
@@ -486,15 +492,15 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     public void goToEastWoods(){
         Vector2 position = player.getPosition();
         if (position.x < 2 && position.y < 16) {
-            game.setScreen(new EastWoodsBase(game, 28, 5, "levels/EastWoodsBase.json"));
+            game.setScreen(new EastWoodsBase(game, 27, 7, "levels/EastWoodsBase.json"));
         }
     }
 
     public void goToWestWoods(){
         Vector2 position = player.getPosition();
         if (position.x > 28 && position.y < 6) {
-            //game.setScreen(new WestWoodsBase(game, 3, 2, "levels/WestWoodsBase.json"));
-            game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
+            game.setScreen(new WestWoodsBase(game, 3, 2, "levels/WestWoodsBase.json"));
+            //game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
         }
     }
 

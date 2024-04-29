@@ -65,6 +65,7 @@ public class Object {
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = shape;
             fixtureDef.density = density;
+            //fixtureDef.isSensor = isSensor;
 
             return fixtureDef;
         } else {
