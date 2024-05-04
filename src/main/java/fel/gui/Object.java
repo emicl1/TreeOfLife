@@ -83,7 +83,7 @@ public class Object {
 
     public void draw(SpriteBatch batch) {
 
-        if (sprite != null && body != null) {
+        if (sprite != null ) { //&& body != null)
             sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
             sprite.draw(batch);
 
@@ -97,5 +97,17 @@ public class Object {
 
     public Body getBody() {
         return body;
+    }
+
+    public void setActive(){
+        body.setActive(true);
+    }
+
+    public void setInactive(){
+        body.setActive(false);
+    }
+
+    public void setPosition(float x, float y){
+       body.setTransform(x, y, 0);
     }
 }

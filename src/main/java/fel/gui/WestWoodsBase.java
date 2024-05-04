@@ -4,12 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
+import fel.controller.MyGame;
 import fel.jsonFun.LevelLoader;
 
 public class WestWoodsBase extends BaseScreen {
 
 
-    public WestWoodsBase(Game game, float x, float y, String jsonPath) {
+    public WestWoodsBase(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
     }
 

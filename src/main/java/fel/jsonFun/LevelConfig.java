@@ -3,6 +3,9 @@ package fel.jsonFun;
 import java.util.List;
 
 public class LevelConfig {
+    public String name;
+    public String locationName;
+    public boolean isLocked;
     public String background;
     public String groundImage;
     public List<GroundConfig> ground;

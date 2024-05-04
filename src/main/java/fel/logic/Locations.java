@@ -1,18 +1,19 @@
 package fel.logic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Locations{
     private String name;
-    private Scenes[] scenes;
+    private List<Scenes>  scenes;
     private boolean isLocked;
     private boolean isVisited;
     private String description;
 
-    public Locations(String name, Scenes[] scenes, boolean isLocked, boolean isVisited, String description) {
+    public Locations(String name, List<Scenes> scenes, boolean isLocked) {
         this.name = name;
         this.scenes = scenes;
         this.isLocked = isLocked;
-        this.isVisited = isVisited;
-        this.description = description;
     }
 
     public String getName() {
@@ -23,9 +24,6 @@ public class Locations{
         return description;
     }
 
-    public Scenes[] getScenes() {
-        return scenes;
-    }
 
     public boolean getIsLocked() {
         return isLocked;
@@ -43,9 +41,6 @@ public class Locations{
         this.description = description;
     }
 
-    public void setScenes(Scenes[] scenes) {
-        this.scenes = scenes;
-    }
 
     public void setIsLocked(boolean isLocked) {
         this.isLocked = isLocked;
@@ -56,24 +51,12 @@ public class Locations{
     }
 
     public void addScene(Scenes scene) {
-        Scenes[] temp = new Scenes[scenes.length + 1];
-        for (int i = 0; i < scenes.length; i++) {
-            temp[i] = scenes[i];
-        }
-        temp[scenes.length] = scene;
-        scenes = temp;
+        scenes.add(scene);
     }
 
-    public void getScenesInfo() {
-        for (int i = 0; i < scenes.length; i++) {
-            System.out.println(scenes[i].getName());
-        }
+    public List<Scenes> getScenes() {
+        return scenes;
     }
 
-    public void getSceneDescription() {
-        for (int i = 0; i < scenes.length; i++) {
-            System.out.println(scenes[i].getDescription());
-        }
-    }
 
 }

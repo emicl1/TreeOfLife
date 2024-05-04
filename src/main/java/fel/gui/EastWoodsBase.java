@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
+import fel.controller.MyGame;
 import fel.jsonFun.BigBugConfig;
 import fel.jsonFun.GroundConfig;
 import fel.jsonFun.LevelLoader;
@@ -15,7 +16,7 @@ import java.util.List;
 public class EastWoodsBase extends BaseScreen {
 
 
-    public EastWoodsBase(Game game, float x, float y, String jsonPath) {
+    public EastWoodsBase(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
     }
 

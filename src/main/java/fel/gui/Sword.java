@@ -36,7 +36,7 @@ public class Sword {
         swordFixtureDef.density = 0.5f;
         swordFixtureDef.isSensor = true; // Make it a sensor if it should not cause physical collisions
 
-        swordBody.createFixture(swordFixtureDef);
+        swordBody.createFixture(swordFixtureDef).setUserData(this);
         swordShape.dispose();
 
         attachSwordToPlayer(swordBody, playerHeight);
@@ -86,6 +86,5 @@ public class Sword {
     public float getAngle() {
         return swordBody.getAngle();
     }
-
 
 }

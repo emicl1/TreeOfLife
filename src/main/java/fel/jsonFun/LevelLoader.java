@@ -1,7 +1,6 @@
 package fel.jsonFun;
 
 
-
 import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

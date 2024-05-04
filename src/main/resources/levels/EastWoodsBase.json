@@ -1,4 +1,6 @@
 {
+  "name": "EastWoodsBase",
+  "locationName": "EastWoods",
   "background": "eastwoods/redforest.jpg",
   "groundImage": "eastwoods/kamen.png",
   "ground": [
@@ -8,7 +10,9 @@
     ],
   "gravityX": 0,
   "gravityY": -17,
-  "smallBugs": [ {
+  "smallBugs": [
+    {
+    "name": "smallBug",
     "paths": ["eastwoods/mnbrouk1.png",
       "eastwoods/mnbrouk2.png",
       "eastwoods/mnbrouk3.png",
@@ -16,9 +20,12 @@
     "x": 8,
     "y": 2,
     "leftBound": 8,
-    "rightBound": 22
+    "rightBound": 22,
+    "health": 100,
+    "attackDamage": 20
   }
   ],
   "groundHeight": 2,
-  "groundWidth": 2
+  "groundWidth": 2,
+  "isLocked": false
 }

@@ -6,6 +6,8 @@ public interface BodyDoorItemRemoveManager {
     void removeBody(Body body);
     void removeDoor(Door door);
     void removeItem(Item item);
+    void addItemToInventory(Item item);
     void changeOnGround(boolean isOnGround);
     void doorsToOpen(Door door);
+
 }

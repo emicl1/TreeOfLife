@@ -5,17 +5,12 @@ public class Character {
     private int health;
     private int attackDamage;
     private boolean isAlive;
-    private int speed;
-    private int x;
-    private int y;
-    public Items[] items;
 
-    public Character(String name, int health, int attackDamage, boolean isAlive, int speed, Items[] items){
+    public Character(String name, int health, int attackDamage, boolean isAlive){
         this.name = name;
         this.health = health;
         this.attackDamage = attackDamage;
         this.isAlive = isAlive;
-        this.items = items;
     }
 
     public String getName(){
@@ -48,14 +43,6 @@ public class Character {
 
     public boolean getIsAlive(){
         return isAlive;
-    }
-
-    public void setSpeed(int speed){
-        this.speed = speed;
-    }
-
-    public int getSpeed(){
-        return speed;
     }
 
     public void takeDamage(int damage){

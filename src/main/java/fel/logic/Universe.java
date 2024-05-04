@@ -1,11 +1,13 @@
 package fel.logic;
 
 
+import java.util.List;
+
 public class Universe {
     private String name;
-    private Locations[] locations;
+    private List<Locations> locations;
 
-    public Universe(String name, Locations[] locations) {
+    public Universe(String name, List<Locations> locations) {
         this.name = name;
         this.locations = locations;
     }
@@ -14,31 +16,21 @@ public class Universe {
         return name;
     }
 
-    public Locations[] getLocations() {
+    public List<Locations> getLocations() {
         return locations;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void addLocation(Locations location){
+        locations.add(location);
     }
 
-    public void setLocations(Locations[] locations) {
-        this.locations = locations;
+    public void removeLocation(Locations location) {
+        locations.remove(location);
     }
 
-    public void addLocation(Locations location) {
-        Locations[] temp = new Locations[locations.length + 1];
-        for (int i = 0; i < locations.length; i++) {
-            temp[i] = locations[i];
-        }
-        temp[locations.length] = location;
-        locations = temp;
+    public void addLocations(List<Locations> locations){
+        this.locations.addAll(locations);
     }
 
-    public void getLocationsInfo() {
-        for (int i = 0; i < locations.length; i++) {
-            System.out.println(locations[i].getName());
-        }
-    }
 
 }

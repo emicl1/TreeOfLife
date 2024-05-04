@@ -15,6 +15,7 @@ public class Enemy{
     public Animation<TextureRegion> walkAnimation;
 
     public Body body;
+    public String name;
     public String currentState;
     public float leftBoundary;
     public float rightBoundary;
@@ -30,10 +31,11 @@ public class Enemy{
     public float boxWidth = 1.6f;
     public float boxHeight = 0.95f;
 
-    public Enemy(World world, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary) {
+    public Enemy(World world, String name, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary) {
         this.pathToAnimations = pathToAnimations;
         this.leftBoundary = leftBoundary;
         this.rightBoundary = rightBoundary;
+        this.name = name;
         this.currentState = "PATROLLING";
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -55,11 +57,12 @@ public class Enemy{
 
     }
 
-    public Enemy(World world, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight) {
+    public Enemy(World world, String name,String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight) {
         this.pathToAnimations = pathToAnimations;
         this.leftBoundary = leftBoundary;
         this.rightBoundary = rightBoundary;
         this.currentState = "PATROLLING";
+        this.name = name;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(startPosition);
@@ -80,10 +83,11 @@ public class Enemy{
         body.setActive(true);
     }
 
-    public Enemy(World world, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight, float speedPatrol, float speedFollow) {
+    public Enemy(World world, String name, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight, float speedPatrol, float speedFollow) {
         this.pathToAnimations = pathToAnimations;
         this.leftBoundary = leftBoundary;
         this.rightBoundary = rightBoundary;
+        this.name = name;
         this.currentState = "PATROLLING";
         this.speedPatrolOriginal = speedPatrol;
         this.speedFollowOriginal = speedFollow;
@@ -190,6 +194,10 @@ public class Enemy{
         return body.getPosition();
     }
 
+    public String getName() {
+        return name;
+    }
+
 
     private void die() {
         body.setActive(false);
@@ -202,5 +210,7 @@ public class Enemy{
         }
 
     }
+
+
 }
 

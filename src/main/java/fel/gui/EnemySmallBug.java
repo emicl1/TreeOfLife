@@ -13,8 +13,8 @@ import java.util.Objects;
 
 public class EnemySmallBug extends Enemy{
 
-    public EnemySmallBug(World world, String[] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary) {
-        super(world, pathToAnimations, startPosition, leftBoundary, rightBoundary);
+    public EnemySmallBug(World world, String name,String[] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary) {
+        super(world, name, pathToAnimations, startPosition, leftBoundary, rightBoundary);
     }
 }
 

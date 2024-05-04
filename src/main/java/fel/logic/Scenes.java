@@ -1,24 +1,25 @@
 package fel.logic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Scenes {
     private String name;
     private String description;
-    private Enemies[] enemies;
-    private Items[] items;
+    private List<Enemies> smallBugs = new ArrayList<>();
+    private List<Enemies> bigBugs = new ArrayList<>();
+
+    private List<Items> items = new ArrayList<>();
     private FriendlyNPC[] friendlyNPCs;
-    private boolean isLocked;
-    private boolean isVisited;
 
 
-
-    public Scenes(String name, String description, Enemies[] enemies, Items[] items, FriendlyNPC[] friendlyNPCs, boolean isLocked, boolean isVisited) {
+    public Scenes(String name, String description, List<Enemies> smallBugs, List<Enemies>  bigBugs,  List<Items> items, FriendlyNPC[] friendlyNPCs) {
         this.name = name;
         this.description = description;
-        this.enemies = enemies;
+        this.smallBugs = smallBugs;
+        this.bigBugs = bigBugs;
         this.items = items;
         this.friendlyNPCs = friendlyNPCs;
-        this.isLocked = isLocked;
-        this.isVisited = isVisited;
     }
 
     public String getName() {
@@ -29,24 +30,20 @@ public class Scenes {
         return description;
     }
 
-    public Enemies[] getEnemies() {
-        return enemies;
+    public List<Enemies> getSmallBugs() {
+        return smallBugs;
     }
 
-    public Items[] getItems() {
+    public List<Enemies> getBigBugs() {
+        return bigBugs;
+    }
+
+    public List<Items> getItems() {
         return items;
     }
 
     public FriendlyNPC[] getFriendlyNPCs() {
         return friendlyNPCs;
-    }
-
-    public boolean getIsLocked() {
-        return isLocked;
-    }
-
-    public boolean getIsVisited() {
-        return isVisited;
     }
 
     public void setName(String name) {
@@ -57,11 +54,15 @@ public class Scenes {
         this.description = description;
     }
 
-    public void setEnemies(Enemies[] enemies) {
-        this.enemies = enemies;
+    public void setSmallBugs(List<Enemies> smallBugs) {
+        this.smallBugs = smallBugs;
     }
 
-    public void setItems(Items[] items) {
+    public void setBigBugs(List<Enemies> bigBugs) {
+        this.bigBugs = bigBugs;
+    }
+
+    public void setItems(List<Items> items) {
         this.items = items;
     }
 
@@ -69,30 +70,16 @@ public class Scenes {
         this.friendlyNPCs = friendlyNPCs;
     }
 
-    public void setIsLocked(boolean isLocked) {
-        this.isLocked = isLocked;
+    public void addSmallBug(Enemies smallBug) {
+        smallBugs.add(smallBug);
     }
 
-    public void setIsVisited(boolean isVisited) {
-        this.isVisited = isVisited;
-    }
-
-    public void addEnemy(Enemies enemy) {
-        Enemies[] temp = new Enemies[enemies.length + 1];
-        for (int i = 0; i < enemies.length; i++) {
-            temp[i] = enemies[i];
-        }
-        temp[enemies.length] = enemy;
-        enemies = temp;
+    public void addBigBug(Enemies bigBug) {
+        bigBugs.add(bigBug);
     }
 
     public void addItem(Items item) {
-        Items[] temp = new Items[items.length + 1];
-        for (int i = 0; i < items.length; i++) {
-            temp[i] = items[i];
-        }
-        temp[items.length] = item;
-        items = temp;
+        items.add(item);
     }
 
     public void addFriendlyNPC(FriendlyNPC friendlyNPC) {
@@ -104,39 +91,52 @@ public class Scenes {
         friendlyNPCs = temp;
     }
 
-    public void getEnemiesInfo() {
-        for (int i = 0; i < enemies.length; i++) {
-            System.out.println(enemies[i].getName());
-        }
+    public void removeSmallBug(Enemies smallBug) {
+        smallBugs.remove(smallBug);
     }
 
-    public void getItemsInfo() {
-        for (int i = 0; i < items.length; i++) {
-            System.out.println(items[i].getName());
-        }
+    public void removeBigBug(Enemies bigBug) {
+        bigBugs.remove(bigBug);
     }
 
-    public void getFriendlyNPCsInfo() {
+    public void removeItem(Items item) {
+        items.remove(item);
+    }
+
+    public void removeFriendlyNPC(FriendlyNPC friendlyNPC) {
+        FriendlyNPC[] temp = new FriendlyNPC[friendlyNPCs.length - 1];
+        int j = 0;
         for (int i = 0; i < friendlyNPCs.length; i++) {
-            System.out.println(friendlyNPCs[i].getName());
+            if (friendlyNPCs[i] != friendlyNPC) {
+                temp[j] = friendlyNPCs[i];
+                j++;
+            }
         }
+        friendlyNPCs = temp;
     }
 
-    public void getScenesInfo() {
-        for (int i = 0; i < enemies.length; i++) {
-            System.out.println(enemies[i].getName());
-        }
-        for (int i = 0; i < items.length; i++) {
-            System.out.println(items[i].getName());
-        }
-        for (int i = 0; i < friendlyNPCs.length; i++) {
-            System.out.println(friendlyNPCs[i].getName());
-        }
+    public void clearSmallBugs() {
+        smallBugs.clear();
     }
 
+    public void clearBigBugs() {
+        bigBugs.clear();
+    }
 
+    public void clearItems() {
+        items.clear();
+    }
 
+    public void clearFriendlyNPCs() {
+        friendlyNPCs = new FriendlyNPC[0];
+    }
 
+    public void clearAll() {
+        smallBugs.clear();
+        bigBugs.clear();
+        items.clear();
+        friendlyNPCs = new FriendlyNPC[0];
+    }
 
 
 }

@@ -1,4 +1,6 @@
 {
+  "name": "WestWoodsPuzzle",
+  "locationName": "WestWoods",
   "background": "westwoods/badforest.jpg",
   "groundImage": "eastwoods/kamen.png",
   "ground": [
@@ -46,6 +48,7 @@
   "gravityX": 0,
   "gravityY": -17,
   "groundHeight": 1,
-  "groundWidth": 1
+  "groundWidth": 1,
+  "isLocked": false
 
 }

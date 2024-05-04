@@ -14,13 +14,15 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import fel.controller.MyGame;
 import fel.jsonFun.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
-    public Game game;
+    public MyGame game;
 
     public float x;
     public float y;
@@ -38,10 +40,11 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     private List<Sprite> groundSprites = new ArrayList<>();
     private List<MoveableObj> moveableObjs = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
+    private List<Item> itemsToPutInInventory = new ArrayList<>();
+    private List<Item> invetory = new ArrayList<>();
     private List<Button> buttons = new ArrayList<>();
     public List<EnemySmallBug> smallBugs;
     public List<EnemyBigBug> bigBugs;
-
 
     public boolean facingRight = true;
 
@@ -55,14 +58,12 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
     public String jsonPath;
 
-
-
     public Array<Body> bodiesToDestroy = new Array<Body>();
     public Array<Door> doorsToClose = new Array<Door>();
     public Array<Door> doorsToOpen = new Array<Door>();
 
 
-    public BaseScreen(Game game, float x, float y, String jsonPath) {
+    public BaseScreen(MyGame game, float x, float y, String jsonPath) {
         this.game = game;
         this.x = x;
         this.y = y;
@@ -74,7 +75,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             for (SmallBugConfig smallBugConfig : config.smallBugs){
                 String[] paths = smallBugConfig.paths;
                 Vector2 startPosition = new Vector2(smallBugConfig.x, smallBugConfig.y);
-                EnemySmallBug enemy = new EnemySmallBug(world, paths, startPosition, smallBugConfig.leftBound, smallBugConfig.rightBound);
+                EnemySmallBug enemy = new EnemySmallBug(world, smallBugConfig.name, paths, startPosition, smallBugConfig.leftBound, smallBugConfig.rightBound);
                 enemy.loadAnimationEnemy();
                 smallBugs.add(enemy);
             }
@@ -84,7 +85,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 String[] paths = bigBugConfig.paths;
                 String[] attackPaths = bigBugConfig.attackPaths;
                 Vector2 startPosition = new Vector2(bigBugConfig.x, bigBugConfig.y);
-                EnemyBigBug enemy = new EnemyBigBug(world, paths, attackPaths, startPosition, bigBugConfig.leftBound, bigBugConfig.rightBound, 2.2f, 1.5f, 1.5f, 5f);
+                EnemyBigBug enemy = new EnemyBigBug(world, bigBugConfig.name, paths, attackPaths, startPosition, bigBugConfig.leftBound, bigBugConfig.rightBound, 2.2f, 1.5f, 1.5f, 5f);
                 enemy.loadAnimationEnemy();
                 enemy.loadAttackAnimation();
                 bigBugs.add(enemy);
@@ -154,7 +155,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         world = new World(new Vector2(gravityX, gravityY), true);
         debugRenderer = new Box2DDebugRenderer();
         batch = new SpriteBatch();
-        listener = new MyContactListener(this);
+        listener = new MyContactListener(this, game);
         world.setContactListener(listener);
     }
 
@@ -166,19 +167,21 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     @Override
     public void removeDoor(Door door) {
         doorsToClose.add(door);
-
     }
 
     @Override
     public void removeItem(Item item) {
         items.remove(item);
+    }
 
+    @Override
+    public void addItemToInventory(Item item){
+        itemsToPutInInventory.add(item);
     }
 
     @Override
     public void changeOnGround(boolean isOnGround) {
         BaseScreen.this.isOnGround = isOnGround;
-
     }
 
     @Override
@@ -410,9 +413,11 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         stateTime += delta;
 
         for (Body body : bodiesToDestroy) {
+
             world.destroyBody(body);
         }
         bodiesToDestroy.clear();
+
 
         for (Door door : doorsToClose) {
             door.close();
@@ -424,15 +429,43 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         }
         doorsToOpen.clear();
 
-        if (smallBugs != null){
-            for(EnemySmallBug enemy : smallBugs){
+        if (smallBugs != null) {
+            Iterator<EnemySmallBug> iterator = smallBugs.iterator();
+            while (iterator.hasNext()) {
+                EnemySmallBug enemy = iterator.next();
                 enemy.update(player.getPosition());
+                if (!game.isEnemyAlive(enemy.getName())) {
+                    iterator.remove(); // Safe removal during iteration
+                }
             }
         }
-        if (bigBugs != null){
-            for(EnemyBigBug enemy : bigBugs){
+
+        if (bigBugs != null) {
+            Iterator<EnemyBigBug> iterator = bigBugs.iterator();
+            while (iterator.hasNext()) {
+                EnemyBigBug enemy = iterator.next();
                 enemy.update(player.getPosition());
+                if (!game.isEnemyAlive(enemy.getName())) {
+                    iterator.remove(); // Safe removal during iteration
+                }
             }
+        }
+
+
+
+
+        if (itemsToPutInInventory != null){
+            for (Item item : itemsToPutInInventory){
+                item.setInactive();
+                invetory.add(item);
+            }
+        }
+        itemsToPutInInventory.clear();
+
+        if (!game.isPlayerAlive()){
+            game.setScreen(new BaseScreen(game, 15, 4, "levels/BaseScreen.json"));
+            game.setPlayerAlive(true);
+
         }
     }
 
@@ -479,6 +512,18 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         if (bigBugs != null){
             for (EnemyBigBug enemy : bigBugs){
                 enemy.draw(batch, stateTime);
+            }
+        }
+
+        if (invetory != null){
+            float PPM = player.PPM;
+
+            float x = (Gdx.graphics.getWidth() * 2.2f)/PPM;
+            float y = (Gdx.graphics.getHeight() *0.2f)/PPM;
+            for (Item item : invetory){
+                item.setPosition(x, y);
+                item.draw(batch);
+                x += (Gdx.graphics.getWidth() * 0.3f)/PPM;
             }
         }
 
@@ -552,6 +597,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         for (EnemySmallBug enemy : smallBugs){
             enemy.dispose();
         }
+
         for (EnemyBigBug enemy : bigBugs){
             enemy.dispose();
         }

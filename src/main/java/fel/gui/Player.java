@@ -70,6 +70,7 @@ public class Player {
         bodyDef.fixedRotation = true;
 
         playerBody = world.createBody(bodyDef);
+        System.out.println("Player: Box height: " + boxHeight + " Box width: " + boxWidth);
         System.out.println(boxHeight + " " + boxWidth);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(boxWidth, boxHeight);
@@ -200,21 +201,17 @@ public class Player {
     public void attack() {
         if (sword != null) {
             float currentAngle = sword.getAngle() % (2 * MathUtils.PI); // Normalize the angle
-            System.out.println("Current sword angle in degrees: " + MathUtils.radiansToDegrees * currentAngle);
 
-            // Calculate the target angle for 190 degrees in radians
             float targetAngle = 179 * MathUtils.degreesToRadians;
 
-            // Check if the sword has not yet rotated the full 190 degrees
             if (Math.abs(currentAngle) < targetAngle) {
                 sword.update(); // Continue to apply torque
             }
 
-            // Once the sword rotates slightly more than 190 degrees, consider stopping the attack
+            // Once the sword rotates slightly more than 179 degrees, dispose of it
             if (Math.abs(currentAngle) >= targetAngle) {
                 sword.dispose(); // Dispose of the sword and remove it
                 sword = null; // Make sure to nullify the reference
-                System.out.println("Sword disposed after completing the attack rotation.");
             }
         } else {
             System.out.println("Sword is null, cannot perform attack.");

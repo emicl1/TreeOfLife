@@ -1,18 +1,21 @@
 package fel.gui;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import fel.controller.MyGame;
 import fel.jsonFun.SmallBugConfig;
 
 public class MyContactListener implements ContactListener {
     public int groundContacts = 0;
     public boolean isOnGround = false;
-
+    public MyGame game;
 
     private BodyDoorItemRemoveManager bodyDoorItemRemoveManager;
 
-    public MyContactListener(BodyDoorItemRemoveManager bodyDoorItemRemoveManager) {
+    public MyContactListener(BodyDoorItemRemoveManager bodyDoorItemRemoveManager, MyGame game) {
         this.bodyDoorItemRemoveManager = bodyDoorItemRemoveManager;
+        this.game = game;
     }
 
 
@@ -41,11 +44,33 @@ public class MyContactListener implements ContactListener {
         }
 
         if ((isFixtureEnemy(fixA) || isFixtureEnemy(fixB)) && (isFixturePlayer(fixA) || isFixturePlayer(fixB))){
-            System.out.println("Enemy touched");
+            System.out.println("Enemy touched player");
+            game.playerTakeDamage(20);
+            if (game.getPlayerHealth() <= 0){
+                game.setPlayerAlive(false);
+            }
         }
 
-        if ((isFixtureSword(fixA) || isFixtureSword(fixB)) && (isFixtureEnemy(fixA) || isFixtureEnemy(fixB))){
+        if ((isFixtureSword(fixA) && isFixtureEnemy(fixB))) {
             System.out.println("Sword touched enemy");
+            String name = ((Enemy) fixB.getUserData()).getName();
+            System.out.println(name);
+            game.playerAttack(name);
+            if (!game.isEnemyAlive(name)){
+                game.removeEnemy(name);
+                bodyDoorItemRemoveManager.removeBody(fixB.getBody());
+            }
+        }
+
+        if ((isFixtureSword(fixB) && isFixtureEnemy(fixA))) {
+            System.out.println("Sword touched enemy");
+            String name = ((Enemy) fixA.getUserData()).getName();
+            System.out.println(name);
+            game.playerAttack(name);
+            if (!game.isEnemyAlive(name)){
+                game.removeEnemy(name);
+                bodyDoorItemRemoveManager.removeBody(fixA.getBody());
+            }
         }
 
     }
@@ -112,6 +137,7 @@ public class MyContactListener implements ContactListener {
             Item collectedItem = (Item) itemFixture.getUserData();
             System.out.println("Item collected: " + collectedItem.name);
             if (collectedItem.isCollectable) {
+                bodyDoorItemRemoveManager.addItemToInventory(collectedItem);
                 bodyDoorItemRemoveManager.removeItem(collectedItem);
                 bodyDoorItemRemoveManager.removeBody(collectedItem.getBody());
             }

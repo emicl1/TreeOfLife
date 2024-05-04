@@ -1,4 +1,6 @@
 {
+  "name": "BaseScreen",
+  "locationName": "Base",
   "background": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/homelocation/treetrunk.jpg",
   "groundImage": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/eastwoods/kamen.png",
      "ground": [{
@@ -12,6 +14,7 @@
   "gravityX": 0,
   "gravityY": -17,
   "groundHeight": 2,
-  "groundWidth": 2
+  "groundWidth": 2,
+  "isLocked": false
 
 }

@@ -3,9 +3,10 @@ package fel.gui;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import fel.controller.MyGame;
 
 public class EastWoods1 extends EastWoodsBase{
-    public EastWoods1(Game game, float x, float y, String jsonPath) {
+    public EastWoods1(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
     }
 

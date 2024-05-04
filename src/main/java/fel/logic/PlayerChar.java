@@ -1,36 +1,67 @@
 package fel.logic;
 
+
+import java.util.List;
+import fel.jsonFun.ItemConfig;
+
 public class PlayerChar extends Character{
 
-    private Items[] abilities;
     private Locations[] exploredLocations;
-    private Items[] inventory;
+    public List<Items> inventory;
 
-    public PlayerChar(String name, int health, int attackDamage, boolean isAlive, int speed, Items[] items, Items[] abilities, Locations[] exploredLocations, Items[] inventory) {
-        super(name, health, attackDamage, isAlive, speed, items);
-        this.abilities = abilities;
+    public PlayerChar(String name, int health, int attackDamage, boolean isAlive, Locations[] exploredLocations, List<Items> inventory) {
+        super(name, health, attackDamage, isAlive);
         this.exploredLocations = exploredLocations;
         this.inventory = inventory;
     }
 
-    public void addAbility(Items ability){
-        return;
+    public Locations[] getExploredLocations() {
+        return exploredLocations;
     }
 
-    public void addLocation(Locations location){
-        return;
+    public void setExploredLocations(Locations[] exploredLocations) {
+        this.exploredLocations = exploredLocations;
     }
 
-    public void addItem(Items item){
-        return;
+    public List<Items> getInventory() {
+        return inventory;
     }
 
-    public void removeItem(Items item){
-        return;
+    public void setInventory(List<Items> inventory) {
+        this.inventory = inventory;
     }
 
-    public void CurrentLocation(){
-        return;
+    public void addLocation(Locations location) {
+        if (exploredLocations == null) {
+            exploredLocations = new Locations[1];
+            exploredLocations[0] = location;
+        } else {
+            Locations[] temp = new Locations[exploredLocations.length + 1];
+            for (int i = 0; i < exploredLocations.length; i++) {
+                temp[i] = exploredLocations[i];
+            }
+            temp[exploredLocations.length] = location;
+            exploredLocations = temp;
+        }
+    }
+
+    public void addItem(Items item) {
+        inventory.add(item);
+    }
+
+    public void removeItem(Items item) {
+        inventory.remove(item);
+    }
+
+    public void takeDamage(int damage){
+        this.setHealth(this.getHealth() - damage);
+        if (this.getHealth() <= 0){
+            this.setIsAlive(false);
+        }
+    }
+
+    public void attack(Character target){
+        target.takeDamage(this.getAttackDamage());
     }
 
 }
