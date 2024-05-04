@@ -47,7 +47,7 @@ public class WestWoodsBase extends BaseScreen {
 
     public void GoToPuzzle() {
         Vector2 position = player.getPosition();
-        if (position.x > 26 && position.y > 15) {
+        if (position.x > 26 && position.y > 14) {
             game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
         }
     }
@@ -56,7 +56,7 @@ public class WestWoodsBase extends BaseScreen {
     public void goToBase() {
         Vector2 position = player.getPosition();
         if (position.x < 2 && position.y < 6) {
-            game.setScreen(new BaseScreen(game, 24, 2, "levels/BaseScreen.json"));
+            game.setScreen(new BaseScreen(game, 24, 4, "levels/BaseScreen.json"));
         }
 
     }

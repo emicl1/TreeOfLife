@@ -31,13 +31,13 @@ public class EastWoodsBase extends BaseScreen {
 
     public void goToBase() {
         if (player.getPosition().x > 29 && player.getPosition().y < 10) {
-            game.setScreen(new BaseScreen(game, 2, 2, "levels/BaseScreen.json"));
+            game.setScreen(new BaseScreen(game, 2, 3, "levels/BaseScreen.json"));
         }
     }
 
     public void goToEastWood1() {
         if (player.getPosition().x < 2 && player.getPosition().y < 6) {
-            game.setScreen(new EastWoods1(game, 27, 6, "levels/EastWoods1.json"));
+            game.setScreen(new EastWoods1(game, 28, 9, "levels/EastWoods1.json"));
         }
     }
 

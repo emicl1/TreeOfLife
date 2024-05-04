@@ -17,7 +17,7 @@ public class EastWoods1 extends EastWoodsBase{
 
     void goToEastWoodsBase() {
         if (player.getPosition().x > 29 && player.getPosition().y > 2) {
-            game.setScreen(new EastWoodsBase(game, 3, 6, "levels/EastWoodsBase.json"));
+            game.setScreen(new EastWoodsBase(game, 2, 7, "levels/EastWoodsBase.json"));
         }
     }
 

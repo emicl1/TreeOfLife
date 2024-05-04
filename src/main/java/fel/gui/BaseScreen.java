@@ -537,7 +537,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     public void goToEastWoods(){
         Vector2 position = player.getPosition();
         if (position.x < 2 && position.y < 16) {
-            game.setScreen(new EastWoodsBase(game, 27, 7, "levels/EastWoodsBase.json"));
+            game.setScreen(new EastWoodsBase(game, 28, 10, "levels/EastWoodsBase.json"));
         }
     }
 
