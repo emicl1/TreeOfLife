@@ -3,6 +3,7 @@ package fel.jsonFun;
 import java.util.List;
 
 public class PlayerConfig {
+    public String name;
     public String[] standing;
     public String[] walking;
     public String[] walkingWithSword;

@@ -36,8 +36,15 @@ public class WestWoodsBase extends BaseScreen {
 
     @Override
     public void createPlayer(){
-        System.out.println("Creating player");
-        player = new Player(world, x, y, "player/PlayerWestWoodsBase.json");
+
+        Path path = Paths.get("src/main/resources/savePlayer/PlayerWestWoodsBase.json");
+
+        if (path.toFile().exists()) {
+            player = new Player(world, x, y, "src/main/resources/savePlayer/PlayerWestWoodsBase.json");
+        } else {
+            player = new Player(world, x, y, "player/PlayerWestWoodsBase.json");
+        }
+        createPlayersInventory();
     }
 
     @Override
@@ -50,10 +57,10 @@ public class WestWoodsBase extends BaseScreen {
     public void GoToPuzzle() {
         Vector2 position = player.getPosition();
         if (position.x > 26 && position.y > 14) {
-            Path path = Paths.get("saveLevels/WestWoodsPuzzle.json");
+            Path path = Paths.get("src/main/resources/saveLevels/WestWoodsPuzzle.json");
             if (path.toFile().exists()) {
                 System.out.println("Going to puzzle");
-                game.setScreen(new WestWoodsPuzzle(game, 2, 2, "saveLevels/WestWoodsPuzzle.json"));
+                game.setScreen(new WestWoodsPuzzle(game, 2, 2, "src/main/resources/saveLevels/WestWoodsPuzzle.json"));
             } else {
                 game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
             }
@@ -64,9 +71,9 @@ public class WestWoodsBase extends BaseScreen {
     public void goToBase() {
         Vector2 position = player.getPosition();
         if (position.x < 2 && position.y < 6) {
-            Path path = Paths.get("saveLevels/BaseScreen.json");
+            Path path = Paths.get("src/main/resources/saveLevels/BaseScreen.json");
             if (path.toFile().exists()) {
-                game.setScreen(new BaseScreen(game, 24, 4, "saveLevels/BaseScreen.json"));
+                game.setScreen(new BaseScreen(game, 24, 4, "src/main/resources/saveLevels/BaseScreen.json"));
             } else {
                 game.setScreen(new BaseScreen(game, 24, 4, "levels/BaseScreen.json"));
             }

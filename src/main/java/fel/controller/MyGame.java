@@ -8,6 +8,8 @@ import fel.logic.Items;
 import fel.logic.LogicManager;
 import fel.logic.Universe;
 
+import java.util.List;
+
 public class MyGame extends Game {
 
     public LogicManager logicManager;
@@ -81,7 +83,7 @@ public class MyGame extends Game {
     }
 
 
-    public void craftItem(String item1Name, String item2Name){
+    public String craftItem(String item1Name, String item2Name){
         Items item1 = logicManager.findItemWithNameInInvetory(item1Name);
         Items item2 = logicManager.findItemWithNameInInvetory(item2Name);
         Items itemToCraft = logicManager.findItemToCraft(item1, item2);
@@ -89,12 +91,17 @@ public class MyGame extends Game {
         logicManager.playerRemoveItem(item1);
         logicManager.playerRemoveItem(item2);
         logicManager.printInventory();
+        return itemToCraft.name;
     }
 
     public void saveGame(LevelConfig levelConfig, PlayerConfig playerConfig){
 
         levelSaver.saveLevel(levelConfig, "src/main/resources/saveLevels/" + levelConfig.name + ".json");
-        playerSaver.savePlayer(playerConfig, "src/main/resources/savePlayer/Player.json");
+        playerSaver.savePlayer(playerConfig, "src/main/resources/savePlayer/" + playerConfig.name + ".json");
+    }
+
+    public List<Items> getInventory(){
+        return logicManager.getInventory();
     }
 
 }

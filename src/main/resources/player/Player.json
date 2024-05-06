@@ -1,5 +1,6 @@
 
 {
+  "name": "Player",
   "standing": [
     "player/duchstat/duch1stat.png",
     "player/duchstat/duch2stat.png",

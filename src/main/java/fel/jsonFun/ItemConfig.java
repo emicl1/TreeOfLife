@@ -8,4 +8,5 @@ public class ItemConfig {
     public float width;
     public float height;
     public boolean isCollectable;
+
 }

@@ -18,9 +18,9 @@ public class WestWoodsPuzzle extends WestWoodsBase{
 
     public void goToWestWoodsBase() {
         if (player.getPosition().x < 2 && player.getPosition().y < 7) {
-            Path path = Paths.get("saveLevels/WestWoodsBase.json");
+            Path path = Paths.get("src/main/resources/saveLevels/WestWoodsBase.json");
             if (path.toFile().exists()) {
-                game.setScreen(new WestWoodsBase(game, 28, 14, "saveLevels/WestWoodsBase.json"));
+                game.setScreen(new WestWoodsBase(game, 28, 14, "src/main/resources/saveLevels/WestWoodsBase.json"));
             } else {
                 game.setScreen(new WestWoodsBase(game, 28, 14, "levels/WestWoodsBase.json"));
             }

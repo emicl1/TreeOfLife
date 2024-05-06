@@ -1,10 +1,2 @@
-1) make controller work
-2) init all the logic in controller
-3) make all the necessary methods in controller
-4) make it work with the view
-5) add one scene to westwoods - final scene with item to unlock end location
-8) make three scenes in Tree of life - two challenging two jump on the top of the tree
-and one for the final boss fight
-
-
-make first scenes, than location and then the universe it'll better
+make inventory spawn only once
+save the object you crafted

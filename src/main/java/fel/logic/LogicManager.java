@@ -2,6 +2,7 @@ package fel.logic;
 
 import fel.jsonFun.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -104,7 +105,25 @@ public class LogicManager {
     public void createPlayer(){
         PlayerLoader playerLoader = new PlayerLoader();
         configPlayer = playerLoader.loadPlayer(pathToPlayerJson);
+        inventory = createPlayerInventory(configPlayer);
         player = new PlayerChar("Player", (int )configPlayer.health, (int)configPlayer.attackDamage, true, null, inventory);
+    }
+
+    public List<Items> createPlayerInventory(PlayerConfig playerConfig){
+        InventoryLoader inventoryLoader = new InventoryLoader();
+        Path path = Path.of("src/main/resources/savePlayer/inventory.json");
+        if (path.toFile().exists()) {
+            InventoryConfig inventoryConfig = inventoryLoader.loadInventory("src/main/resources/savePlayer/inventory.json");
+            List<Items> items = new ArrayList<>();
+            for (ItemConfig item : inventoryConfig.items){
+                Items item1 = new Items(item.name, "");
+                items.add(item1);
+            }
+            return items;
+        } else {
+            List<Items> items = new ArrayList<>();
+            return items;
+        }
     }
 
 
@@ -264,6 +283,10 @@ public class LogicManager {
         for (Items item : inventory){
             System.out.println("Item name: " + item.getName());
         }
+    }
+
+    public List<Items> getInventory() {
+        return inventory;
     }
 
 }

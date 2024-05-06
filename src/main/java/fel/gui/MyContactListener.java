@@ -57,6 +57,7 @@ public class MyContactListener implements ContactListener {
             game.playerAttack(name);
             if (!game.isEnemyAlive(name)){
                 game.removeEnemy(name);
+                bodyDoorItemRemoveManager.removeEnemy((Enemy) fixA.getUserData());
                 bodyDoorItemRemoveManager.removeBody(fixB.getBody());
             }
         }
@@ -68,6 +69,7 @@ public class MyContactListener implements ContactListener {
             game.playerAttack(name);
             if (!game.isEnemyAlive(name)){
                 game.removeEnemy(name);
+                bodyDoorItemRemoveManager.removeEnemy((Enemy) fixA.getUserData());
                 bodyDoorItemRemoveManager.removeBody(fixA.getBody());
             }
         }

@@ -9,5 +9,6 @@ public interface BodyDoorItemRemoveManager {
     void addItemToInventory(Item item);
     void changeOnGround(boolean isOnGround);
     void doorsToOpen(Door door);
+    void removeEnemy(Enemy enemy);
 
 }
