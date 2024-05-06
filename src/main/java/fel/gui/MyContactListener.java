@@ -31,7 +31,6 @@ public class MyContactListener implements ContactListener {
         }
         if ((isFixturePlayer(fixA) && isFixtureItem(fixB)) ||
                 (isFixturePlayer(fixB) && isFixtureItem(fixA))) {
-            System.out.println("Item collected");
             handleItemCollection(fixA, fixB);
         }
 
@@ -40,7 +39,7 @@ public class MyContactListener implements ContactListener {
         }
 
         if (isFixtureMoveableObj(fixA) || isFixtureMoveableObj(fixB)) {
-            System.out.println("Moveable object touched");
+
         }
 
         if ((isFixtureEnemy(fixA) || isFixtureEnemy(fixB)) && (isFixturePlayer(fixA) || isFixturePlayer(fixB))){

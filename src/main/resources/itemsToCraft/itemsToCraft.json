@@ -1,0 +1,11 @@
+
+{
+  "itemsToCraft": [
+    {
+      "path": "map.jpg",
+      "name": "Map",
+      "item1Name": "stick",
+      "item2Name": "handle"
+    }
+  ]
+}

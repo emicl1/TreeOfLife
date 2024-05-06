@@ -50,5 +50,9 @@ public class Item extends Object{
         return isCollectable;
     }
 
+    public String getName() {
+        return name;
+    }
+
 
 }

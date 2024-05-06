@@ -1,11 +1,13 @@
 package fel.gui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import fel.controller.MyGame;
-import fel.jsonFun.LevelLoader;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class WestWoodsBase extends BaseScreen {
 
@@ -48,7 +50,13 @@ public class WestWoodsBase extends BaseScreen {
     public void GoToPuzzle() {
         Vector2 position = player.getPosition();
         if (position.x > 26 && position.y > 14) {
-            game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
+            Path path = Paths.get("saveLevels/WestWoodsPuzzle.json");
+            if (path.toFile().exists()) {
+                System.out.println("Going to puzzle");
+                game.setScreen(new WestWoodsPuzzle(game, 2, 2, "saveLevels/WestWoodsPuzzle.json"));
+            } else {
+                game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
+            }
         }
     }
 
@@ -56,7 +64,12 @@ public class WestWoodsBase extends BaseScreen {
     public void goToBase() {
         Vector2 position = player.getPosition();
         if (position.x < 2 && position.y < 6) {
-            game.setScreen(new BaseScreen(game, 24, 4, "levels/BaseScreen.json"));
+            Path path = Paths.get("saveLevels/BaseScreen.json");
+            if (path.toFile().exists()) {
+                game.setScreen(new BaseScreen(game, 24, 4, "saveLevels/BaseScreen.json"));
+            } else {
+                game.setScreen(new BaseScreen(game, 24, 4, "levels/BaseScreen.json"));
+            }
         }
 
     }

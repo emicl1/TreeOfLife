@@ -1,7 +1,5 @@
 package fel.logic;
 
-import fel.gui.Enemy;
-import fel.gui.Player;
 import fel.jsonFun.*;
 
 import java.util.ArrayList;
@@ -16,12 +14,17 @@ public class LogicManager {
     public LevelConfig config;
     public PlayerConfig configPlayer;
     public String pathToPlayerJson;
+    public String pathToItemsToCraftJson;
     public PlayerChar player;
 
-    public LogicManager(String[] pathsToJsons, Universe universe, String pathToPlayerJson) {
+    public List<Items> inventory = new ArrayList<>();
+    public List<ItemsCrafted> itemsToCraft = new ArrayList<>();
+
+    public LogicManager(String[] pathsToJsons, Universe universe, String pathToPlayerJson, String pathToItemsToCraftJson) {
         this.pathsToJsons = pathsToJsons;
         this.universe = universe;
         this.pathToPlayerJson = pathToPlayerJson;
+        this.pathToItemsToCraftJson = pathToItemsToCraftJson;
     }
 
 
@@ -29,6 +32,7 @@ public class LogicManager {
         createUniverse();
         goThroughScenesAndAddThemToLocations();
         createPlayer();
+        createItemsToCraft();
     }
 
     public void createUniverse(){
@@ -93,13 +97,26 @@ public class LogicManager {
                 }
             }
         }
+
+        printLocationAndScenesInthem();
     }
 
     public void createPlayer(){
         PlayerLoader playerLoader = new PlayerLoader();
         configPlayer = playerLoader.loadPlayer(pathToPlayerJson);
-        player = new PlayerChar("Player", (int )configPlayer.health, (int)configPlayer.attackDamage, true, null, null);
+        player = new PlayerChar("Player", (int )configPlayer.health, (int)configPlayer.attackDamage, true, null, inventory);
     }
+
+
+    public void createItemsToCraft(){
+        ItemsToCraftLoader itemsToCraftLoader = new ItemsToCraftLoader();
+        ItemsToCraftConfig itemsToCraftConfig = itemsToCraftLoader.loadItemsToCraft(pathToItemsToCraftJson);
+        for (CraftItemConfig item : itemsToCraftConfig.itemsToCraft){
+            ItemsCrafted itemToCraft = new ItemsCrafted(item.name, "", item.item1Name, item.item2Name);
+            itemsToCraft.add(itemToCraft);
+        }
+    }
+
 
     public boolean isPlayerAlive(){
         return player.getIsAlive();
@@ -161,12 +178,92 @@ public class LogicManager {
         return null;
     }
 
+    public Items findItemWithName(String name){
+        for (Locations location : universe.getLocations()){
+            for (Scenes scene : location.getScenes()){
+                for (Items item : scene.getItems()){
+                    if (Objects.equals(item.getName(), name)){
+                        return item;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public Items findItemWithNameInInvetory(String name){
+        for (Items item : inventory){
+            if (Objects.equals(item.getName(), name)){
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public Scenes findSceneWithItem(Items item){
+        for (Locations location : universe.getLocations()){
+            for (Scenes scene : location.getScenes()){
+                for (Items item1 : scene.getItems()){
+                    if (item1 == null){
+                        continue;
+                    }
+
+                    if (Objects.equals(item1.getName(), item.getName())){
+                        return scene;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public void deleteItemFromScene(Items item){
+        Scenes scene = findSceneWithItem(item);
+        scene.removeItem(item);
+    }
+
+
     public boolean isEnemyAlive(Enemies enemy){
         return enemy.getIsAlive();
     }
 
     public void removeEnemy(Enemies enemy){
         enemy.setIsAlive(false);
+    }
+
+    public boolean canBeCrafted(Items item1, Items item2){
+        for (ItemsCrafted item : itemsToCraft){
+            System.out.println("Item to craft "+ item.getName() +" Item1: "  + item1.getName() +  " Item2: " + item2.getName());
+            if (item.canBeCrafted(item1, item2)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ItemsCrafted findItemToCraft(Items item1, Items item2){
+        for (ItemsCrafted item : itemsToCraft){
+            if (item.canBeCrafted(item1, item2)){
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public void printLocationAndScenesInthem(){
+        for (Locations location : universe.getLocations()){
+            System.out.println("Location name: " + location.getName());
+            for (Scenes scene : location.getScenes()){
+                System.out.println("Scene name: " + scene.getName());
+            }
+        }
+    }
+
+    public void printInventory(){
+        for (Items item : inventory){
+            System.out.println("Item name: " + item.getName());
+        }
     }
 
 }
