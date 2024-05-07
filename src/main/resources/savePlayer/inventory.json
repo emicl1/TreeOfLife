@@ -1,1 +1,1 @@
-{"items":[{"path":"westwoods/stick.jpg","name":"stick","x":2.0,"y":14.0,"width":1.3,"height":1.3,"isCollectable":true},{"path":"westwoods/handle.jpg","name":"handle","x":2.0,"y":14.7,"width":1.3,"height":1.3,"isCollectable":true}]}
+{"items":[{"path":"map.jpg","name":"Map","x":0.0,"y":0.0,"width":2.0,"height":2.0,"isCollectable":false}]}
