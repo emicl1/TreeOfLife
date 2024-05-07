@@ -375,6 +375,18 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     public void handleSaving(){
         game.saveGame(config, player.config);
         InventorySaver inventorySaver = new InventorySaver();
+        inventoryConfig.items.clear();
+        for (Item item : inventory){
+            ItemConfig itemConfig = new ItemConfig();
+            itemConfig.path = item.path;
+            itemConfig.name = item.name;
+            itemConfig.x = item.x;
+            itemConfig.y = item.y;
+            itemConfig.width = item.width;
+            itemConfig.height = item.height;
+            itemConfig.isCollectable = item.isCollectable;
+            inventoryConfig.items.add(itemConfig);
+        }
         inventorySaver.saveInventory(inventoryConfig, "src/main/resources/savePlayer/inventory.json");
         
     }
@@ -398,10 +410,10 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 }
             }
         }
-
         // Update inventory
         inventory.removeAll(toRemove);
         inventory.addAll(toAdd);
+        handleSaving();
     }
 
     private void createNewItemFromCrafting(String itemName, List<Item> toAdd) {
@@ -425,6 +437,8 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 System.out.println("Crafted and added new item: " + itemName);
             }
         }
+
+
     }
 
 
@@ -436,7 +450,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         createCamera();
         createWorld(config.gravityX, config.gravityY);
-
 
         createBackgroundAndGround(config);
 
@@ -533,6 +546,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 item.setInactive();
                 inventory.add(item);
                 game.playerAddItem(item.getName());
+                handleSaving();
 
             }
         }
@@ -592,8 +606,9 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         if (inventory != null){
             float PPM = player.PPM;
 
-            float x = (Gdx.graphics.getWidth() * 2.2f)/PPM;
-            float y = (Gdx.graphics.getHeight() *0.2f)/PPM;
+            //value so low because PPM
+            float x = (Gdx.graphics.getWidth() * 0.009f);
+            float y = (Gdx.graphics.getHeight() *0.0009f);
             for (Item item : inventory){
                 item.setPosition(x, y);
                 item.draw(batch);

@@ -44,7 +44,6 @@ public class WestWoodsBase extends BaseScreen {
         } else {
             player = new Player(world, x, y, "player/PlayerWestWoodsBase.json");
         }
-        createPlayersInventory();
     }
 
     @Override
