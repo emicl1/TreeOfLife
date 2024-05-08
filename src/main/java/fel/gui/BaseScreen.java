@@ -467,6 +467,15 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     public void handleInteraction() {
         for (FriendlyNPC friendlyNPC : friendlyNPCsInContact) {
             game.interactWithFriendlyNPC(friendlyNPC.getName());
+            for (Item item : inventory) {
+                String itemInQuestion = game.getItemFromFriendlyNPC(friendlyNPC.getName(), item.getName());
+                if (!itemInQuestion.equals("")) {
+                    //TODO: Add item to inventory
+                    // read from the itemsToCraft.json file and make the config from CraftItemConfig
+                    // create a new item from the config and add it to the inventory
+
+                }
+            }
         }
     }
 
@@ -492,8 +501,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 log.info("Crafted and added new item: " + itemName);
             }
         }
-
-
     }
 
 

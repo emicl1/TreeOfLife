@@ -136,6 +136,8 @@ public class MyGame extends Game {
         System.out.println(logicManager.getDialogFromFriendlyNPC(friendlyNPCName));
     }
 
-
+    public String getItemFromFriendlyNPC(String friendlyNPCName, String itemToReceive){
+        return logicManager.getItemFromFriendlyNPC(friendlyNPCName, itemToReceive);
+    }
 
 }

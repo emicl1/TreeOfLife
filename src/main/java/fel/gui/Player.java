@@ -87,7 +87,7 @@ public class Player {
 
         Fixture playerFixture = playerBody.createFixture(fixtureDef);
         playerFixture.setUserData("player");
-        playerBody.setActive(true);
+
         shape.dispose();
 
 
@@ -196,8 +196,10 @@ public class Player {
     }
 
     public void initSword(){
+        System.out.println("x " + playerBody.getPosition().x + " y " + playerBody.getPosition().y);
         sword = new Sword(playerBody.getPosition().x, playerBody.getPosition().y);
         sword.createAndAttachSword(world, playerBody, swordWidth, swordHeight, boxHeight);
+
         hasSword = true;
         log.info("Sword created and attached");
     }

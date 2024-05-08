@@ -24,7 +24,7 @@ public class Sword {
         this.playerBody = playerBody;
         BodyDef swordBodyDef = new BodyDef();
         swordBodyDef.type = BodyDef.BodyType.DynamicBody;
-        swordBodyDef.position.set(playerBody.getPosition().x, playerBody.getPosition().y + playerHeight); // Spawn above the player
+        swordBodyDef.position.set(x, y + playerHeight); // Spawn above the player
 
         swordBody = world.createBody(swordBodyDef);
 
