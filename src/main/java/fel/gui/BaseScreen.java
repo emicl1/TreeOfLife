@@ -51,6 +51,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     private List<Button> buttons = new ArrayList<>();
     public List<EnemySmallBug> smallBugs;
     public List<EnemyBigBug> bigBugs;
+    public List<FriendlyNPC> friendlyNPCs = new ArrayList<>();
 
     public boolean facingRight = true;
 
@@ -82,6 +83,21 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
     public void createLogger() {
         log = game.getRootLogger();;
+    }
+
+    public void createFriendlyNPCs(LevelConfig config) {
+        if (config.friendlyNPCs == null) {
+            log.info("No friendly NPCs");
+            return;
+        }
+
+        for (FriendlyNPCConfig friendlyNPC : config.friendlyNPCs) {
+            FriendlyNPC newFriendlyNPC = new FriendlyNPC(friendlyNPC, log);
+            newFriendlyNPC.createBody(world);
+            newFriendlyNPC.loadAnimations();
+            friendlyNPCs.add(newFriendlyNPC);
+            log.info("Friendly NPC created: " + friendlyNPC.name);
+        }
     }
 
 
@@ -354,17 +370,17 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
 
     public void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.moveLeft();
             facingRight = true;
             isMoving = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.moveRight();
             facingRight = false;
             isMoving = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) && isOnGround) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && isOnGround) {
             player.jump();
             isOnGround = false;  // Prevent further jumps until grounded again
             isMoving = true;
@@ -372,7 +388,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             player.playerBody.applyForceToCenter(0, -10, true);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
             if (player.sword == null) {
                 player.initSword();
             }
@@ -398,7 +414,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             inventoryConfig.items = new ArrayList<>();
         }
 
-
         inventoryConfig.items.clear();
         for (Item item : inventory){
             ItemConfig itemConfig = new ItemConfig();
@@ -412,7 +427,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             inventoryConfig.items.add(itemConfig);
         }
         inventorySaver.saveInventory(inventoryConfig, "src/main/resources/savePlayer/inventory.json");
-        
     }
 
 
@@ -483,6 +497,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         createMoveableObj(config);
         createButtons(config);
         createPlayersInventory();
+        createFriendlyNPCs(config);
 
         if (config.items == null){
             log.info("No items");
@@ -625,6 +640,12 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         if (bigBugs != null){
             for (EnemyBigBug enemy : bigBugs){
                 enemy.draw(batch, stateTime);
+            }
+        }
+
+        if (friendlyNPCs != null) {
+            for (FriendlyNPC friendlyNPC : friendlyNPCs) {
+                friendlyNPC.draw(batch, stateTime);
             }
         }
 

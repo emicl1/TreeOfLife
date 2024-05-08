@@ -1,11 +1,16 @@
 package fel.gui;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
+import fel.jsonFun.FriendlyNPCConfig;
+import org.slf4j.Logger;
 
-public class FriendlyNPC {
+public class FriendlyNPC extends Object{
     public Animation<TextureRegion> Animation;
     public World world;
     public Body body;
@@ -16,35 +21,58 @@ public class FriendlyNPC {
     public float x;
     public float y;
 
-    //TODO make it so that it extends the object class i think
-    // it's the way to go
+    public FriendlyNPC(FriendlyNPCConfig config, Logger log) {
+        super(log);
+        this.pathToAnimations = config.pathToAnimations;
+        this.name = config.name;
+        this.x = config.x;
+        this.y = config.y;
+        this.width = config.boxWidth;
+        this.height = config.boxHeight;
+    }
 
-    public FriendlyNPC(World world, String name, String [] pathToAnimations, float x, float y, float boxWidth, float boxHeight) {
-        this.pathToAnimations = pathToAnimations;
-        this.name = name;
+    @Override
+    public void createBody(World world) {
         this.world = world;
-        this.boxWidth = boxWidth;
-        this.boxHeight = boxHeight;
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x, y);
+        BodyDef bodyDef = makeBodyDef(false);
         this.body = world.createBody(bodyDef);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox( boxWidth, boxHeight);
-
+        shape = new PolygonShape();
+        shape.setAsBox(boxWidth, boxHeight);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.3f;
+        fixtureDef.density = 0;
+
         body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
 
+    }
 
-        body.setActive(true);
+    public void loadAnimations() {
+        log.info("Loading animations for: " + name);
+        Array<TextureRegion> frames = new Array<>();
+        for (int i = 0; i < pathToAnimations.length; i++) {
+            try {
+                TextureRegion textureRegion = new TextureRegion(new Texture(pathToAnimations[i]));
+                frames.add(textureRegion);
+            } catch (Exception e) {
+                log.info("Error loading animation: " + pathToAnimations[i]);
+            }
+        }
+        Animation = new Animation(1f/3f, frames);
+    }
+
+    public void draw(SpriteBatch batch, float stateTime) {
+        batch.draw(Animation.getKeyFrame(stateTime), body.getPosition().x, body.getPosition().y, width, height);
     }
 
 
+    @Override
+    public void dispose() {
+        world.destroyBody(body);
+        //dispose animations
+        for (TextureRegion textureRegion : Animation.getKeyFrames()) {
+            textureRegion.getTexture().dispose();
+        }
+    }
 
 }
