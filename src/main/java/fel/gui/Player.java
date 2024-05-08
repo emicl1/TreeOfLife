@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import fel.jsonFun.PlayerConfig;
 import fel.jsonFun.PlayerLoader;
+import org.slf4j.Logger;
 
 public class Player {
 
@@ -36,9 +37,10 @@ public class Player {
     public Animation<TextureRegion> AttackAnimation;
     PlayerConfig config;
 
+    public Logger log;
 
 
-    public Player(World world, float x, float y, String PlayerConfigPath) {
+    public Player(World world, float x, float y, String PlayerConfigPath, Logger log) {
         this.world = world;
         this.x = x;
         this.y = y;
@@ -52,6 +54,7 @@ public class Player {
         this.density = config.density;
         this.swordWidth = config.swordWidth;
         this.swordHeight = config.swordHeight;
+        this.log = log;
         createPlayer();
     }
 
@@ -70,8 +73,8 @@ public class Player {
         bodyDef.fixedRotation = true;
 
         playerBody = world.createBody(bodyDef);
-        System.out.println("Player: Box height: " + boxHeight + " Box width: " + boxWidth);
-        System.out.println(boxHeight + " " + boxWidth);
+        log.info("Player body created at: " + x + " " + y);
+        log.info("Box width and height:" + boxWidth + " " + boxHeight);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(boxWidth, boxHeight);
 
@@ -196,6 +199,7 @@ public class Player {
         sword = new Sword(playerBody.getPosition().x, playerBody.getPosition().y);
         sword.createAndAttachSword(world, playerBody, swordWidth, swordHeight, boxHeight);
         hasSword = true;
+        log.info("Sword created and attached");
     }
 
     public void attack() {
@@ -214,7 +218,7 @@ public class Player {
                 sword = null; // Make sure to nullify the reference
             }
         } else {
-            System.out.println("Sword is null, cannot perform attack.");
+            log.warn("No sword to attack with");
         }
     }
 

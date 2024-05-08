@@ -1,6 +1,9 @@
 package fel.gui;
 
 
+
+
+import org.slf4j.Logger;
 import com.badlogic.gdx.physics.box2d.*;
 import fel.jsonFun.MoveableObjConfig;
 
@@ -8,7 +11,8 @@ public class MoveableObj extends Object{
 
     public float density;
 
-    public MoveableObj(MoveableObjConfig config) {
+    public MoveableObj(MoveableObjConfig config, Logger log) {
+        super(log);
         this.path = config.path;
         this.x = config.x;
         this.y = config.y;

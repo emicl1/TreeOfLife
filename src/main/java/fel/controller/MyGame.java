@@ -1,5 +1,6 @@
 package fel.controller;
 
+import ch.qos.logback.classic.Level;
 import com.badlogic.gdx.Game;
 import fel.gui.BaseScreen;
 import fel.jsonFun.*;
@@ -7,6 +8,14 @@ import fel.logic.Enemies;
 import fel.logic.Items;
 import fel.logic.LogicManager;
 import fel.logic.Universe;
+
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.Logger;
+
+
 
 import java.util.List;
 
@@ -21,11 +30,25 @@ public class MyGame extends Game {
     public LevelSaver levelSaver = new LevelSaver();
     public PlayerSaver playerSaver = new PlayerSaver();
 
+    //private final boolean loggingEnabled;
+    private LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+    private Logger rootLogger = loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
+
+    public MyGame(boolean loggingEnabled) {
+        if (!loggingEnabled) {
+            rootLogger.setLevel(Level.OFF);
+        } else {
+            rootLogger.setLevel(Level.DEBUG);
+        }
+        rootLogger.info("Logging enabled: " + loggingEnabled);
+        rootLogger.info("Logger Created :]");
+    }
+
 
     @Override
     public void create() {
-        System.out.println("Creating game");
-        logicManager = new LogicManager(pathsToJsons, universe, pathToPlayerJson, pathToItemsToCraftJson);
+        rootLogger.info("Creating game");
+        logicManager = new LogicManager(pathsToJsons, universe, pathToPlayerJson, pathToItemsToCraftJson, rootLogger);
         logicManager.create();
         this.setScreen(new BaseScreen(this, 15, 4, "levels/BaseScreen.json"));
     }
@@ -66,7 +89,7 @@ public class MyGame extends Game {
     }
 
     public void playerAddItem(String itemName){
-        System.out.println("Adding item to player inventory " + itemName);
+        rootLogger.info("Adding item to player: " + itemName);
         Items item = logicManager.findItemWithName(itemName);
         logicManager.playerAddItem(item);
         logicManager.deleteItemFromScene(item);
@@ -102,6 +125,10 @@ public class MyGame extends Game {
 
     public List<Items> getInventory(){
         return logicManager.getInventory();
+    }
+
+    public Logger getRootLogger(){
+        return rootLogger;
     }
 
 }

@@ -1,6 +1,8 @@
 package fel.logic;
 
 import fel.jsonFun.*;
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,11 +23,14 @@ public class LogicManager {
     public List<Items> inventory = new ArrayList<>();
     public List<ItemsCrafted> itemsToCraft = new ArrayList<>();
 
-    public LogicManager(String[] pathsToJsons, Universe universe, String pathToPlayerJson, String pathToItemsToCraftJson) {
+    public Logger logger;
+
+    public LogicManager(String[] pathsToJsons, Universe universe, String pathToPlayerJson, String pathToItemsToCraftJson, Logger logger) {
         this.pathsToJsons = pathsToJsons;
         this.universe = universe;
         this.pathToPlayerJson = pathToPlayerJson;
         this.pathToItemsToCraftJson = pathToItemsToCraftJson;
+        this.logger = logger;
     }
 
 
@@ -34,11 +39,13 @@ public class LogicManager {
         goThroughScenesAndAddThemToLocations();
         createPlayer();
         createItemsToCraft();
+        logger.info("LogicManager created");
     }
 
     public void createUniverse(){
         List<Locations> locations = new ArrayList<>();
         universe = new Universe("TreeOfLife", locations);
+        logger.info("Universe created");
     }
 
     public void goThroughScenesAndAddThemToLocations(){
@@ -49,42 +56,55 @@ public class LogicManager {
 
             List<Enemies> smallBugs = new ArrayList<>();
             List<Enemies> bigBugs = new ArrayList<>();
+            List<FriendlyNPC> friendlyNPCs = new ArrayList<>();
 
             List<Items> items = new ArrayList<>();
 
             if (config.smallBugs != null) {
                 for (SmallBugConfig bug : config.smallBugs) {
-                    System.out.println("Created Small bug name: " + bug.name);
-                    Enemies smallBug = new Enemies(bug.name, bug.health, bug.attackDamage, true, true, false);
+                    logger.info("Created Small bug name: " + bug.name);
+                    Enemies smallBug = new Enemies(bug.name, bug.health, bug.attackDamage, true, true);
                     smallBugs.add(smallBug);
                 }
             }
             if (config.bigBugs != null) {
                 for (BigBugConfig bug : config.bigBugs) {
-                    System.out.println("Created Big bug name: " + bug.name);
-                    Enemies BigBug = new Enemies(bug.name, bug.health, bug.attackDamage, true, true, false);
+                    logger.info("Created Big bug name: " + bug.name);
+                    Enemies BigBug = new Enemies(bug.name, bug.health, bug.attackDamage, true, true);
                     bigBugs.add(BigBug);
                 }
             }
             if (config.items != null) {
                 for (ItemConfig itemC : config.items) {
-                    System.out.println("Created Item name: " + itemC.name);
+                    logger.info("Created Item name: " + itemC.name);
                     Items item = new Items(itemC.name, "");
                     items.add(item);
                 }
             }
 
-            Scenes scene = new Scenes(config.name, "", smallBugs, bigBugs, items, null);
+            if (config.friendlyNPCs != null) {
+                for (FriendlyNPCConfig npc : config.friendlyNPCs) {
+                    logger.info("Created Friendly NPC name: " + npc.name);
+                    FriendlyNPC friendlyNPC = new FriendlyNPC(npc.name, 100, 0, true, false, npc.itemToGive, npc.itemToReceive, npc.itemToReceive2, npc.dialogueBeforeReceiving, npc.dialogueAfterReceiving);
+                    friendlyNPCs.add(friendlyNPC);
+                }
+            }
+
+            Scenes scene = new Scenes(config.name, "", smallBugs, bigBugs, items, friendlyNPCs);
 
             if (universe.getLocations() == null){
                 List<Scenes> scenes = new ArrayList<>();
                 scenes.add(scene);
                 Locations location = new Locations(config.locationName, scenes, config.isLocked);
+                logger.info("Created location: " + location.getName());
+                logger.info("Added scene: " + scene.getName() + " to location: " + location.getName());
+
                 universe.addLocation(location);
             }else {
                 boolean checkIfSceneBeenAdded = false;
                 for (Locations location : universe.getLocations()){
                     if (Objects.equals(location.getName(), config.locationName)){
+                        logger.info("Added scene: " + scene.getName() + " to location: " + location.getName());
                         location.addScene(scene);
                         checkIfSceneBeenAdded = true;
                         break;
@@ -94,6 +114,8 @@ public class LogicManager {
                     List<Scenes> scenes = new ArrayList<>();
                     scenes.add(scene);
                     Locations location = new Locations(config.locationName, scenes, config.isLocked);
+                    logger.info("Created location: " + location.getName());
+                    logger.info("Added scene: " + scene.getName() + " to location: " + location.getName());
                     universe.addLocation(location);
                 }
             }
@@ -106,6 +128,7 @@ public class LogicManager {
         PlayerLoader playerLoader = new PlayerLoader();
         configPlayer = playerLoader.loadPlayer(pathToPlayerJson);
         inventory = createPlayerInventory(configPlayer);
+        logger.info("Player created with health: " + configPlayer.health + " and attack damage: " + configPlayer.attackDamage);
         player = new PlayerChar("Player", (int )configPlayer.health, (int)configPlayer.attackDamage, true, null, inventory);
     }
 
@@ -119,13 +142,14 @@ public class LogicManager {
                 Items item1 = new Items(item.name, "");
                 items.add(item1);
             }
+            logger.info("Player inventory loaded from file");
             return items;
         } else {
             List<Items> items = new ArrayList<>();
+            logger.info("Player inventory created");
             return items;
         }
     }
-
 
     public void createItemsToCraft(){
         ItemsToCraftLoader itemsToCraftLoader = new ItemsToCraftLoader();
@@ -135,7 +159,6 @@ public class LogicManager {
             itemsToCraft.add(itemToCraft);
         }
     }
-
 
     public boolean isPlayerAlive(){
         return player.getIsAlive();
@@ -156,11 +179,12 @@ public class LogicManager {
 
     public void playerTakeDamage(int damage){
         player.setHealth(player.getHealth() - damage);
+        logger.info("Player took " + damage + " damage.");
     }
 
     public void playerAttack(Enemies enemy){
-        enemy.takeDamage(player.getAttackDamage());
-        System.out.println("Enemy health: " + enemy.getHealth());
+        enemy.takeDamage(player.getAttackDamage(), logger);
+        logger.info("Player attacked " + enemy.getName() + " for " + player.getAttackDamage() + " damage.");
     }
 
     public void enemyAttack(Enemies enemy){
@@ -173,10 +197,12 @@ public class LogicManager {
 
     public void playerAddItem(Items item){
         player.addItem(item);
+        logger.info("Item " + item.getName() + " added to inventory");
     }
 
     public void playerRemoveItem(Items item){
         player.removeItem(item);
+        logger.info("Item " + item.getName() + " removed from inventory");
     }
 
     public Enemies findEnemyWithName(String name){
@@ -202,6 +228,7 @@ public class LogicManager {
             for (Scenes scene : location.getScenes()){
                 for (Items item : scene.getItems()){
                     if (Objects.equals(item.getName(), name)){
+                        logger.info("Item " + item.getName() + " found in scene: " + scene.getName());
                         return item;
                     }
                 }
@@ -210,10 +237,10 @@ public class LogicManager {
         return null;
     }
 
-
     public Items findItemWithNameInInvetory(String name){
         for (Items item : inventory){
             if (Objects.equals(item.getName(), name)){
+                logger.info("Item " + item.getName() + " found in inventory");
                 return item;
             }
         }
@@ -229,6 +256,7 @@ public class LogicManager {
                     }
 
                     if (Objects.equals(item1.getName(), item.getName())){
+                        logger.info("Item" + item.getName() + " found in scene: " + scene.getName());
                         return scene;
                     }
                 }
@@ -239,6 +267,7 @@ public class LogicManager {
 
     public void deleteItemFromScene(Items item){
         Scenes scene = findSceneWithItem(item);
+        logger.info("Item" + item.getName() + " deleted from scene: " + scene.getName());
         scene.removeItem(item);
     }
 
@@ -253,8 +282,9 @@ public class LogicManager {
 
     public boolean canBeCrafted(Items item1, Items item2){
         for (ItemsCrafted item : itemsToCraft){
-            System.out.println("Item to craft "+ item.getName() +" Item1: "  + item1.getName() +  " Item2: " + item2.getName());
+
             if (item.canBeCrafted(item1, item2)){
+                logger.info("item" + item.getName() + " can be crafted from" + item1.getName() + " and " + item2.getName());
                 return true;
             }
         }
@@ -272,21 +302,56 @@ public class LogicManager {
 
     public void printLocationAndScenesInthem(){
         for (Locations location : universe.getLocations()){
-            System.out.println("Location name: " + location.getName());
+            logger.debug("Location name: " + location.getName());
             for (Scenes scene : location.getScenes()){
-                System.out.println("Scene name: " + scene.getName());
+                logger.debug("Scene name: " + scene.getName());
             }
         }
     }
 
     public void printInventory(){
         for (Items item : inventory){
-            System.out.println("Item name: " + item.getName());
+            logger.debug("Item name: " + item.getName());
         }
     }
 
     public List<Items> getInventory() {
         return inventory;
     }
+
+    public FriendlyNPC findFriendlyNPCWithName(String name){
+        for (Locations location : universe.getLocations()){
+            for (Scenes scene : location.getScenes()){
+                for (FriendlyNPC npc : scene.getFriendlyNPCs()){
+                    if (Objects.equals(npc.getName(), name)){
+                        logger.info("NPC " + npc.getName() + " found in" + scene.getName() + " scene");
+                        return npc;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public String getDialogFromFriendlyNPC(String name){
+        FriendlyNPC npc = findFriendlyNPCWithName(name);
+        return npc.getDialogue(logger);
+    }
+
+    public String getItemFromFriendlyNPC(String name, Items item1, Items item2){
+        FriendlyNPC npc = findFriendlyNPCWithName(name);
+        logger.info("Item given to NPC " + npc.getName());
+        return npc.giveItem( item1, item2);
+    }
+
+    public void giveItemToNPC(String name, String item){
+        FriendlyNPC npc = findFriendlyNPCWithName(name);
+        Items item1 = findItemWithNameInInvetory(item);
+        logger.info("Item " + item1.getName() + " given to NPC " + npc.getName());
+        npc.receiveItem(player, item1);
+    }
+
+
 
 }

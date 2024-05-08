@@ -6,22 +6,27 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import fel.jsonFun.ButtonConfig;
 import fel.jsonFun.DoorConfig;
+import org.slf4j.Logger;
 
 public class Button extends Object{
 
     public Array<Door> doors;
     public boolean isNotPressed = false;
+    public Logger log;
 
-    public Button(ButtonConfig config) {
+    public Button(ButtonConfig config, Logger log) {
+        super(log);
         this.path = config.path;
         this.x = config.x;
         this.y = config.y;
         this.width = config.width;
         this.height = config.height;
         this.doors = new Array<Door>();
+        this.log = log;
         for (DoorConfig doorConfig : config.doors) {
-            this.doors.add(new Door(doorConfig));
+            this.doors.add(new Door(doorConfig, log));
         }
+
     }
 
 

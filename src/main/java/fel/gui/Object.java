@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
+import org.slf4j.Logger;
 
 public class Object {
     public String path;
@@ -18,15 +19,21 @@ public class Object {
     public Body body;
     public World world;
 
+    public Logger log;
+
+    public Object(Logger log) {
+        this.log = log;
+    }
+
     public void loadSprite() {
-        System.out.println("Loading sprite: " + path);
+        log.info("Loading sprite: " + path);
         try {
             Texture texture = new Texture(path);
             this.sprite = new Sprite(texture);
             this.sprite.setPosition(x, y);
             this.sprite.setSize(width, height);
         } catch (Exception e) {
-            System.err.println("Failed to load sprite: " + e.getMessage());
+            log.info("Error loading sprite: " + path);
             this.sprite = null;
         }
     }
@@ -53,9 +60,9 @@ public class Object {
     }
 
     public FixtureDef makeFixtureDef(boolean isDynamic, float density, boolean isSensor) {
-        System.out.println("Creating fixture def");
+        log.info("Creating fixture def");
         if (sprite == null) {
-            System.err.println("Sprite is null");
+            log.warn("Sprite is null");
             return null;
         }
         if (isDynamic) {

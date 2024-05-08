@@ -35,8 +35,10 @@ public class EastWoodsBase extends BaseScreen {
         if (player.getPosition().x > 29 && player.getPosition().y < 10) {
             Path path = Paths.get("src/main/resources/saveLevels/BaseScreen.json");
             if (path.toFile().exists()) {
+                log.info("Loading BaseScreen saved file");
                 game.setScreen(new BaseScreen(game, 2, 3, "src/main/resources/saveLevels/BaseScreen.json"));
             } else {
+                log.info("Loading BaseScreen default file");
                 game.setScreen(new BaseScreen(game, 2, 3, "levels/BaseScreen.json"));
             }
         }
@@ -46,8 +48,10 @@ public class EastWoodsBase extends BaseScreen {
         if (player.getPosition().x < 2 && player.getPosition().y < 6) {
             Path path = Paths.get("src/main/resources/saveLevels/EastWoods1.json");
             if (path.toFile().exists()) {
+                log.info("Loading EastWoods1 saved file");
                 game.setScreen(new EastWoods1(game, 28, 9, "src/main/resources/saveLevels/EastWoods1.json"));
             } else {
+                log.info("Loading EastWoods1 default file");
                 game.setScreen(new EastWoods1(game, 28, 9, "levels/EastWoods1.json"));
             }
         }

@@ -25,7 +25,6 @@ public class WestWoodsBase extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
         goToFunctions();
 
-
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         drawGameElements(); // Draw game elements
@@ -40,9 +39,11 @@ public class WestWoodsBase extends BaseScreen {
         Path path = Paths.get("src/main/resources/savePlayer/PlayerWestWoodsBase.json");
 
         if (path.toFile().exists()) {
-            player = new Player(world, x, y, "src/main/resources/savePlayer/PlayerWestWoodsBase.json");
+            log.info("Loading Player saved file");
+            player = new Player(world, x, y, "src/main/resources/savePlayer/PlayerWestWoodsBase.json", log);
         } else {
-            player = new Player(world, x, y, "player/PlayerWestWoodsBase.json");
+            log.info("Loading Player default file");
+            player = new Player(world, x, y, "player/PlayerWestWoodsBase.json", log);
         }
     }
 
@@ -58,9 +59,10 @@ public class WestWoodsBase extends BaseScreen {
         if (position.x > 26 && position.y > 14) {
             Path path = Paths.get("src/main/resources/saveLevels/WestWoodsPuzzle.json");
             if (path.toFile().exists()) {
-                System.out.println("Going to puzzle");
+                log.info("Loading WestWoodsPuzzle saved file");
                 game.setScreen(new WestWoodsPuzzle(game, 2, 2, "src/main/resources/saveLevels/WestWoodsPuzzle.json"));
             } else {
+                log.info("Loading WestWoodsPuzzle default file");
                 game.setScreen(new WestWoodsPuzzle(game, 2, 2, "levels/WestWoodsPuzzle.json"));
             }
         }
@@ -72,12 +74,13 @@ public class WestWoodsBase extends BaseScreen {
         if (position.x < 2 && position.y < 6) {
             Path path = Paths.get("src/main/resources/saveLevels/BaseScreen.json");
             if (path.toFile().exists()) {
+                log.info("Loading BaseScreen saved file");
                 game.setScreen(new BaseScreen(game, 24, 4, "src/main/resources/saveLevels/BaseScreen.json"));
             } else {
+                log.info("Loading BaseScreen default file");
                 game.setScreen(new BaseScreen(game, 24, 4, "levels/BaseScreen.json"));
             }
         }
-
     }
 
     @Override

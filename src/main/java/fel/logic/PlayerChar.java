@@ -60,8 +60,4 @@ public class PlayerChar extends Character{
         }
     }
 
-    public void attack(Character target){
-        target.takeDamage(this.getAttackDamage());
-    }
-
 }

@@ -1,5 +1,7 @@
 package fel.logic;
 
+import ch.qos.logback.classic.Logger;
+
 public class Character {
     private String name;
     private int health;
@@ -45,15 +47,12 @@ public class Character {
         return isAlive;
     }
 
-    public void takeDamage(int damage){
+    public void takeDamage(int damage, Logger logger){
+        logger.info(name + " took " + damage + " damage.");
         health -= damage;
         if(health <= 0){
             isAlive = false;
         }
-    }
-
-    public void attack(Character target){
-        target.takeDamage(attackDamage);
     }
 
     public void heal(int heal){

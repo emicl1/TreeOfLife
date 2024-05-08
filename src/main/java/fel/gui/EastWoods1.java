@@ -22,8 +22,10 @@ public class EastWoods1 extends EastWoodsBase{
         if (player.getPosition().x > 29 && player.getPosition().y > 2) {
             Path path = Paths.get("src/main/resources/saveLevels/EastWoodsBase.json");
             if (path.toFile().exists()) {
+                log.info("Loading East Woods Base saved level");
                 game.setScreen(new EastWoodsBase(game, 2, 7, "src/main/resources/saveLevels/EastWoodsBase.json"));
             } else {
+                log.info("Loading East Woods Base new level");
             game.setScreen(new EastWoodsBase(game, 2, 7, "levels/EastWoodsBase.json"));
             }
         }

@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 
 public class DesktopLauncher {
-	public static void main(String[] arg) {
+	public static void main(String[] args) {
 		// Set up an error callback to handle any GLFW initialization errors
 		GLFWErrorCallback.createPrint(System.err).set();
 
@@ -27,7 +27,15 @@ public class DesktopLauncher {
 			throw new RuntimeException("Failed to get primary monitor");
 		}
 
-		MyGame myGame = new MyGame();
+		boolean loggingEnabled = true;
+		for (String arg : args) {
+			if (arg.equals("--logging=off")) {
+				loggingEnabled = false;
+				break;
+			}
+		}
+
+		MyGame myGame = new MyGame(loggingEnabled);
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("Tree of Life");
 

@@ -5,11 +5,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import fel.jsonFun.DoorConfig;
+import org.slf4j.Logger;
 
 public class Door extends Object{
 
 
-    public Door(DoorConfig config) {
+    public Door(DoorConfig config, Logger log) {
+        super(log);
         this.path = config.path;
         this.x = config.x;
         this.y = config.y;

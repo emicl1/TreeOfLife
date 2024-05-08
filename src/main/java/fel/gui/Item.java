@@ -1,10 +1,13 @@
 package fel.gui;
 
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 import fel.jsonFun.ItemConfig;
+
+import org.slf4j.Logger;
 
 
 public class Item extends Object{
@@ -13,7 +16,8 @@ public class Item extends Object{
     public boolean isCollectable = false;
 
 
-    public Item(ItemConfig config) {
+    public Item(ItemConfig config, Logger log) {
+        super(log);
         this.path = config.path;
         this.name = config.name;
         this.x = config.x;
@@ -21,10 +25,12 @@ public class Item extends Object{
         this.width = config.width;
         this.height = config.height;
         this.isCollectable = config.isCollectable;
+
     }
 
     @Override
     public void createBody(World world) {
+
         this.world = world;
 
         BodyDef bodyDef = makeBodyDef(false);

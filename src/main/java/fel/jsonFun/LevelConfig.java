@@ -11,6 +11,7 @@ public class LevelConfig {
     public List<GroundConfig> ground;
     public List<SmallBugConfig> smallBugs;
     public List<BigBugConfig> bigBugs;
+    public List<FriendlyNPCConfig> friendlyNPCs;
     public List<ItemConfig> items;
     public List<MoveableObjConfig> moveableObjs;
     public List<DoorConfig> doors;

@@ -20,8 +20,10 @@ public class WestWoodsPuzzle extends WestWoodsBase{
         if (player.getPosition().x < 2 && player.getPosition().y < 7) {
             Path path = Paths.get("src/main/resources/saveLevels/WestWoodsBase.json");
             if (path.toFile().exists()) {
+                log.info("Loading WestWoodsBase saved file");
                 game.setScreen(new WestWoodsBase(game, 28, 14, "src/main/resources/saveLevels/WestWoodsBase.json"));
             } else {
+                log.info("Loading WestWoodsBase default file");
                 game.setScreen(new WestWoodsBase(game, 28, 14, "levels/WestWoodsBase.json"));
             }
         }

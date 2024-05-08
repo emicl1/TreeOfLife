@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import fel.controller.MyGame;
 import fel.jsonFun.SmallBugConfig;
+import org.slf4j.Logger;
 
 public class MyContactListener implements ContactListener {
     public int groundContacts = 0;
@@ -13,9 +14,16 @@ public class MyContactListener implements ContactListener {
 
     private BodyDoorItemRemoveManager bodyDoorItemRemoveManager;
 
+    public Logger log;
+
     public MyContactListener(BodyDoorItemRemoveManager bodyDoorItemRemoveManager, MyGame game) {
         this.bodyDoorItemRemoveManager = bodyDoorItemRemoveManager;
         this.game = game;
+        createLogger();
+    }
+
+    public void createLogger(){
+        log = game.getRootLogger();;
     }
 
 
@@ -43,7 +51,7 @@ public class MyContactListener implements ContactListener {
         }
 
         if ((isFixtureEnemy(fixA) || isFixtureEnemy(fixB)) && (isFixturePlayer(fixA) || isFixturePlayer(fixB))){
-            System.out.println("Enemy touched player");
+            log.info("Enemy touched player");
             game.playerTakeDamage(20);
             if (game.getPlayerHealth() <= 0){
                 game.setPlayerAlive(false);
@@ -51,7 +59,7 @@ public class MyContactListener implements ContactListener {
         }
 
         if ((isFixtureSword(fixA) && isFixtureEnemy(fixB))) {
-            System.out.println("Sword touched enemy");
+            log.info("Sword touched enemy");
             String name = ((Enemy) fixB.getUserData()).getName();
             System.out.println(name);
             game.playerAttack(name);
@@ -63,7 +71,7 @@ public class MyContactListener implements ContactListener {
         }
 
         if ((isFixtureSword(fixB) && isFixtureEnemy(fixA))) {
-            System.out.println("Sword touched enemy");
+            log.info("Sword touched enemy");
             String name = ((Enemy) fixA.getUserData()).getName();
             System.out.println(name);
             game.playerAttack(name);
@@ -136,14 +144,14 @@ public class MyContactListener implements ContactListener {
 
         if (itemFixture.getUserData() instanceof Item) {
             Item collectedItem = (Item) itemFixture.getUserData();
-            System.out.println("Item collected: " + collectedItem.name);
+            log.info("Item collected: " + collectedItem.getName());
             if (collectedItem.isCollectable) {
                 bodyDoorItemRemoveManager.addItemToInventory(collectedItem);
                 bodyDoorItemRemoveManager.removeItem(collectedItem);
                 bodyDoorItemRemoveManager.removeBody(collectedItem.getBody());
             }
         } else {
-            System.out.println("Error: Non-item fixture involved in item collection");
+            log.error("Error: Non-item fixture involved in item collection");
         }
     }
 
@@ -152,14 +160,14 @@ public class MyContactListener implements ContactListener {
 
         if (buttonFixture.getUserData() instanceof Button) {
             Button button = (Button) buttonFixture.getUserData();
-            System.out.println("Button pressed");
+            log.info("Button pressed");
             Array<Door> doors = button.getDoors();
             for (Door door : doors) {
                 bodyDoorItemRemoveManager.removeDoor(door);
             }
             button.isNotPressed = true;
         } else {
-            System.out.println("Error: Non-button fixture involved in button press");
+            log.error("Error: Non-button fixture involved in button press");
         }
     }
 
@@ -168,14 +176,14 @@ public class MyContactListener implements ContactListener {
 
         if (buttonFixture.getUserData() instanceof Button) {
             Button button = (Button) buttonFixture.getUserData();
-            System.out.println("Button released");
+            log.info("Button released");
             Array<Door> doors = button.getDoors();
             for (Door door : doors) {
                 bodyDoorItemRemoveManager.doorsToOpen(door);
             }
             button.isNotPressed = false;
         } else {
-            System.out.println("Error: Non-button fixture involved in button release");
+            log.error("Error: Non-button fixture involved in button release");
         }
     }
 }
