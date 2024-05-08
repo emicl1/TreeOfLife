@@ -36,11 +36,12 @@ public class FriendlyNPC extends Object{
         this.world = world;
         BodyDef bodyDef = makeBodyDef(false);
         this.body = world.createBody(bodyDef);
+        body.setTransform(new Vector2(x, y), 0);
         shape = new PolygonShape();
-        shape.setAsBox(boxWidth, boxHeight);
+        shape.setAsBox(width, height);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 0;
+        fixtureDef.isSensor = true;
 
         body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
@@ -58,11 +59,15 @@ public class FriendlyNPC extends Object{
                 log.info("Error loading animation: " + pathToAnimations[i]);
             }
         }
-        Animation = new Animation(1f/3f, frames);
+        Animation = new Animation(1f/3f, frames, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP);
     }
 
-    public void draw(SpriteBatch batch, float stateTime) {
-        batch.draw(Animation.getKeyFrame(stateTime), body.getPosition().x, body.getPosition().y, width, height);
+    public void draw(SpriteBatch batch, float stateTime, float PPM){
+
+        TextureRegion currentFrame = Animation.getKeyFrame(stateTime);
+        float npcX = body.getPosition().x - currentFrame.getRegionWidth() * 0.5f / PPM;
+        float npcY = body.getPosition().y - currentFrame.getRegionHeight() * 0.5f / PPM;
+        batch.draw(currentFrame, npcX, npcY, currentFrame.getRegionWidth() / PPM, currentFrame.getRegionHeight() / PPM);
     }
 
 
@@ -73,6 +78,10 @@ public class FriendlyNPC extends Object{
         for (TextureRegion textureRegion : Animation.getKeyFrames()) {
             textureRegion.getTexture().dispose();
         }
+    }
+
+    public String getName(){
+        return name;
     }
 
 }

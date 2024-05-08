@@ -10,5 +10,7 @@ public interface BodyDoorItemRemoveManager {
     void changeOnGround(boolean isOnGround);
     void doorsToOpen(Door door);
     void removeEnemy(Enemy enemy);
+    void addFriendlyNPCsInContact(FriendlyNPC friendlyNPC);
+    void removeFriendlyNPCsInContact(FriendlyNPC friendlyNPC);
 
 }

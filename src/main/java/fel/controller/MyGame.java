@@ -131,4 +131,11 @@ public class MyGame extends Game {
         return rootLogger;
     }
 
+    public void interactWithFriendlyNPC(String friendlyNPCName){
+        logicManager.getDialogFromFriendlyNPC(friendlyNPCName);
+        System.out.println(logicManager.getDialogFromFriendlyNPC(friendlyNPCName));
+    }
+
+
+
 }

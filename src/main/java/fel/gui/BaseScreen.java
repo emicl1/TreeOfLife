@@ -68,9 +68,9 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     public Array<Body> bodiesToDestroy = new Array<Body>();
     public Array<Door> doorsToClose = new Array<Door>();
     public Array<Door> doorsToOpen = new Array<Door>();
+    public Array<FriendlyNPC> friendlyNPCsInContact = new Array<FriendlyNPC>();
 
     public Logger log;
-
 
 
     public BaseScreen(MyGame game, float x, float y, String jsonPath) {
@@ -341,10 +341,13 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         Path path = Paths.get("src/main/resources/savePlayer/Player.json");
 
         if (path.toFile().exists()) {
+            log.info("Player created from loaded file");
             player = new Player(world, x, y, "src/main/resources/savePlayer/Player.json", log);
         } else {
+            log.info("Player created");
             player = new Player(world, x, y, "player/Player.json", log);
         }
+
 
     }
 
@@ -365,6 +368,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         } else {
             inventory = new ArrayList<>();
         }
+        log.info("Inventory created");
 
     }
 
@@ -400,6 +404,10 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             handleSaving();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            handleInteraction();
         }
     }
 
@@ -453,6 +461,13 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         inventory.removeAll(toRemove);
         inventory.addAll(toAdd);
         handleSaving();
+    }
+
+
+    public void handleInteraction() {
+        for (FriendlyNPC friendlyNPC : friendlyNPCsInContact) {
+            game.interactWithFriendlyNPC(friendlyNPC.getName());
+        }
     }
 
 
@@ -645,7 +660,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         if (friendlyNPCs != null) {
             for (FriendlyNPC friendlyNPC : friendlyNPCs) {
-                friendlyNPC.draw(batch, stateTime);
+                friendlyNPC.draw(batch, stateTime, player.PPM);
             }
         }
 
@@ -792,6 +807,15 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         handleSaving();
     }
 
+    @Override
+    public void addFriendlyNPCsInContact(FriendlyNPC friendlyNPC) {
+        friendlyNPCsInContact.add(friendlyNPC);
+    }
+
+    @Override
+    public void removeFriendlyNPCsInContact(FriendlyNPC friendlyNPC) {
+        friendlyNPCsInContact.removeValue(friendlyNPC, true);
+    }
 
     //Screen methods
     @Override

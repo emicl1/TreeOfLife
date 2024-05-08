@@ -5,6 +5,7 @@ import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,6 +52,17 @@ public class LogicManager {
     public void goThroughScenesAndAddThemToLocations(){
         LevelLoader levelLoad = new LevelLoader();
         for (String path : pathsToJsons){
+            String testPathString  = path.substring(7);
+            Path testPath = Paths.get("src/main/resources/saveLevels/" + testPathString);
+
+            if (testPath.toFile().exists()){
+                logger.info("loading level from file");
+                path = path.substring(7);
+                path = "src/main/resources/saveLevels/" + path;
+            }else {
+                logger.info("loading level from resources");
+            }
+
             config = levelLoad.loadLevel(path);
             // make a list of Enemies
 
@@ -155,6 +167,7 @@ public class LogicManager {
         ItemsToCraftLoader itemsToCraftLoader = new ItemsToCraftLoader();
         ItemsToCraftConfig itemsToCraftConfig = itemsToCraftLoader.loadItemsToCraft(pathToItemsToCraftJson);
         for (CraftItemConfig item : itemsToCraftConfig.itemsToCraft){
+            logger.info("Item for crafting " + item.name + " created");
             ItemsCrafted itemToCraft = new ItemsCrafted(item.name, "", item.item1Name, item.item2Name);
             itemsToCraft.add(itemToCraft);
         }
@@ -336,20 +349,24 @@ public class LogicManager {
 
     public String getDialogFromFriendlyNPC(String name){
         FriendlyNPC npc = findFriendlyNPCWithName(name);
-        return npc.getDialogue(logger);
+        String dialog = npc.getDialogue(logger);
+        npc.setHasSpoken(true);
+        return dialog;
     }
 
-    public String getItemFromFriendlyNPC(String name, Items item1, Items item2){
+    public String getItemFromFriendlyNPC(String name, String itemName){
         FriendlyNPC npc = findFriendlyNPCWithName(name);
-        logger.info("Item given to NPC " + npc.getName());
-        return npc.giveItem( item1, item2);
-    }
+        String itemToGiveName = npc.giveItem(itemName);
 
-    public void giveItemToNPC(String name, String item){
-        FriendlyNPC npc = findFriendlyNPCWithName(name);
-        Items item1 = findItemWithNameInInvetory(item);
-        logger.info("Item " + item1.getName() + " given to NPC " + npc.getName());
-        npc.receiveItem(player, item1);
+        if (!itemToGiveName.equals("")){
+            Items itemToGive = new Items(itemToGiveName, "");
+            playerAddItem(itemToGive);
+            playerRemoveItem(findItemWithNameInInvetory(itemName));
+            logger.info("Item " + itemToGive.getName() + " given to player");
+            return itemToGive.getName();
+        }else
+            return "";
+
     }
 
 

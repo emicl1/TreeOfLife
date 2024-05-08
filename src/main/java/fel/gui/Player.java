@@ -87,10 +87,10 @@ public class Player {
 
         Fixture playerFixture = playerBody.createFixture(fixtureDef);
         playerFixture.setUserData("player");
+        playerBody.setActive(true);
         shape.dispose();
 
-        playerBody.setUserData(this);
-        playerBody.setActive(true);
+
 
     }
 

@@ -9,7 +9,6 @@ import java.util.List;
 public class FriendlyNPC extends NPC{
     public String itemToGive;
     public String itemToReceive;
-    public String itemToReceive2;
     public List<String> dialogueBeforeReceiving;
     public List<String> dialogueAfterReceiving;
     public boolean hasGivenItem = false;
@@ -20,25 +19,19 @@ public class FriendlyNPC extends NPC{
         super(name, 100, 0, isAlive, false);
         this.itemToGive = itemToGive;
         this.itemToReceive = itemToReceive;
-        this.itemToReceive2 = itemToReceive2;
         this.dialogueBeforeReceiving = dialogueBeforeReceiving;
         this.dialogueAfterReceiving = dialogueAfterReceiving;
 
     }
 
-    public String giveItem( Items item, Items item2){
-        if ((itemToReceive.equals(item.getName()) || itemToReceive2.equals(item.getName()))
-                && (itemToReceive.equals(item2.getName()) || itemToReceive2.equals(item2.getName()))){
+    public String giveItem( String item){
+        if (itemToReceive.equals(item)){
             hasGivenItem = true;
             return itemToGive;
         }
         else{
             return "";
         }
-    }
-
-    public void receiveItem(PlayerChar player, Items item){
-        player.removeItem(item);
     }
 
     public boolean hasGivenItem(){
@@ -67,7 +60,7 @@ public class FriendlyNPC extends NPC{
             }
             else{
                 // choose random dialogue from dialogueBeforeReceiving
-                logger.info("Dialogue before receiving item");
+                logger.info("Dialogue before receiving item here");
                 return dialogueBeforeReceiving.get((int)(Math.random() * dialogueBeforeReceiving.size()));
             }
         }else {
@@ -81,6 +74,7 @@ public class FriendlyNPC extends NPC{
             }
         }
     }
+
 
 
 

@@ -82,6 +82,13 @@ public class MyContactListener implements ContactListener {
             }
         }
 
+        if ((isFixturePlayer(fixA) && isFixtureFriendlyNPC(fixB)) ||
+                (isFixturePlayer(fixB) && isFixtureFriendlyNPC(fixA))) {
+            log.info("Friendly NPC touched player");
+            FriendlyNPC friendlyNPC = (FriendlyNPC) (isFixtureFriendlyNPC(fixA) ? fixA.getUserData() : fixB.getUserData());
+            bodyDoorItemRemoveManager.addFriendlyNPCsInContact(friendlyNPC);
+        }
+
     }
 
     @Override
@@ -96,6 +103,13 @@ public class MyContactListener implements ContactListener {
         }
         if (isFixtureButton(contact.getFixtureA()) || isFixtureButton(contact.getFixtureB())) {
             handleButtonRelease(contact.getFixtureA(), contact.getFixtureB());
+        }
+
+        if ((isFixturePlayer(contact.getFixtureA()) && isFixtureFriendlyNPC(contact.getFixtureB())) ||
+                (isFixturePlayer(contact.getFixtureB()) && isFixtureFriendlyNPC(contact.getFixtureA()))) {
+            log.info("Friendly NPC stopped touching player");
+            FriendlyNPC friendlyNPC = (FriendlyNPC) (isFixtureFriendlyNPC(contact.getFixtureA()) ? contact.getFixtureA().getUserData() : contact.getFixtureB().getUserData());
+            bodyDoorItemRemoveManager.removeFriendlyNPCsInContact(friendlyNPC);
         }
 
     }
@@ -137,6 +151,10 @@ public class MyContactListener implements ContactListener {
 
     private boolean isFixtureSword(Fixture fixture) {
         return fixture.getUserData() instanceof Sword;
+    }
+
+    private boolean isFixtureFriendlyNPC(Fixture fixture) {
+        return fixture.getUserData() instanceof FriendlyNPC;
     }
 
     private void handleItemCollection(Fixture fixA, Fixture fixB) {
