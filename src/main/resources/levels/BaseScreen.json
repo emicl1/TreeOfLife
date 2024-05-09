@@ -1,8 +1,8 @@
 {
   "name": "BaseScreen",
   "locationName": "Base",
-  "background": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/homelocation/treetrunk.jpg",
-  "groundImage": "/home/alex/IdeaProjects/TreeOfLife/src/main/resources/eastwoods/kamen.png",
+  "background": "homelocation/treetrunk.jpg",
+  "groundImage": "eastwoods/kamen.png",
      "ground": [{
        "x": 0,
        "y": 0,
@@ -15,6 +15,18 @@
   "gravityY": -17,
   "groundHeight": 2,
   "groundWidth": 2,
-  "isLocked": false
-
+  "isLocked": false,
+  "friendlyNPCs": [{"name": "Sova", "x": 20, "y": 4,
+    "pathToAnimations":["player/duchstat/duch1stat.png",
+    "player/duchstat/duch2stat.png",
+    "player/duchstat/duch3stat.png"],
+    "itemToGive": "badforest",
+    "itemToReceive": "map",
+    "itemToReceive2": "",
+    "dialogueBeforeReceiving": ["Go to Westwoods and pick up two item and craft a handle with them and give to Ori.",
+    "What are you waiting for? Save the forest!"],
+    "dialogueAfterReceiving": ["Thank you! Now you can go to the Westwoods and kill the enemies and bring back nutrients to the forest."],
+    "boxWidth": 1,
+    "boxHeight": 2
+    }]
 }

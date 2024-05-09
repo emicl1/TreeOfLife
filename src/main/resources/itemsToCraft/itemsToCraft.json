@@ -3,9 +3,15 @@
   "itemsToCraft": [
     {
       "path": "map.jpg",
-      "name": "Map",
+      "name": "map",
       "item1Name": "stick",
       "item2Name": "handle"
+    },
+    {
+      "path": "westwoods/badforest.jpg",
+      "name": "badforest",
+      "item1Name": "map",
+      "item2Name": ""
     }
   ]
 }
