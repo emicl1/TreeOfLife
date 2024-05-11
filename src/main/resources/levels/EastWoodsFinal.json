@@ -1,0 +1,23 @@
+{
+  "name": "EastWoodsFinal",
+  "locationName": "EastWoods",
+  "background": "eastwoods/redforestdeeper.jpg",
+  "groundImage": "eastwoods/kamen.png",
+  "ground": [{
+    "x": 0,
+    "y": 0,
+    "width": 29,
+    "height": 2
+  }
+  ],
+
+  "gravityX": 0,
+  "gravityY": -17,
+  "groundHeight": 2,
+  "groundWidth": 2,
+  "isLocked": true,
+  "items": [ {"path": "westwoods/stick.png", "name": "nutrient", "x": 10, "y": 3, "width": 1.3, "height": 1.3,
+    "isCollectable": true}
+
+  ]
+}

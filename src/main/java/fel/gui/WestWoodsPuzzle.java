@@ -14,6 +14,7 @@ public class WestWoodsPuzzle extends WestWoodsBase{
     @Override
     public void goToFunctions() {
         goToWestWoodsBase();
+        goToWestWoodsFinal();
     }
 
     public void goToWestWoodsBase() {
@@ -25,6 +26,19 @@ public class WestWoodsPuzzle extends WestWoodsBase{
             } else {
                 log.info("Loading WestWoodsBase default file");
                 game.setScreen(new WestWoodsBase(game, 28, 14, "levels/WestWoodsBase.json"));
+            }
+        }
+    }
+
+    public void goToWestWoodsFinal() {
+        if (player.getPosition().x > 29 && player.getPosition().y > 15) {
+            Path path = Paths.get("src/main/resources/saveLevels/WestWoodsFinal.json");
+            if (path.toFile().exists()) {
+                log.info("Loading WestWoodsFinal saved file");
+                game.setScreen(new WestWoodsFinal(game, 2, 2, "src/main/resources/saveLevels/WestWoodsFinal.json"));
+            } else {
+                log.info("Loading WestWoodsFinal default file");
+                game.setScreen(new WestWoodsFinal(game, 2, 2, "levels/WestWoodsFinal.json"));
             }
         }
     }

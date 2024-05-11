@@ -1,0 +1,33 @@
+{
+  "name": "WestWoodsFinal",
+  "locationName": "WestWoods",
+  "background": "westwoods/badforest.jpg",
+  "groundImage": "eastwoods/kamen.png",
+  "ground": [{
+    "x": 0,
+    "y": 0,
+    "width": 29,
+    "height": 2
+  }
+  ],
+
+  "gravityX": 0,
+  "gravityY": -17,
+  "groundHeight": 2,
+  "groundWidth": 2,
+  "isLocked": false,
+  "friendlyNPCs": [{"name": "NotTheSameSova", "x": 20, "y": 4,
+    "pathToAnimations":["player/duchstat/duch1stat.png",
+      "player/duchstat/duch2stat.png",
+      "player/duchstat/duch3stat.png"],
+    "itemToGive": "sword",
+    "itemToReceive": "paka",
+    "itemToReceive2": "",
+    "dialogueBeforeReceiving": ["Give me a Lever, so I can repair the mill!",
+      "Why are you staring at me? I need the Lever!"],
+    "dialogueAfterReceiving": ["Thank you for the Lever! Now I can repair the mill!",
+      "I have repaired the mill, now you can go to the next location!"],
+    "boxWidth": 1,
+    "boxHeight": 2
+  }]
+}

@@ -16,6 +16,7 @@ public class EastWoods1 extends EastWoodsBase{
     @Override
     public void goToFunctions() {
         goToEastWoodsBase();
+        goToEastWoodsFinal();
     }
 
     void goToEastWoodsBase() {
@@ -27,6 +28,19 @@ public class EastWoods1 extends EastWoodsBase{
             } else {
                 log.info("Loading East Woods Base new level");
             game.setScreen(new EastWoodsBase(game, 2, 7, "levels/EastWoodsBase.json"));
+            }
+        }
+    }
+
+    void goToEastWoodsFinal() {
+        if (player.getPosition().x < 2 && player.getPosition().y < 7) {
+            Path path = Paths.get("src/main/resources/saveLevels/EastWoodsFinal.json");
+            if (path.toFile().exists()) {
+                log.info("Loading East Woods Final saved level");
+                game.setScreen(new EastWoodsFinal(game, 27, 3, "src/main/resources/saveLevels/EastWoodsFinal.json"));
+            } else {
+                log.info("Loading East Woods Final new level");
+                game.setScreen(new EastWoodsFinal(game, 27, 3, "levels/EastWoodsFinal.json"));
             }
         }
     }

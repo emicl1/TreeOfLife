@@ -39,10 +39,10 @@ public class Sword {
         swordBody.createFixture(swordFixtureDef).setUserData(this);
         swordShape.dispose();
 
-        attachSwordToPlayer(swordBody, playerHeight);
+        attachSwordToPlayer( playerHeight, playerBody);
     }
 
-    private void attachSwordToPlayer(Body swordBody, float playerHeight) {
+    private void attachSwordToPlayer( float playerHeight, Body playerBody) {
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.bodyA = playerBody;
         jointDef.bodyB = swordBody;
@@ -57,6 +57,13 @@ public class Sword {
     }
 
     public void update() {
+        //if sword isn't on player's body dispose it
+        if (swordBody.getPosition().y <2){
+            swordBody.setActive(false);
+
+        }
+
+
         float targetAngle = MathUtils.PI * 190 / 180; // Target angle in radians (190 degrees)
         float currentAngle = swordBody.getAngle() % (2 * MathUtils.PI); // Normalize angle
 

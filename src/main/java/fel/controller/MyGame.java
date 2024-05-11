@@ -3,6 +3,7 @@ package fel.controller;
 import ch.qos.logback.classic.Level;
 import com.badlogic.gdx.Game;
 import fel.gui.BaseScreen;
+import fel.gui.MenuScreen;
 import fel.jsonFun.*;
 import fel.logic.Enemies;
 import fel.logic.Items;
@@ -24,7 +25,8 @@ public class MyGame extends Game {
     public LogicManager logicManager;
     public Universe universe;
     public String[] pathsToJsons = {"levels/BaseScreen.json", "levels/EastWoods1.json",
-            "levels/EastWoodsBase.json", "levels/WestWoodsBase.json", "levels/WestWoodsPuzzle.json"};
+            "levels/EastWoodsBase.json", "levels/WestWoodsBase.json", "levels/WestWoodsPuzzle.json", "levels/WestWoodsFinal.json",
+    "levels/EastWoodsFinal.json"};
     public String pathToPlayerJson = "player/Player.json";
     public String pathToItemsToCraftJson = "itemsToCraft/itemsToCraft.json";
     public LevelSaver levelSaver = new LevelSaver();
@@ -50,7 +52,8 @@ public class MyGame extends Game {
         rootLogger.info("Creating game");
         logicManager = new LogicManager(pathsToJsons, universe, pathToPlayerJson, pathToItemsToCraftJson, rootLogger);
         logicManager.create();
-        this.setScreen(new BaseScreen(this, 15, 4, "levels/BaseScreen.json"));
+        this.setScreen(new MenuScreen());
+        //this.setScreen(new BaseScreen(this, 15, 4, "levels/BaseScreen.json"));
     }
 
     public boolean isPlayerAlive(){
@@ -131,13 +134,17 @@ public class MyGame extends Game {
         return rootLogger;
     }
 
-    public void interactWithFriendlyNPC(String friendlyNPCName){
-        logicManager.getDialogFromFriendlyNPC(friendlyNPCName);
-        System.out.println(logicManager.getDialogFromFriendlyNPC(friendlyNPCName));
+    public String interactWithFriendlyNPC(String friendlyNPCName){
+        return logicManager.getDialogFromFriendlyNPC(friendlyNPCName);
     }
 
     public String getItemFromFriendlyNPC(String friendlyNPCName, String itemToReceive){
         return logicManager.getItemFromFriendlyNPC(friendlyNPCName, itemToReceive);
+    }
+
+
+    public boolean isLocationLocked(String locationName){
+        return logicManager.isLocationLocked(locationName);
     }
 
 }

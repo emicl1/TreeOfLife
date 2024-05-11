@@ -41,6 +41,7 @@ public class LogicManager {
         createPlayer();
         createItemsToCraft();
         logger.info("LogicManager created");
+        unlockLocationsWithItemsInInventory();
     }
 
     public void createUniverse(){
@@ -108,7 +109,7 @@ public class LogicManager {
             if (universe.getLocations() == null){
                 List<Scenes> scenes = new ArrayList<>();
                 scenes.add(scene);
-                Locations location = new Locations(config.locationName, scenes, config.isLocked);
+                Locations location = new Locations(config.locationName, scenes, config.isLocked, config.itemNeededToUnlock);
                 logger.info("Created location: " + location.getName());
                 logger.info("Added scene: " + scene.getName() + " to location: " + location.getName());
 
@@ -126,7 +127,7 @@ public class LogicManager {
                 if (!checkIfSceneBeenAdded){
                     List<Scenes> scenes = new ArrayList<>();
                     scenes.add(scene);
-                    Locations location = new Locations(config.locationName, scenes, config.isLocked);
+                    Locations location = new Locations(config.locationName, scenes, config.isLocked, config.itemNeededToUnlock);
                     logger.info("Created location: " + location.getName());
                     logger.info("Added scene: " + scene.getName() + " to location: " + location.getName());
                     universe.addLocation(location);
@@ -212,7 +213,13 @@ public class LogicManager {
     }
 
     public void playerAddItem(Items item){
+        if (item == null) {
+            return;
+        }
         player.addItem(item);
+        if (canItemUnlockLocation(item.getName())){
+            unlockLocation(item.getName());
+        }
         logger.info("Item " + item.getName() + " added to inventory");
     }
 
@@ -390,5 +397,45 @@ public class LogicManager {
     }
 
 
+    public boolean canItemUnlockLocation(String itemName){
+        for (Locations location : universe.getLocations()){
+            if (Objects.equals(location.getName(), location.getName())){
+                if (Objects.equals(location.getItemNeededToUnlock(), itemName)){
+                    logger.info("Item " + itemName + " can unlock location " + location.getName());
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void unlockLocation(String itemName){
+        for (Locations location : universe.getLocations()){
+            if (Objects.equals(location.getItemNeededToUnlock(), itemName)){
+                location.setIsLocked(false);
+                config.isLocked = false;
+                logger.info("Location " + location.getName() + " unlocked");
+            }
+        }
+    }
+
+    public boolean isLocationLocked(String locationName){
+        for (Locations location : universe.getLocations()){
+            if (Objects.equals(location.getName(), locationName)){
+                return location.getIsLocked();
+
+            }
+        }
+        return false;
+    }
+
+
+    public void unlockLocationsWithItemsInInventory(){
+        for (Items item : inventory){
+            if (canItemUnlockLocation(item.getName())){
+                unlockLocation(item.getName());
+            }
+        }
+    }
 
 }

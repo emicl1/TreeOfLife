@@ -17,21 +17,6 @@ public class WestWoodsBase extends BaseScreen {
     }
 
 
-    @Override
-    public void render(float delta) {
-        handleInput(); // Handle user input
-        updateGameLogic(delta); // Update game logic
-
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
-        goToFunctions();
-
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        drawGameElements(); // Draw game elements
-        batch.end();
-        isMoving = false;
-        debugRenderer.render(world, camera.combined); // Debug rendering
-    }
 
     @Override
     public void createPlayer(){

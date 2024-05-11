@@ -6,6 +6,7 @@ public class LevelConfig {
     public String name;
     public String locationName;
     public boolean isLocked;
+    public String itemNeededToUnlock;
     public String background;
     public String groundImage;
     public List<GroundConfig> ground;

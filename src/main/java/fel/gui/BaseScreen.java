@@ -4,16 +4,23 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import fel.controller.MyGame;
 import fel.jsonFun.*;
@@ -40,7 +47,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     private Texture backgroundTexture;
     public ContactListener listener;
 
-    private static final Logger logger = LoggerFactory.getLogger(BaseScreen.class);
 
     private List<Sprite> groundSprites = new ArrayList<>();
     private List<MoveableObj> moveableObjs = new ArrayList<>();
@@ -70,7 +76,14 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     public Array<Door> doorsToOpen = new Array<Door>();
     public Array<FriendlyNPC> friendlyNPCsInContact = new Array<FriendlyNPC>();
 
+    public String currentDialogue = "";
+    public boolean showDialogue = false;
+
     public Logger log;
+
+    public Stage uiStage;
+    public Skin uiSkin = new Skin();
+    public Label label;
 
 
     public BaseScreen(MyGame game, float x, float y, String jsonPath) {
@@ -82,7 +95,25 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
     public void createLogger() {
-        log = game.getRootLogger();;
+        log = game.getRootLogger();
+    }
+
+    public void createUi() {
+        // Assuming uiStage and uiSkin are initialized elsewhere or here
+        uiStage = new Stage(new ScreenViewport());
+        uiSkin.add("default-font", new BitmapFont(Gdx.files.internal("myfont.fnt")));
+        FileHandle skinFile = Gdx.files.internal("uiskin.json");
+        uiSkin.load(skinFile);
+
+        // Create a label for displaying text
+        label = new Label("", uiSkin);
+        label.setWrap(true); // Enable text wrapping
+        label.setWidth(200);
+        label.setPosition(400, 200);
+        uiStage.addActor(label);
+
+        // Set the input processor to the stage to handle UI input
+        Gdx.input.setInputProcessor(uiStage);
     }
 
     public void createFriendlyNPCs(LevelConfig config) {
@@ -477,7 +508,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         List<Item> toRemove = new ArrayList<>();
         List<Item> toAdd = new ArrayList<>();
         for (FriendlyNPC friendlyNPC : friendlyNPCsInContact) {
-            game.interactWithFriendlyNPC(friendlyNPC.getName());
             for (Item item : inventory) {
                 String itemInQuestion = game.getItemFromFriendlyNPC(friendlyNPC.getName(), item.getName());
                 log.debug("Item in question: " + itemInQuestion);
@@ -494,6 +524,12 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
                 }
             }
+            String dialog = game.interactWithFriendlyNPC(friendlyNPC.getName());
+            currentDialogue = dialog;
+            showDialogue = true;
+            System.out.println("x " + friendlyNPC.x + " y " + friendlyNPC.y);
+            System.out.println("dialog: " + dialog);
+            label.setPosition( (float)((friendlyNPC.x/30) * Gdx.graphics.getWidth() - 2.5* (friendlyNPC.width/30) * Gdx.graphics.getWidth()), (float) (((friendlyNPC.y/20) * Gdx.graphics.getHeight()) +2.5*(friendlyNPC.height/20* Gdx.graphics.getHeight())));
         }
         inventory.removeAll(toRemove);
         inventory.addAll(toAdd);
@@ -545,6 +581,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         createButtons(config);
         createPlayersInventory();
         createFriendlyNPCs(config);
+        createUi();
 
         if (config.items == null){
             log.info("No items");
@@ -580,6 +617,8 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
 
         batch.end();
+        uiStage.act(delta);
+        uiStage.draw();
         isMoving = false;
         debugRenderer.render(world, camera.combined);
     }
@@ -637,7 +676,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 inventory.add(item);
                 game.playerAddItem(item.getName());
                 handleSaving();
-
             }
         }
         itemsToPutInInventory.clear();
@@ -712,6 +750,15 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             }
         }
 
+        if (showDialogue) {
+
+            updateUi(currentDialogue);
+        }
+
+    }
+
+    public void updateUi(String newText) {
+        label.setText(newText);
     }
 
 
@@ -723,7 +770,13 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
     public void goToEastWoods(){
         Vector2 position = player.getPosition();
+
         if (position.x < 2 && position.y < 16) {
+
+            if (game.isLocationLocked("EastWoods")) {
+                return;
+            }
+
             Path path = Paths.get("src/main/resources/saveLevels/EastWoodsBase.json");
             if (path.toFile().exists()) {
                 log.info("Going to east woods from loaded file");
@@ -738,7 +791,13 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
     public void goToWestWoods(){
         Vector2 position = player.getPosition();
+
         if (position.x > 28 && position.y < 6) {
+
+            if (game.isLocationLocked("WestWoods")) {
+                return;
+            }
+
             Path path = Paths.get("src/main/resources/saveLevels/WestWoodsBase.json");
             if (path.toFile().exists()) {
                 log.info("Going to west woods from loaded file");

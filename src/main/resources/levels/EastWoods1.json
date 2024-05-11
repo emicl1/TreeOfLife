@@ -33,7 +33,8 @@
     ],
   "groundHeight": 2,
   "groundWidth": 2,
-  "isLocked": false
+  "isLocked": true,
+  "itemNeededToUnlock": "sword"
 }
 
 
