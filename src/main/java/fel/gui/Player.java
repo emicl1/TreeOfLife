@@ -142,7 +142,7 @@ public class Player {
         loadAttackAnimation(config);
     }
 
-    private TextureRegion getCurrentFrame(float stateTime, boolean isMoving, boolean hasSword, boolean isAttacking){
+    private TextureRegion getCurrentFrame(float stateTime, boolean isMoving, boolean isAttacking){
 
         TextureRegion currentFrame;
         if (isAttacking){
@@ -163,8 +163,8 @@ public class Player {
         return currentFrame;
     }
 
-    public void drawPlayer(SpriteBatch batch, float stateTime, boolean isMoving, boolean hasSword, boolean isAttacking, boolean isFacingRight){
-        TextureRegion currentFrame = getCurrentFrame(stateTime, isMoving, hasSword, isAttacking);
+    public void drawPlayer(SpriteBatch batch, float stateTime, boolean isMoving, boolean isAttacking, boolean isFacingRight){
+        TextureRegion currentFrame = getCurrentFrame(stateTime, isMoving, isAttacking);
         float playerX = playerBody.getPosition().x - currentFrame.getRegionWidth() * 0.5f / PPM;
         float playerY = playerBody.getPosition().y - currentFrame.getRegionHeight() * 0.5f / PPM;
         float width = currentFrame.getRegionWidth() / PPM;
@@ -202,6 +202,10 @@ public class Player {
 
         hasSword = true;
         log.info("Sword created and attached");
+    }
+
+    public boolean hasSword(){
+        return hasSword;
     }
 
     public void attack() {

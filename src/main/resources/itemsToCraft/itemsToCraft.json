@@ -2,15 +2,15 @@
 {
   "itemsToCraft": [
     {
-      "path": "map.jpg",
-      "name": "map",
+      "path": "westwoods/paka.png",
+      "name": "paka",
       "item1Name": "stick",
       "item2Name": "handle"
     },
     {
-      "path": "westwoods/badforest.jpg",
-      "name": "badforest",
-      "item1Name": "map",
+      "path": "westwoods/mec.png",
+      "name": "sword",
+      "item1Name": "paka",
       "item2Name": ""
     }
   ]

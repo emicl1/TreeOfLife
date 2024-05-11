@@ -51,6 +51,7 @@ public class LogicManager {
 
     public void goThroughScenesAndAddThemToLocations(){
         LevelLoader levelLoad = new LevelLoader();
+
         for (String path : pathsToJsons){
             String testPathString  = path.substring(7);
             Path testPath = Paths.get("src/main/resources/saveLevels/" + testPathString);
@@ -147,6 +148,7 @@ public class LogicManager {
     public List<Items> createPlayerInventory(PlayerConfig playerConfig){
         InventoryLoader inventoryLoader = new InventoryLoader();
         Path path = Path.of("src/main/resources/savePlayer/inventory.json");
+
         if (path.toFile().exists()) {
             InventoryConfig inventoryConfig = inventoryLoader.loadInventory("src/main/resources/savePlayer/inventory.json");
             List<Items> items = new ArrayList<>();
@@ -166,6 +168,7 @@ public class LogicManager {
     public void createItemsToCraft(){
         ItemsToCraftLoader itemsToCraftLoader = new ItemsToCraftLoader();
         ItemsToCraftConfig itemsToCraftConfig = itemsToCraftLoader.loadItemsToCraft(pathToItemsToCraftJson);
+
         for (CraftItemConfig item : itemsToCraftConfig.itemsToCraft){
             logger.info("Item for crafting " + item.name + " created");
             ItemsCrafted itemToCraft = new ItemsCrafted(item.name, "", item.item1Name, item.item2Name);
@@ -214,8 +217,12 @@ public class LogicManager {
     }
 
     public void playerRemoveItem(Items item){
+       if (item == null) {
+           return;
+       }
         player.removeItem(item);
         logger.info("Item " + item.getName() + " removed from inventory");
+
     }
 
     public Enemies findEnemyWithName(String name){
@@ -360,6 +367,10 @@ public class LogicManager {
 
         if (!itemToGiveName.equals("")){
             Items itemToGive = new Items(itemToGiveName, "");
+            if (isItemInInventory(itemToGive.getName())){
+                logger.info("Item " + itemToGive.getName() + " already in inventory");
+                return "";
+            }
             playerAddItem(itemToGive);
             playerRemoveItem(findItemWithNameInInvetory(itemName));
             logger.info("Item " + itemToGive.getName() + " given to player");
@@ -367,6 +378,15 @@ public class LogicManager {
         }else
             return "";
 
+    }
+
+    public boolean isItemInInventory(String itemName){
+        for (Items item : inventory){
+            if (Objects.equals(item.getName(), itemName)){
+                return true;
+            }
+        }
+        return false;
     }
 
 

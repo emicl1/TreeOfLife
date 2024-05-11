@@ -364,6 +364,9 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 newItem.createBody(world);
                 newItem.setInactive();
                 inventory.add(newItem);
+                if (Objects.equals(newItem.name, "sword")) {
+                    player.hasSword = true;
+                }
             }
         } else {
             inventory = new ArrayList<>();
@@ -393,10 +396,12 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             player.playerBody.applyForceToCenter(0, -10, true);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
-            if (player.sword == null) {
-                player.initSword();
+            if (player.hasSword() ){
+                if (player.sword == null) {
+                    player.initSword();
+                }
+                player.attack();
             }
-            player.attack();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             handleCrafting();
@@ -453,11 +458,15 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                     toRemove.add(item2);
 
                     String craftedItemName = game.craftItem(item1.getName(), item2.getName());
-                    createNewItemFromCrafting(craftedItemName, toAdd);
+                    Item item = createNewItemFromCrafting(craftedItemName);
+                    if (item != null) {
+                        toAdd.add(item);
+                    }
+
                 }
             }
         }
-        // Update inventory
+
         inventory.removeAll(toRemove);
         inventory.addAll(toAdd);
         handleSaving();
@@ -465,27 +474,41 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
 
     public void handleInteraction() {
+        List<Item> toRemove = new ArrayList<>();
+        List<Item> toAdd = new ArrayList<>();
         for (FriendlyNPC friendlyNPC : friendlyNPCsInContact) {
             game.interactWithFriendlyNPC(friendlyNPC.getName());
             for (Item item : inventory) {
                 String itemInQuestion = game.getItemFromFriendlyNPC(friendlyNPC.getName(), item.getName());
+                log.debug("Item in question: " + itemInQuestion);
                 if (!itemInQuestion.equals("")) {
-                    //TODO: Add item to inventory
-                    // read from the itemsToCraft.json file and make the config from CraftItemConfig
-                    // create a new item from the config and add it to the inventory
+                    log.debug("Item in question: " + itemInQuestion);
+                    Item newItem = createNewItemFromCrafting(itemInQuestion);
+                    if (newItem != null) {
+                        toAdd.add(newItem);
+                        toRemove.add(item);
+                        if (Objects.equals(newItem.name, "sword")) {
+                            player.hasSword = true;
+                        }
+                    }
 
                 }
             }
         }
+        inventory.removeAll(toRemove);
+        inventory.addAll(toAdd);
+        handleSaving();
     }
 
 
-    private void createNewItemFromCrafting(String itemName, List<Item> toAdd) {
+    private Item createNewItemFromCrafting(String itemName) {
         ItemsToCraftLoader itemsToCraftLoader = new ItemsToCraftLoader();
         ItemsToCraftConfig itemsToCraftConfig = itemsToCraftLoader.loadItemsToCraft("src/main/resources/itemsToCraft/itemsToCraft.json");
 
         for (CraftItemConfig craftItem : itemsToCraftConfig.itemsToCraft) {
+            log.debug("Craft item: " + craftItem.name);
             if (craftItem.name.equals(itemName)) {
+                log.debug("Crafting new item: " + itemName);
                 ItemConfig itemConfig = new ItemConfig();
                 itemConfig.name = craftItem.name;
                 itemConfig.path = craftItem.path;
@@ -497,11 +520,13 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 Item newItem = new Item(itemConfig, log);
                 newItem.loadSprite();
                 newItem.createBody(world);
-                toAdd.add(newItem);
                 log.info("Crafted and added new item: " + itemName);
+                return newItem;
             }
         }
+        return null;
     }
+
 
 
     @Override
@@ -605,6 +630,9 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         if (itemsToPutInInventory != null){
             for (Item item : itemsToPutInInventory){
+                if (item == null){
+                    continue;
+                }
                 item.setInactive();
                 inventory.add(item);
                 game.playerAddItem(item.getName());
@@ -624,7 +652,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
     public void drawGameElements() {
         drawOtherElements();
-        player.drawPlayer(batch, stateTime, isMoving, true , false, facingRight);
+        player.drawPlayer(batch, stateTime, isMoving, false, facingRight);
     }
 
 
@@ -746,7 +774,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 iterator.remove();  // Safely remove using iterator
             }
         }
-        items.remove(item); // Assuming 'items' is a separate collection that can be directly modified here
+        items.remove(item);
         handleSaving();
     }
 
@@ -760,7 +788,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         }
 
         if (inventoryConfig.items == null) {
-            inventoryConfig.items = new ArrayList<>(); // Ensure the list is initialized
+            inventoryConfig.items = new ArrayList<>();
         }
 
         ItemConfig itemConfig = new ItemConfig();
