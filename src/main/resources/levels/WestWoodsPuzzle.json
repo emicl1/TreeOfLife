@@ -34,7 +34,7 @@
     {"x": 25, "y": 5, "width": 2, "height": 2}
   ],
   "items": [ {"path": "westwoods/hlaven.png", "name": "handle",
-    "x": 2, "y": 14.7, "width": 1.3, "height": 1.3, "isCollectable": true}
+    "x": 2, "y": 14.7, "width": 1.3, "height": 1.3, "isCollectable": true, "isWinningItem": false}
 
   ],
   "moveableObjs": [{"path": "westwoods/barrier.png",

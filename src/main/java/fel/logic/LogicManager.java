@@ -89,9 +89,10 @@ public class LogicManager {
                 }
             }
             if (config.items != null) {
+                logger.debug("Items in scene: " + config.items.size());
                 for (ItemConfig itemC : config.items) {
                     logger.info("Created Item name: " + itemC.name);
-                    Items item = new Items(itemC.name, "");
+                    Items item = new Items(itemC.name, "", itemC.isWinningItem);
                     items.add(item);
                 }
             }
@@ -154,7 +155,7 @@ public class LogicManager {
             InventoryConfig inventoryConfig = inventoryLoader.loadInventory("src/main/resources/savePlayer/inventory.json");
             List<Items> items = new ArrayList<>();
             for (ItemConfig item : inventoryConfig.items){
-                Items item1 = new Items(item.name, "");
+                Items item1 = new Items(item.name, "", item.isWinningItem);
                 items.add(item1);
             }
             logger.info("Player inventory loaded from file");
@@ -172,7 +173,7 @@ public class LogicManager {
 
         for (CraftItemConfig item : itemsToCraftConfig.itemsToCraft){
             logger.info("Item for crafting " + item.name + " created");
-            ItemsCrafted itemToCraft = new ItemsCrafted(item.name, "", item.item1Name, item.item2Name);
+            ItemsCrafted itemToCraft = new ItemsCrafted(item.name, "", item.item1Name, item.item2Name, false);
             itemsToCraft.add(itemToCraft);
         }
     }
@@ -212,15 +213,19 @@ public class LogicManager {
         player.setHealth(player.getHealth() + heal);
     }
 
-    public void playerAddItem(Items item){
+    public boolean playerAddItem(Items item){
         if (item == null) {
-            return;
+            return false;
         }
         player.addItem(item);
         if (canItemUnlockLocation(item.getName())){
             unlockLocation(item.getName());
         }
+        if (item.isWinningItem()){
+            return true;
+        }
         logger.info("Item " + item.getName() + " added to inventory");
+        return false;
     }
 
     public void playerRemoveItem(Items item){
@@ -293,6 +298,9 @@ public class LogicManager {
     }
 
     public void deleteItemFromScene(Items item){
+        if (item == null) {
+            return ;
+        }
         Scenes scene = findSceneWithItem(item);
         logger.info("Item" + item.getName() + " deleted from scene: " + scene.getName());
         scene.removeItem(item);
@@ -373,7 +381,7 @@ public class LogicManager {
         String itemToGiveName = npc.giveItem(itemName);
 
         if (!itemToGiveName.equals("")){
-            Items itemToGive = new Items(itemToGiveName, "");
+            Items itemToGive = new Items(itemToGiveName, "", false);
             if (isItemInInventory(itemToGive.getName())){
                 logger.info("Item " + itemToGive.getName() + " already in inventory");
                 return "";

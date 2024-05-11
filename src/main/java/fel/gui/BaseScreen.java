@@ -390,6 +390,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             InventoryLoader inventoryLoader = new InventoryLoader();
             inventoryConfig = inventoryLoader.loadInventory("src/main/resources/savePlayer/inventory.json");
             for (ItemConfig item : inventoryConfig.items){
+
                 Item newItem = new Item(item, log);
                 newItem.loadSprite();
                 newItem.createBody(world);
@@ -442,8 +443,12 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             handleSaving();
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             handleInteraction();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new HelpScreen(game, this));
         }
     }
 
@@ -481,6 +486,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         // Collect items to remove and craft new ones
         for (Item item1 : inventory) {
             for (Item item2 : inventory) {
+                log.debug("Item1: " + item1.getName() + " Item2: " + item2.getName());
                 if (item1 == null || item2 == null || item1 == item2) {
                     continue;
                 }
@@ -826,7 +832,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         Iterator<ItemConfig> iterator = config.items.iterator();
         while (iterator.hasNext()) {
             ItemConfig itemConfig = iterator.next();
-            System.out.println(itemConfig.name + " " + item.getName());
             log.debug(itemConfig.name + " " + item.getName());
             if (itemConfig.name.equals(item.getName())) {
                 log.info("Removing item: " + item.getName());

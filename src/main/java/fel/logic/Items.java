@@ -3,10 +3,12 @@ package fel.logic;
 public class Items {
     public String name;
     public String description;
+    public boolean isWinningItem;
 
-    public Items(String name, String description) {
+    public Items(String name, String description, boolean isWinningItem) {
         this.name = name;
         this.description = description;
+        this.isWinningItem = isWinningItem;
     }
 
     public String getName() {
@@ -29,6 +31,10 @@ public class Items {
     public void getItemInfo() {
         System.out.println("Name: " + name);
         System.out.println("Description: " + description);
+    }
+
+    public boolean isWinningItem() {
+        return isWinningItem;
     }
 
 }

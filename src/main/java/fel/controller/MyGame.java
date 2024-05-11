@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import com.badlogic.gdx.Game;
 import fel.gui.BaseScreen;
 import fel.gui.MenuScreen;
+import fel.gui.WinScreen;
 import fel.jsonFun.*;
 import fel.logic.Enemies;
 import fel.logic.Items;
@@ -52,7 +53,7 @@ public class MyGame extends Game {
         rootLogger.info("Creating game");
         logicManager = new LogicManager(pathsToJsons, universe, pathToPlayerJson, pathToItemsToCraftJson, rootLogger);
         logicManager.create();
-        this.setScreen(new MenuScreen());
+        this.setScreen(new MenuScreen(this));
         //this.setScreen(new BaseScreen(this, 15, 4, "levels/BaseScreen.json"));
     }
 
@@ -94,13 +95,17 @@ public class MyGame extends Game {
     public void playerAddItem(String itemName){
         rootLogger.info("Adding item to player: " + itemName);
         Items item = logicManager.findItemWithName(itemName);
-        logicManager.playerAddItem(item);
+        if (logicManager.playerAddItem(item)){
+            setScreen(new WinScreen(this));
+        }
         logicManager.deleteItemFromScene(item);
     }
 
     public boolean canCraftItem(String item1Name, String item2Name){
         Items item1 = logicManager.findItemWithNameInInvetory(item1Name);
         Items item2 = logicManager.findItemWithNameInInvetory(item2Name);
+        logicManager.printInventory();
+        rootLogger.debug("in the canCraftItem method");
         if (item1 == null || item2 == null){
             return false;
         }
@@ -110,6 +115,7 @@ public class MyGame extends Game {
 
 
     public String craftItem(String item1Name, String item2Name){
+        rootLogger.debug("Crafting item in MyGame item1: " + item1Name + " item2: " + item2Name);
         Items item1 = logicManager.findItemWithNameInInvetory(item1Name);
         Items item2 = logicManager.findItemWithNameInInvetory(item2Name);
         Items itemToCraft = logicManager.findItemToCraft(item1, item2);
@@ -145,6 +151,10 @@ public class MyGame extends Game {
 
     public boolean isLocationLocked(String locationName){
         return logicManager.isLocationLocked(locationName);
+    }
+
+    public boolean isItemInInventory(String itemName){
+        return logicManager.isItemInInventory(itemName);
     }
 
 }

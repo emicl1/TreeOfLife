@@ -5,8 +5,8 @@ public class ItemsCrafted extends Items{
     public String item1Name;
     public String item2Name;
 
-    public ItemsCrafted(String name, String description, String item1Name, String item2Name) {
-        super(name, description);
+    public ItemsCrafted(String name, String description, String item1Name, String item2Name, boolean isWinningItem) {
+        super(name, description,   isWinningItem);
         this.item1Name = item1Name;
         this.item2Name = item2Name;
     }
