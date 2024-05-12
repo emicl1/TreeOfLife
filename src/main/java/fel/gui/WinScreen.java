@@ -30,7 +30,7 @@ public class WinScreen extends MenuScreen {
                 "You have taken nutrients from the forest and \n" +
                 "have grown strong enough to leave the forest\n" +
                 "Credits: \n" +
-                "Develop by: Alex Oliver Michaud\n" +
+                "Develop by: Alex Olivier Michaud\n" +
                 "Graphics by: Caroline Iva Michaud\n", skin);
 
 

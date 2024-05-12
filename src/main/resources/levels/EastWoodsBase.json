@@ -1,7 +1,7 @@
 {
   "name": "EastWoodsBase",
   "locationName": "EastWoods",
-  "background": "eastwoods/redforest.jpg",
+  "background": "eastwoods/redwood.png",
   "groundImage": "eastwoods/kamen.png",
   "ground": [
     {"x": 0, "y": 0, "width": 29, "height": 2},
