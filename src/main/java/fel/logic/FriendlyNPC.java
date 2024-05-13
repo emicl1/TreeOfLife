@@ -31,7 +31,7 @@ public class FriendlyNPC extends NPC{
      * @param item the item to give
      * @return the item to give
      */
-    public String giveItem( String item){
+    public String giveItem(String item){
         if (itemToReceive.equals(item)){
             hasGivenItem = true;
             return itemToGive;
@@ -39,6 +39,14 @@ public class FriendlyNPC extends NPC{
         else{
             return "";
         }
+    }
+
+    public void setItemToGive(String itemToGive){
+        this.itemToGive = itemToGive;
+    }
+
+    public void setItemToReceive(String itemToReceive){
+        this.itemToReceive = itemToReceive;
     }
 
     public void setHasSpoken(boolean hasSpoken){

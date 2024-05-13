@@ -424,8 +424,12 @@ public class LogicManager {
         return inventory;
     }
 
-
-    private FriendlyNPC findFriendlyNPCWithName(String name){
+    /**
+     * Method to find friendly NPC with name
+     * @param name String
+     * @return FriendlyNPC
+     */
+    public FriendlyNPC findFriendlyNPCWithName(String name){
         for (Locations location : universe.getLocations()){
             for (Scenes scene : location.getScenes()){
                 for (FriendlyNPC npc : scene.getFriendlyNPCs()){
@@ -506,8 +510,11 @@ public class LogicManager {
         return false;
     }
 
-
-    private void unlockLocation(String itemName){
+    /**
+     * Method to unlock location
+     * @param itemName String
+     */
+    public void unlockLocation(String itemName){
         for (Locations location : universe.getLocations()){
             if (Objects.equals(location.getItemNeededToUnlock(), itemName)){
                 location.setIsLocked(false);
@@ -539,6 +546,19 @@ public class LogicManager {
                 unlockLocation(item.getName());
             }
         }
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public void setUniverse(Universe universe) {
+        this.universe = universe;
+    }
+
+
+    public void setConfig(LevelConfig config) {
+        this.config = config;
     }
 
 }
