@@ -2,6 +2,11 @@ package fel.logic;
 
 import ch.qos.logback.classic.Logger;
 
+/**
+ * Character class that represents the characters in the game
+ * The characters have a name, health, attack damage, and can take damage
+ * This class is meant to be inherited from
+ */
 public class Character {
     private String name;
     private int health;
@@ -53,10 +58,6 @@ public class Character {
         if(health <= 0){
             isAlive = false;
         }
-    }
-
-    public void heal(int heal){
-        health += heal;
     }
 
 }

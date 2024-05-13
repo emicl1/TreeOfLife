@@ -2,7 +2,6 @@ package fel.logic;
 
 import fel.jsonFun.*;
 import ch.qos.logback.classic.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,19 +11,19 @@ import java.util.Objects;
 
 public class LogicManager {
 
-    public Universe universe;
-    public String[] pathsToJsons;
+    private Universe universe;
+    private final String[] pathsToJsons;
 
-    public LevelConfig config;
-    public PlayerConfig configPlayer;
-    public String pathToPlayerJson;
-    public String pathToItemsToCraftJson;
+    private LevelConfig config;
+    private PlayerConfig configPlayer;
+    private final String pathToPlayerJson;
+    private final String pathToItemsToCraftJson;
     public PlayerChar player;
 
-    public List<Items> inventory = new ArrayList<>();
-    public List<ItemsCrafted> itemsToCraft = new ArrayList<>();
+    private List<Items> inventory = new ArrayList<>();
+    private final List<ItemsCrafted> itemsToCraft = new ArrayList<>();
 
-    public Logger logger;
+    private final Logger logger;
 
     public LogicManager(String[] pathsToJsons, Universe universe, String pathToPlayerJson, String pathToItemsToCraftJson, Logger logger) {
         this.pathsToJsons = pathsToJsons;
@@ -34,7 +33,9 @@ public class LogicManager {
         this.logger = logger;
     }
 
-
+    /**
+     * Method to create the LogicManager
+     */
     public void create(){
         createUniverse();
         goThroughScenesAndAddThemToLocations();
@@ -44,13 +45,15 @@ public class LogicManager {
         unlockLocationsWithItemsInInventory();
     }
 
-    public void createUniverse(){
+
+    private void createUniverse(){
         List<Locations> locations = new ArrayList<>();
         universe = new Universe("TreeOfLife", locations);
         logger.info("Universe created");
     }
 
-    public void goThroughScenesAndAddThemToLocations(){
+
+    private void goThroughScenesAndAddThemToLocations(){
         LevelLoader levelLoad = new LevelLoader();
 
         for (String path : pathsToJsons){
@@ -139,7 +142,7 @@ public class LogicManager {
         printLocationAndScenesInthem();
     }
 
-    public void createPlayer(){
+    private void createPlayer(){
         PlayerLoader playerLoader = new PlayerLoader();
         configPlayer = playerLoader.loadPlayer(pathToPlayerJson);
         inventory = createPlayerInventory(configPlayer);
@@ -147,7 +150,7 @@ public class LogicManager {
         player = new PlayerChar("Player", (int )configPlayer.health, (int)configPlayer.attackDamage, true, null, inventory);
     }
 
-    public List<Items> createPlayerInventory(PlayerConfig playerConfig){
+    private List<Items> createPlayerInventory(PlayerConfig playerConfig){
         InventoryLoader inventoryLoader = new InventoryLoader();
         Path path = Path.of("src/main/resources/savePlayer/inventory.json");
 
@@ -158,16 +161,19 @@ public class LogicManager {
                 Items item1 = new Items(item.name, "", item.isWinningItem);
                 items.add(item1);
             }
-            logger.info("Player inventory loaded from file");
+            logger.info("Player inventory loaded from file in logicManager and printing inventory");
+            printInventory();
             return items;
         } else {
             List<Items> items = new ArrayList<>();
-            logger.info("Player inventory created");
+            logger.info("Player inventory created in LogicManager and printing inventory");
+            printInventory();
             return items;
         }
+
     }
 
-    public void createItemsToCraft(){
+    private void createItemsToCraft(){
         ItemsToCraftLoader itemsToCraftLoader = new ItemsToCraftLoader();
         ItemsToCraftConfig itemsToCraftConfig = itemsToCraftLoader.loadItemsToCraft(pathToItemsToCraftJson);
 
@@ -178,6 +184,10 @@ public class LogicManager {
         }
     }
 
+    /**
+     * Method to check if player is alive
+     * @return boolean
+     */
     public boolean isPlayerAlive(){
         return player.getIsAlive();
     }
@@ -195,24 +205,31 @@ public class LogicManager {
         return player.getHealth();
     }
 
+    /**
+     * Method to take damage from enemy
+     * @param damage int
+     */
     public void playerTakeDamage(int damage){
         player.setHealth(player.getHealth() - damage);
         logger.info("Player took " + damage + " damage.");
     }
 
+    /**
+     * Method to attack enemy
+     * @param enemy Enemies
+     */
     public void playerAttack(Enemies enemy){
         enemy.takeDamage(player.getAttackDamage(), logger);
         logger.info("Player attacked " + enemy.getName() + " for " + player.getAttackDamage() + " damage.");
     }
 
-    public void enemyAttack(Enemies enemy){
-        player.takeDamage(enemy.getAttackDamage());
-    }
-
-    public void playerHeal(int heal){
-        player.setHealth(player.getHealth() + heal);
-    }
-
+    /**
+     * Method to add item to player inventory
+     * also checks if location can be unlocked
+     * or if item is winning item
+     * @param item Items
+     * @return boolean
+     */
     public boolean playerAddItem(Items item){
         if (item == null) {
             return false;
@@ -228,6 +245,10 @@ public class LogicManager {
         return false;
     }
 
+    /**
+     * Method to remove item from player inventory
+     * @param item Items
+     */
     public void playerRemoveItem(Items item){
        if (item == null) {
            return;
@@ -237,6 +258,11 @@ public class LogicManager {
 
     }
 
+    /**
+     * Go through all locations and scenes to find enemy with name
+     * @param name String
+     * @return Enemies
+     */
     public Enemies findEnemyWithName(String name){
         for (Locations location : universe.getLocations()){
             for (Scenes scene : location.getScenes()){
@@ -255,6 +281,11 @@ public class LogicManager {
         return null;
     }
 
+    /**
+     * Go through all locations and scenes to find item with name
+     * @param name String
+     * @return Items
+     */
     public Items findItemWithName(String name){
         for (Locations location : universe.getLocations()){
             for (Scenes scene : location.getScenes()){
@@ -269,6 +300,11 @@ public class LogicManager {
         return null;
     }
 
+    /**
+     * Got through player's inventory to find item with name
+     * @param name String
+     * @return Items
+     */
     public Items findItemWithNameInInvetory(String name){
         for (Items item : inventory){
             if (Objects.equals(item.getName(), name)){
@@ -279,7 +315,7 @@ public class LogicManager {
         return null;
     }
 
-    public Scenes findSceneWithItem(Items item){
+    private Scenes findSceneWithItem(Items item){
         for (Locations location : universe.getLocations()){
             for (Scenes scene : location.getScenes()){
                 for (Items item1 : scene.getItems()){
@@ -297,6 +333,10 @@ public class LogicManager {
         return null;
     }
 
+    /**
+     * Method to delete item from scene
+     * @param item Items
+     */
     public void deleteItemFromScene(Items item){
         if (item == null) {
             return ;
@@ -306,15 +346,30 @@ public class LogicManager {
         scene.removeItem(item);
     }
 
-
+    /**
+     * Method to check if enemy is alive
+     * @param enemy Enemies
+     * @return boolean
+     */
     public boolean isEnemyAlive(Enemies enemy){
         return enemy.getIsAlive();
     }
 
+    /**
+     * Method to remove enemy from the game
+     * @param enemy Enemies
+     */
     public void removeEnemy(Enemies enemy){
         enemy.setIsAlive(false);
     }
 
+    /**
+     * Method to check if item can be crafted
+     * by going through all itemsToCraft
+     * @param item1 Items
+     * @param item2 Items
+     * @return boolean
+     */
     public boolean canBeCrafted(Items item1, Items item2){
         for (ItemsCrafted item : itemsToCraft){
 
@@ -326,6 +381,12 @@ public class LogicManager {
         return false;
     }
 
+    /**
+     * Method to find item that can be crafted
+     * @param item1 Items
+     * @param item2 Items
+     * @return ItemsCrafted
+     */
     public ItemsCrafted findItemToCraft(Items item1, Items item2){
         for (ItemsCrafted item : itemsToCraft){
             if (item.canBeCrafted(item1, item2)){
@@ -335,7 +396,8 @@ public class LogicManager {
         return null;
     }
 
-    public void printLocationAndScenesInthem(){
+
+    private void printLocationAndScenesInthem(){
         for (Locations location : universe.getLocations()){
             logger.debug("Location name: " + location.getName());
             for (Scenes scene : location.getScenes()){
@@ -344,17 +406,26 @@ public class LogicManager {
         }
     }
 
+    /**
+     * Method to print inventory in console
+     * this is used for debugging
+     */
     public void printInventory(){
         for (Items item : inventory){
             logger.debug("Item name: " + item.getName());
         }
     }
 
+    /**
+     * Method to get inventory
+     * @return List of Items
+     */
     public List<Items> getInventory() {
         return inventory;
     }
 
-    public FriendlyNPC findFriendlyNPCWithName(String name){
+
+    private FriendlyNPC findFriendlyNPCWithName(String name){
         for (Locations location : universe.getLocations()){
             for (Scenes scene : location.getScenes()){
                 for (FriendlyNPC npc : scene.getFriendlyNPCs()){
@@ -368,19 +439,32 @@ public class LogicManager {
         return null;
     }
 
-
+    /**
+     * Method to get dialog from friendly NPC
+     * @param name String
+     * @return String
+     */
     public String getDialogFromFriendlyNPC(String name){
         FriendlyNPC npc = findFriendlyNPCWithName(name);
+        assert npc != null;
         String dialog = npc.getDialogue(logger);
         npc.setHasSpoken(true);
         return dialog;
     }
 
+    /**
+     * Method to get item from friendly NPC
+     * handles removing and adding items to player inventory
+     * @param name String
+     * @param itemName String
+     * @return String
+     */
     public String getItemFromFriendlyNPC(String name, String itemName){
         FriendlyNPC npc = findFriendlyNPCWithName(name);
+        assert npc != null;
         String itemToGiveName = npc.giveItem(itemName);
 
-        if (!itemToGiveName.equals("")){
+        if (!itemToGiveName.isEmpty()){
             Items itemToGive = new Items(itemToGiveName, "", false);
             if (isItemInInventory(itemToGive.getName())){
                 logger.info("Item " + itemToGive.getName() + " already in inventory");
@@ -395,6 +479,11 @@ public class LogicManager {
 
     }
 
+    /**
+     * Method to check if item is in inventory
+     * @param itemName String
+     * @return boolean
+     */
     public boolean isItemInInventory(String itemName){
         for (Items item : inventory){
             if (Objects.equals(item.getName(), itemName)){
@@ -405,7 +494,7 @@ public class LogicManager {
     }
 
 
-    public boolean canItemUnlockLocation(String itemName){
+    private boolean canItemUnlockLocation(String itemName){
         for (Locations location : universe.getLocations()){
             if (Objects.equals(location.getName(), location.getName())){
                 if (Objects.equals(location.getItemNeededToUnlock(), itemName)){
@@ -417,7 +506,8 @@ public class LogicManager {
         return false;
     }
 
-    public void unlockLocation(String itemName){
+
+    private void unlockLocation(String itemName){
         for (Locations location : universe.getLocations()){
             if (Objects.equals(location.getItemNeededToUnlock(), itemName)){
                 location.setIsLocked(false);
@@ -427,6 +517,11 @@ public class LogicManager {
         }
     }
 
+    /**
+     * Method to check if location is locked
+     * @param locationName String
+     * @return boolean
+     */
     public boolean isLocationLocked(String locationName){
         for (Locations location : universe.getLocations()){
             if (Objects.equals(location.getName(), locationName)){
@@ -438,7 +533,7 @@ public class LogicManager {
     }
 
 
-    public void unlockLocationsWithItemsInInventory(){
+    private void unlockLocationsWithItemsInInventory(){
         for (Items item : inventory){
             if (canItemUnlockLocation(item.getName())){
                 unlockLocation(item.getName());

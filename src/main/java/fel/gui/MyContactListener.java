@@ -1,20 +1,22 @@
 package fel.gui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import fel.controller.MyGame;
-import fel.jsonFun.SmallBugConfig;
 import org.slf4j.Logger;
 
+/**
+ * This class is used to handle the contact between fixtures in the game
+ * It uses BodyDoorItemRemoveManager interface to remove bodies, doors and items
+ * from the game
+ */
 public class MyContactListener implements ContactListener {
-    public int groundContacts = 0;
-    public boolean isOnGround = false;
-    public MyGame game;
+    private int groundContacts = 0;
+    private MyGame game;
 
     private BodyDoorItemRemoveManager bodyDoorItemRemoveManager;
 
-    public Logger log;
+    private Logger log;
 
     public MyContactListener(BodyDoorItemRemoveManager bodyDoorItemRemoveManager, MyGame game) {
         this.bodyDoorItemRemoveManager = bodyDoorItemRemoveManager;
@@ -22,7 +24,7 @@ public class MyContactListener implements ContactListener {
         createLogger();
     }
 
-    public void createLogger(){
+    private void createLogger(){
         log = game.getRootLogger();;
     }
 
@@ -181,7 +183,7 @@ public class MyContactListener implements ContactListener {
             log.info("Button pressed");
             Array<Door> doors = button.getDoors();
             for (Door door : doors) {
-                bodyDoorItemRemoveManager.removeDoor(door);
+                bodyDoorItemRemoveManager.closeDoor(door);
             }
             button.isNotPressed = true;
         } else {

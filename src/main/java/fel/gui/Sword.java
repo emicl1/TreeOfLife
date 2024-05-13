@@ -5,20 +5,28 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 
 public class Sword {
-    public float x;
-    public float y;
-    public float width;
-    public float height;
+    private float x;
+    private float y;
+    private float width;
+    private float height;
 
-    public Body playerBody;
-    public World world;
-    public Body swordBody;
+    private Body playerBody;
+    private World world;
+    private Body swordBody;
 
     public Sword(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Create and attach the sword to the player
+     * @param world The world to create the sword in
+     * @param playerBody The player's body to attach the sword to
+     * @param swordWidth The width of the sword
+     * @param swordHeight The height of the sword
+     * @param playerHeight The height of the player
+     */
     public void createAndAttachSword(World world, Body playerBody, float swordWidth, float swordHeight, float playerHeight) {
         this.world = world;
         this.playerBody = playerBody;
@@ -42,6 +50,7 @@ public class Sword {
         attachSwordToPlayer( playerHeight, playerBody);
     }
 
+
     private void attachSwordToPlayer( float playerHeight, Body playerBody) {
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.bodyA = playerBody;
@@ -56,14 +65,14 @@ public class Sword {
         world.createJoint(jointDef);
     }
 
+    /**
+     * Update the sword's rotation
+     */
     public void update() {
         //if sword isn't on player's body dispose it
         if (swordBody.getPosition().y <2){
             swordBody.setActive(false);
-
         }
-
-
         float targetAngle = MathUtils.PI * 190 / 180; // Target angle in radians (190 degrees)
         float currentAngle = swordBody.getAngle() % (2 * MathUtils.PI); // Normalize angle
 

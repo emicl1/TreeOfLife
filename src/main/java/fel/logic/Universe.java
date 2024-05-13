@@ -1,8 +1,11 @@
 package fel.logic;
 
-
 import java.util.List;
 
+/**
+ * Universe class that represents the universe in the game
+ * The universe has a name and locations
+ */
 public class Universe {
     private String name;
     private List<Locations> locations;
@@ -23,14 +26,4 @@ public class Universe {
     public void addLocation(Locations location){
         locations.add(location);
     }
-
-    public void removeLocation(Locations location) {
-        locations.remove(location);
-    }
-
-    public void addLocations(List<Locations> locations){
-        this.locations.addAll(locations);
-    }
-
-
 }

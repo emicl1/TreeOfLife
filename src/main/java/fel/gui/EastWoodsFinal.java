@@ -5,20 +5,23 @@ import fel.controller.MyGame;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+    * EastWoodsFinal class is the final level of the East Woods.
+    * A winning item is placed in this level.
+ */
 public class EastWoodsFinal extends EastWoodsBase{
+
     public EastWoodsFinal(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
     }
 
-
+    @Override
     public void goToFunctions() {
         goToEastWoods1();
     }
 
 
-    public void goToEastWoods1(){
-
-
+    private void goToEastWoods1(){
         if (player.getPosition().x >28  && player.getPosition().y < 5) {
             Path path = Paths.get("src/main/resources/saveLevels/EastWoods1.json");
             if (path.toFile().exists()) {

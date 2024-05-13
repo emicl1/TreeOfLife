@@ -1,14 +1,17 @@
 package fel;
 
-
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import fel.controller.MyGame;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 
+/**
+ * DesktopLauncher class that launches the game on the desktop
+ * The game is set to fullscreen on the primary monitor
+ * further it handles if logging is enabled or not
+ */
 public class DesktopLauncher {
 	public static void main(String[] args) {
 		// Set up an error callback to handle any GLFW initialization errors
@@ -22,11 +25,12 @@ public class DesktopLauncher {
 		Here I'm using GLFW to get the primary monitor and set the windowed mode to the monitor's resolution.
 		A bit weird, but it's a way to make the game fullscreen for all monitors and get the right resolution.
 		 */
-				long monitor = GLFW.glfwGetPrimaryMonitor();
+		long monitor = GLFW.glfwGetPrimaryMonitor();
 		if (monitor == 0) {
 			throw new RuntimeException("Failed to get primary monitor");
 		}
 
+		// Check if logging is enabled
 		boolean loggingEnabled = true;
 		for (String arg : args) {
 			if (arg.equals("--logging=off")) {
@@ -35,6 +39,7 @@ public class DesktopLauncher {
 			}
 		}
 
+		// Usual game setup
 		MyGame myGame = new MyGame(loggingEnabled);
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("Tree of Life");

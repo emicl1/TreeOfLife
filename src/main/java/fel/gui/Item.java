@@ -1,18 +1,19 @@
 package fel.gui;
 
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 import fel.jsonFun.ItemConfig;
 
 import org.slf4j.Logger;
 
-
+/**
+ * Item class that extends Object class
+ * This class is used to create an item object in the game
+ * which can be collected by the player used for crafting or other purposes
+ */
 public class Item extends Object{
 
-    public String name;
+    public final String name;
     public boolean isCollectable = false;
 
 
@@ -25,7 +26,6 @@ public class Item extends Object{
         this.width = config.width;
         this.height = config.height;
         this.isCollectable = config.isCollectable;
-
     }
 
     @Override
@@ -46,14 +46,6 @@ public class Item extends Object{
     public void dispose() {
         sprite.getTexture().dispose();
         world.destroyBody(body);
-    }
-
-    public void setCollectable(boolean collectable) {
-        this.isCollectable = collectable;
-    }
-
-    public boolean isCollectable() {
-        return isCollectable;
     }
 
     public String getName() {

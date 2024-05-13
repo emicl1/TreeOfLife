@@ -1,9 +1,13 @@
 package fel.logic;
 
+/**
+ * Items class that represents the items in the game
+ * The items have a name, description, and can be winning items
+ */
 public class Items {
     public String name;
-    public String description;
-    public boolean isWinningItem;
+    private String description;
+    private boolean isWinningItem;
 
     public Items(String name, String description, boolean isWinningItem) {
         this.name = name;
@@ -15,26 +19,15 @@ public class Items {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
-    public void getItemInfo() {
-        System.out.println("Name: " + name);
-        System.out.println("Description: " + description);
-    }
-
+    /**
+     * check if the game can be won with this item
+     * @return the description of the item
+     */
     public boolean isWinningItem() {
         return isWinningItem;
     }
-
 }

@@ -1,18 +1,20 @@
 package fel.logic;
 
-
 import ch.qos.logback.classic.Logger;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.List;
 
+/**
+ * FriendlyNPC class that represents the friendly NPCs in the game
+ * The friendly NPCs can give the player items and have dialogue
+ */
 public class FriendlyNPC extends NPC{
-    public String itemToGive;
-    public String itemToReceive;
-    public List<String> dialogueBeforeReceiving;
-    public List<String> dialogueAfterReceiving;
-    public boolean hasGivenItem = false;
-    public boolean hasSpoken = false;
+    private String itemToGive;
+    private String itemToReceive;
+    private List<String> dialogueBeforeReceiving;
+    private List<String> dialogueAfterReceiving;
+    private boolean hasGivenItem = false;
+    private boolean hasSpoken = false;
 
 
     public FriendlyNPC(String name, int health, int attackDamage, boolean isAlive, boolean isHostile, String itemToGive, String itemToReceive, String itemToReceive2, List<String> dialogueBeforeReceiving, List<String> dialogueAfterReceiving) {
@@ -24,6 +26,11 @@ public class FriendlyNPC extends NPC{
 
     }
 
+    /**
+     * Method to give the player an item
+     * @param item the item to give
+     * @return the item to give
+     */
     public String giveItem( String item){
         if (itemToReceive.equals(item)){
             hasGivenItem = true;
@@ -34,23 +41,20 @@ public class FriendlyNPC extends NPC{
         }
     }
 
-    public boolean hasGivenItem(){
-        return hasGivenItem;
-    }
-
-    public boolean hasSpoken(){
-        return hasSpoken;
-    }
-
-    public void setHasGivenItem(boolean hasGivenItem){
-        this.hasGivenItem = hasGivenItem;
-    }
-
     public void setHasSpoken(boolean hasSpoken){
         this.hasSpoken = hasSpoken;
     }
 
-
+    /**
+     * Method to get the dialogue of the NPC
+     * it has several dialogue options
+     * depending on if the player has spoken to the NPC before
+     * and if the player has received the item
+     * the first dialogue option is always the same
+     * and the rest are random
+     * @param logger the logger
+     * @return the dialogue of the NPC
+     */
     public String getDialogue(Logger logger){
         if(hasSpoken){
             if(hasGivenItem){
@@ -74,9 +78,4 @@ public class FriendlyNPC extends NPC{
             }
         }
     }
-
-
-
-
-
 }

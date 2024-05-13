@@ -7,6 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
+/**
+ * Class that loads a player from a JSON file
+ * The JSON file is converted to a PlayerConfig object
+ * The PlayerConfig object is then returned
+ */
 public class PlayerLoader {
     private ObjectMapper mapper;
 

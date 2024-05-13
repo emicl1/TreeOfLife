@@ -6,6 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
+/**
+ * Class that loads a level from a JSON file
+ * The JSON file is converted to a LevelConfig object
+ * The LevelConfig object is then returned
+ */
+
 public class LevelLoader {
     private ObjectMapper mapper;
 
@@ -16,13 +22,7 @@ public class LevelLoader {
     public LevelConfig loadLevel(String path) {
         try {
             String json = new String(Gdx.files.internal(path).readBytes());
-            //System.out.println("Loading JSON: " + json);  // Print the raw JSON
             LevelConfig config = mapper.readValue(json, LevelConfig.class);
-//            if (config.items != null) {
-//                System.out.println("Loaded " + config.items.size() + " items.");
-//            } else {
-//                System.out.println("No items loaded.");
-//            }
             return config;
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,13 +1,14 @@
 package fel.gui;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import fel.controller.MyGame;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * East Woods 1 class that extends East Woods Base class
+ * This class is used to create level of the East Woods
+ */
 public class EastWoods1 extends EastWoodsBase{
     public EastWoods1(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
@@ -19,7 +20,7 @@ public class EastWoods1 extends EastWoodsBase{
         goToEastWoodsFinal();
     }
 
-    void goToEastWoodsBase() {
+    private void goToEastWoodsBase() {
         if (player.getPosition().x > 29 && player.getPosition().y > 2) {
             Path path = Paths.get("src/main/resources/saveLevels/EastWoodsBase.json");
             if (path.toFile().exists()) {
@@ -32,7 +33,7 @@ public class EastWoods1 extends EastWoodsBase{
         }
     }
 
-    void goToEastWoodsFinal() {
+    private void goToEastWoodsFinal() {
         if (player.getPosition().x < 2 && player.getPosition().y < 7) {
             Path path = Paths.get("src/main/resources/saveLevels/EastWoodsFinal.json");
             if (path.toFile().exists()) {

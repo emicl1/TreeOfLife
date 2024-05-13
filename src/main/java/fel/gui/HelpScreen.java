@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import fel.controller.MyGame;
 
+/**
+ * HelpScreen class is a screen that displays the controls of the game.
+ */
 public class HelpScreen extends MenuScreen {
     private Screen previousScreen;
 

@@ -2,22 +2,14 @@ package fel.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import fel.controller.MyGame;
 
 public class WinScreen extends MenuScreen {
 
-
     public WinScreen(MyGame game) {
         super(game);
-
-
     }
 
     @Override
@@ -31,10 +23,8 @@ public class WinScreen extends MenuScreen {
                 "have grown strong enough to leave the forest\n" +
                 "Credits: \n" +
                 "Develop by: Alex Olivier Michaud\n" +
-                "Graphics by: Caroline Iva Michaud\n", skin);
+                "Graphics by: Caroline Iva Michaud alias Alfons\n", skin);
 
-
-        table.row().pad(10, 0, 10, 0);
 
         table.row().pad(10, 0, 10, 0);
         table.add(control).fillX().uniformX();
@@ -48,6 +38,7 @@ public class WinScreen extends MenuScreen {
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MenuScreen(game));
         }

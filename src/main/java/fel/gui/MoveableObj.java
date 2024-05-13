@@ -1,12 +1,15 @@
 package fel.gui;
 
-
-
-
 import org.slf4j.Logger;
 import com.badlogic.gdx.physics.box2d.*;
 import fel.jsonFun.MoveableObjConfig;
 
+/**
+ * MoveableObj class extends Object class.
+ * Class for all moveable objects in the game.
+ * Usually used to create objects that can be moved by the player.
+ * and step on buttons.
+ */
 public class MoveableObj extends Object{
 
     public float density;
@@ -21,6 +24,7 @@ public class MoveableObj extends Object{
         this.density = config.density;
     }
 
+    @Override
     public void createBody(World world) {
         this.world = world;
 

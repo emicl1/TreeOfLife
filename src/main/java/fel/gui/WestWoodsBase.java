@@ -1,7 +1,5 @@
 package fel.gui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import fel.controller.MyGame;
 
@@ -15,7 +13,6 @@ public class WestWoodsBase extends BaseScreen {
     public WestWoodsBase(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
     }
-
 
 
     @Override
@@ -32,6 +29,7 @@ public class WestWoodsBase extends BaseScreen {
         }
     }
 
+
     @Override
     public void goToFunctions() {
         GoToPuzzle();
@@ -39,9 +37,9 @@ public class WestWoodsBase extends BaseScreen {
     }
 
 
-    public void GoToPuzzle() {
+    private void GoToPuzzle() {
         Vector2 position = player.getPosition();
-        if (position.x > 26 && position.y > 14) {
+        if (position.x > 28 && position.y > 14) {
             Path path = Paths.get("src/main/resources/saveLevels/WestWoodsPuzzle.json");
             if (path.toFile().exists()) {
                 log.info("Loading WestWoodsPuzzle saved file");
@@ -54,7 +52,7 @@ public class WestWoodsBase extends BaseScreen {
     }
 
 
-    public void goToBase() {
+    private void goToBase() {
         Vector2 position = player.getPosition();
         if (position.x < 2 && position.y < 6) {
             Path path = Paths.get("src/main/resources/saveLevels/BaseScreen.json");
@@ -68,14 +66,11 @@ public class WestWoodsBase extends BaseScreen {
         }
     }
 
+
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
     }
 
-
-    public void dispose() {
-        super.dispose();
-    }
 }

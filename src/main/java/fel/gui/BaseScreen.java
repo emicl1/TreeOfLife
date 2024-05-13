@@ -1,35 +1,45 @@
 package fel.gui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import fel.controller.MyGame;
 import fel.jsonFun.*;
+
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.*;
+
+/**
+ * Base screen for the game
+ * This class is the base screen for the game and contains the main game GUI
+ * all other screens should extend this class
+ */
 
 public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     public MyGame game;
@@ -38,14 +48,14 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     public float y;
 
     public World world;
-    public Box2DDebugRenderer debugRenderer;
+    private Box2DDebugRenderer debugRenderer;
     public OrthographicCamera camera;
     public Viewport viewport;
     public Player player;
     public SpriteBatch batch;
-    public Sprite backgroundSprite;
+    private Sprite backgroundSprite;
     private Texture backgroundTexture;
-    public ContactListener listener;
+    private ContactListener listener;
 
 
     private List<Sprite> groundSprites = new ArrayList<>();
@@ -53,37 +63,37 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     private List<Item> items = new ArrayList<>();
     private List<Item> itemsToPutInInventory = new ArrayList<>();
     private List<Item> inventory = new ArrayList<>();
-    public InventoryConfig inventoryConfig = new InventoryConfig();
+    private InventoryConfig inventoryConfig = new InventoryConfig();
     private List<Button> buttons = new ArrayList<>();
-    public List<EnemySmallBug> smallBugs;
-    public List<EnemyBigBug> bigBugs;
-    public List<FriendlyNPC> friendlyNPCs = new ArrayList<>();
+    private List<EnemySmallBug> smallBugs;
+    private List<EnemyBigBug> bigBugs;
+    private List<FriendlyNPC> friendlyNPCs = new ArrayList<>();
 
-    public boolean facingRight = true;
+    private boolean facingRight = true;
 
-    public float stateTime;
+    private float stateTime;
 
     private boolean isOnGround;
 
-    public boolean isMoving = false;
+    private boolean isMoving = false;
 
-    public LevelConfig config;
+    private LevelConfig config;
 
-    public String jsonPath;
+    private String jsonPath;
 
-    public Array<Body> bodiesToDestroy = new Array<Body>();
-    public Array<Door> doorsToClose = new Array<Door>();
-    public Array<Door> doorsToOpen = new Array<Door>();
-    public Array<FriendlyNPC> friendlyNPCsInContact = new Array<FriendlyNPC>();
+    private Array<Body> bodiesToDestroy = new Array<Body>();
+    private Array<Door> doorsToClose = new Array<Door>();
+    private Array<Door> doorsToOpen = new Array<Door>();
+    private Array<FriendlyNPC> friendlyNPCsInContact = new Array<FriendlyNPC>();
 
-    public String currentDialogue = "";
-    public boolean showDialogue = false;
+    private String currentDialogue = "";
+    private boolean showDialogue = false;
 
     public Logger log;
 
     public Stage uiStage;
-    public Skin uiSkin = new Skin();
-    public Label label;
+    private Skin uiSkin = new Skin();
+    private Label label;
 
 
     public BaseScreen(MyGame game, float x, float y, String jsonPath) {
@@ -94,11 +104,11 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         createLogger();
     }
 
-    public void createLogger() {
+    private void createLogger() {
         log = game.getRootLogger();
     }
 
-    public void createUi() {
+    private void createUi() {
         // Assuming uiStage and uiSkin are initialized elsewhere or here
         uiStage = new Stage(new ScreenViewport());
         uiSkin.add("default-font", new BitmapFont(Gdx.files.internal("myfont.fnt")));
@@ -116,7 +126,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         Gdx.input.setInputProcessor(uiStage);
     }
 
-    public void createFriendlyNPCs(LevelConfig config) {
+    private void createFriendlyNPCs(LevelConfig config) {
         if (config.friendlyNPCs == null) {
             log.info("No friendly NPCs");
             return;
@@ -132,7 +142,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createEnemies(){
+    private void createEnemies(){
         if (config.smallBugs != null){
             for (SmallBugConfig smallBugConfig : config.smallBugs){
                 String[] paths = smallBugConfig.paths;
@@ -158,7 +168,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createMoveableObj(LevelConfig config){
+    private void createMoveableObj(LevelConfig config){
         if (config.moveableObjs == null){
             log.info("No moveable objects");
             return;
@@ -173,7 +183,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createItems(LevelConfig config){
+    private void createItems(LevelConfig config){
         if (config.items == null){
             log.info("No items");
             return;
@@ -189,7 +199,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createButtons(LevelConfig config) {
+    private void createButtons(LevelConfig config) {
         if (config.buttons == null) {
             log.info("No buttons");
             return;
@@ -205,7 +215,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createBackgroundAndGround(LevelConfig config){
+    private void createBackgroundAndGround(LevelConfig config){
         createBackground(config.background);
         createGround(config.groundImage);
         for (GroundConfig ground : config.ground){
@@ -214,13 +224,13 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createBackground(String path){
+    private void createBackground(String path){
         backgroundTexture = new Texture(path);
         backgroundSprite = new Sprite(backgroundTexture);
     }
 
 
-    public void createWorld(float gravityX, float gravityY){
+    private void createWorld(float gravityX, float gravityY){
         stateTime = 0f;  // Accumulate elapsed time
 
         world = new World(new Vector2(gravityX, gravityY), true);
@@ -231,7 +241,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createCamera() {
+    private void createCamera() {
         float w = 30;
         float h = 30 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth());
 
@@ -244,7 +254,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createGround(String path) {
+    private void createGround(String path) {
         float groundWidth = config.groundWidth;
         float groundHeight = config.groundHeight;
         int numGroundSegments = 13;
@@ -283,7 +293,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createGroundFromRectangularShape(World world, String path, float x1, float y1, float x2, float y2) {
+    private void createGroundFromRectangularShape(World world, String path, float x1, float y1, float x2, float y2) {
         float groundWidth = config.groundWidth;  // Width of each ground segment
         float groundHeight = config.groundHeight; // Height of each ground segment
         Texture groundTexture = new Texture(path);
@@ -321,7 +331,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void createWorldBounds(float worldWidth, float worldHeight) {
+    private void createWorldBounds(float worldWidth, float worldHeight) {
         BodyDef bd = new BodyDef();
         bd.position.set(0, 0);
         bd.type = BodyDef.BodyType.StaticBody;
@@ -367,7 +377,12 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         verticalEdge.dispose();
     }
 
-
+    /**
+     * Function to create player
+     * If there is a save file, the player is created from the save file
+     * If there is no save file, the player is created from the default file
+     * Rewrite this function in the subclass to create a player with different parameters
+     */
     public void createPlayer(){
         Path path = Paths.get("src/main/resources/savePlayer/Player.json");
 
@@ -378,19 +393,16 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             log.info("Player created");
             player = new Player(world, x, y, "player/Player.json", log);
         }
-
-
     }
 
 
-    public void createPlayersInventory(){
+    private void createPlayersInventory(){
         Path path = Paths.get("src/main/resources/savePlayer/inventory.json");
 
         if (path.toFile().exists()) {
             InventoryLoader inventoryLoader = new InventoryLoader();
             inventoryConfig = inventoryLoader.loadInventory("src/main/resources/savePlayer/inventory.json");
             for (ItemConfig item : inventoryConfig.items){
-
                 Item newItem = new Item(item, log);
                 newItem.loadSprite();
                 newItem.createBody(world);
@@ -404,29 +416,32 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             inventory = new ArrayList<>();
         }
         log.info("Inventory created");
-
     }
 
 
-    public void handleInput() {
+    private void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.moveLeft();
             facingRight = true;
             isMoving = true;
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.moveRight();
             facingRight = false;
             isMoving = true;
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.W) && isOnGround) {
             player.jump();
             isOnGround = false;  // Prevent further jumps until grounded again
             isMoving = true;
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             player.playerBody.applyForceToCenter(0, -10, true);
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ) {
             if (player.hasSword() ){
                 if (player.sword == null) {
@@ -435,8 +450,12 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 player.attack();
             }
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            log.debug("Crafting and printing inventory");
+            game.printInventory();
             handleCrafting();
+            checkIfInventoryMatches();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
@@ -452,8 +471,30 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         }
     }
 
+    /**
+     * Check if the inventory matches the logic inventory and add items to the inventory if they don't match
+     * This is a debugging method to ensure that the inventory matches the logic inventory
+     * the logical inventory is the superior inventory
+     */
+    private void checkIfInventoryMatches(){
+        List<Item> toRemove = new ArrayList<>();
+        if (!game.checkIfLogicAndGameInventoryMatch(inventory)){
+            List<String> logicInventory = game.getLogicInventory();
+            log.debug("Inventory does not match logic inventory");
+            toRemove.addAll(inventory);
+            for (String item : logicInventory){
+                Item newItem = createNewItemFromCrafting(item);
+                if (newItem != null){
+                    itemsToPutInInventory.add(newItem);
+                }
+            }
 
-    public void handleSaving(){
+        }
+        inventory.removeAll(toRemove);
+    }
+
+
+    private void handleSaving(){
         game.saveGame(config, player.config);
         InventorySaver inventorySaver = new InventorySaver();
         if (inventoryConfig == null){
@@ -479,14 +520,14 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void handleCrafting() {
+    private void handleCrafting() {
         List<Item> toRemove = new ArrayList<>();
         List<Item> toAdd = new ArrayList<>();
 
         // Collect items to remove and craft new ones
         for (Item item1 : inventory) {
             for (Item item2 : inventory) {
-                log.debug("Item1: " + item1.getName() + " Item2: " + item2.getName());
+                log.debug("Item1: {} Item2: {}", item1.getName(), item2.getName());
                 if (item1 == null || item2 == null || item1 == item2) {
                     continue;
                 }
@@ -510,15 +551,15 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void handleInteraction() {
+    private void handleInteraction() {  // I need this function :(
         List<Item> toRemove = new ArrayList<>();
         List<Item> toAdd = new ArrayList<>();
+
         for (FriendlyNPC friendlyNPC : friendlyNPCsInContact) {
             for (Item item : inventory) {
                 String itemInQuestion = game.getItemFromFriendlyNPC(friendlyNPC.getName(), item.getName());
-                log.debug("Item in question: " + itemInQuestion);
                 if (!itemInQuestion.equals("")) {
-                    log.debug("Item in question: " + itemInQuestion);
+                    log.debug("Item in question: {}", itemInQuestion);
                     Item newItem = createNewItemFromCrafting(itemInQuestion);
                     if (newItem != null) {
                         toAdd.add(newItem);
@@ -535,6 +576,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             showDialogue = true;
             System.out.println("x " + friendlyNPC.x + " y " + friendlyNPC.y);
             System.out.println("dialog: " + dialog);
+            // Position of label set relative to the friendlyNPC, so it appears above them slightly to the left
             label.setPosition( (float)((friendlyNPC.x/30) * Gdx.graphics.getWidth() - 2.5* (friendlyNPC.width/30) * Gdx.graphics.getWidth()), (float) (((friendlyNPC.y/20) * Gdx.graphics.getHeight()) +2.5*(friendlyNPC.height/20* Gdx.graphics.getHeight())));
         }
         inventory.removeAll(toRemove);
@@ -548,9 +590,10 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         ItemsToCraftConfig itemsToCraftConfig = itemsToCraftLoader.loadItemsToCraft("src/main/resources/itemsToCraft/itemsToCraft.json");
 
         for (CraftItemConfig craftItem : itemsToCraftConfig.itemsToCraft) {
-            log.debug("Craft item: " + craftItem.name);
+            log.debug("Craft item: {}", craftItem.name);
+
             if (craftItem.name.equals(itemName)) {
-                log.debug("Crafting new item: " + itemName);
+                log.debug("Crafting new item: {}", itemName);
                 ItemConfig itemConfig = new ItemConfig();
                 itemConfig.name = craftItem.name;
                 itemConfig.path = craftItem.path;
@@ -562,7 +605,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 Item newItem = new Item(itemConfig, log);
                 newItem.loadSprite();
                 newItem.createBody(world);
-                log.info("Crafted and added new item: " + itemName);
+                log.info("Crafted and added new item: {}", itemName);
                 return newItem;
             }
         }
@@ -578,9 +621,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         createCamera();
         createWorld(config.gravityX, config.gravityY);
-
         createBackgroundAndGround(config);
-
         createPlayer();
         createItems(config);
         createMoveableObj(config);
@@ -590,17 +631,17 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         createUi();
 
         if (config.items == null){
-            log.info("No items");
+            log.info("No items in this location");
         }
 
         smallBugs = new ArrayList<>();
         bigBugs = new ArrayList<>();
 
-
         createEnemies();
 
         log.info("Ratio of height and width: " + (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
+        //hard code values for better calculations of the world bounds
         createWorldBounds(31, 32 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
         // Set background sprite to cover the screen
@@ -615,22 +656,25 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
+        // functions that enable you to go to other levels should be overwritten in the subclass
         goToFunctions();
+
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         drawGameElements();
 
-
         batch.end();
+
         uiStage.act(delta);
         uiStage.draw();
+
         isMoving = false;
         debugRenderer.render(world, camera.combined);
     }
 
 
-    public void updateGameLogic(float delta) {
+    private void updateGameLogic(float delta) {
         world.step(1/60f, 6, 2);
         stateTime += delta;
 
@@ -694,13 +738,13 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void drawGameElements() {
+    private void drawGameElements() {
         drawOtherElements();
         player.drawPlayer(batch, stateTime, isMoving, false, facingRight);
     }
 
 
-    public void drawOtherElements() {
+    private void drawOtherElements() {
 
         backgroundSprite.draw(batch);
         for (Sprite groundSprite : groundSprites) {
@@ -716,6 +760,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 moveableObj.draw(batch);
             }
         }
+
         if (buttons != null) {
             for (Button button : buttons) {
                 button.draw(batch);
@@ -726,11 +771,13 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 }
             }
         }
+
         if (smallBugs != null){
             for (EnemySmallBug enemy : smallBugs){
                 enemy.draw(batch, stateTime);
             }
         }
+
         if (bigBugs != null){
             for (EnemyBigBug enemy : bigBugs){
                 enemy.draw(batch, stateTime);
@@ -745,7 +792,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         if (inventory != null){
             float PPM = player.PPM;
-
             //value so low because PPM
             float x = (Gdx.graphics.getWidth() * 0.009f);
             float y = (Gdx.graphics.getHeight() *0.0009f);
@@ -757,28 +803,33 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         }
 
         if (showDialogue) {
-
             updateUi(currentDialogue);
         }
 
     }
 
-    public void updateUi(String newText) {
+    private void updateUi(String newText) {
         label.setText(newText);
     }
 
-
+    /**
+     * Function to go to other levels
+     * Overwrite this function in the subclass to go to other levels
+     */
     public void goToFunctions(){
         goToEastWoods();
         goToWestWoods();
     }
 
-
-    public void goToEastWoods(){
+    /**
+     * Function to go to East Woods
+     * make a function like this to go to other levels
+     * ensure it uses the same structure so that levels are saved and loaded correctly
+     */
+    private void goToEastWoods(){
         Vector2 position = player.getPosition();
 
         if (position.x < 2 && position.y < 16) {
-
             if (game.isLocationLocked("EastWoods")) {
                 return;
             }
@@ -795,16 +846,15 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
-    public void goToWestWoods(){
+    private void goToWestWoods(){
         Vector2 position = player.getPosition();
 
         if (position.x > 28 && position.y < 6) {
-
             if (game.isLocationLocked("WestWoods")) {
                 return;
             }
-
             Path path = Paths.get("src/main/resources/saveLevels/WestWoodsBase.json");
+
             if (path.toFile().exists()) {
                 log.info("Going to west woods from loaded file");
                 game.setScreen(new WestWoodsBase(game, 2, 2, "src/main/resources/saveLevels/WestWoodsBase.json"));
@@ -823,16 +873,18 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
     @Override
-    public void removeDoor(Door door) {
+    public void closeDoor(Door door) {
         doorsToClose.add(door);
     }
 
     @Override
     public void removeItem(Item item) {
         Iterator<ItemConfig> iterator = config.items.iterator();
+
         while (iterator.hasNext()) {
             ItemConfig itemConfig = iterator.next();
             log.debug(itemConfig.name + " " + item.getName());
+
             if (itemConfig.name.equals(item.getName())) {
                 log.info("Removing item: " + item.getName());
                 iterator.remove();  // Safely remove using iterator
@@ -869,7 +921,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         InventorySaver inventorySaver = new InventorySaver();
         inventorySaver.saveInventory(inventoryConfig, "src/main/resources/savePlayer/inventory.json");
-
     }
 
     @Override
@@ -887,8 +938,10 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         if (enemy instanceof EnemySmallBug) {
             smallBugs.remove(enemy);
             Iterator<SmallBugConfig> iterator = config.smallBugs.iterator();
+
             while (iterator.hasNext()) {
                 SmallBugConfig smallBugConfig = iterator.next();
+
                 if (smallBugConfig.name.equals(enemy.getName())) {
                     iterator.remove();  // Safely remove using iterator
                 }
@@ -896,6 +949,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         } else if (enemy instanceof EnemyBigBug) {
             bigBugs.remove(enemy);
             Iterator<BigBugConfig> iterator = config.bigBugs.iterator();
+
             while (iterator.hasNext()) {
                 BigBugConfig bigBugConfig = iterator.next();
                 if (bigBugConfig.name.equals(enemy.getName())) {
@@ -943,7 +997,6 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         debugRenderer.dispose();
         batch.dispose();
         backgroundTexture.dispose();
-
         player.dispose();
 
         for (Sprite groundSprite : groundSprites) {

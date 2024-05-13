@@ -1,27 +1,22 @@
 package fel.gui;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Vector2;
 import fel.controller.MyGame;
-import fel.jsonFun.BigBugConfig;
-import fel.jsonFun.GroundConfig;
-import fel.jsonFun.LevelLoader;
-import fel.jsonFun.SmallBugConfig;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
+
+/**
+ * EastWoodsBase class that extends BaseScreen class
+ * This class is used to create the EastWoodsBase screen in the game
+ * which is the base screen for the East Woods levels
+ */
 public class EastWoodsBase extends BaseScreen {
 
 
     public EastWoodsBase(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
     }
-
 
 
     @Override
@@ -31,7 +26,7 @@ public class EastWoodsBase extends BaseScreen {
     }
 
 
-    public void goToBase() {
+    private void goToBase() {
         if (player.getPosition().x > 29 && player.getPosition().y < 10) {
             Path path = Paths.get("src/main/resources/saveLevels/BaseScreen.json");
             if (path.toFile().exists()) {
@@ -44,7 +39,7 @@ public class EastWoodsBase extends BaseScreen {
         }
     }
 
-    public void goToEastWood1() {
+    private void goToEastWood1() {
         if (player.getPosition().x < 2 && player.getPosition().y < 6) {
             Path path = Paths.get("src/main/resources/saveLevels/EastWoods1.json");
             if (path.toFile().exists()) {

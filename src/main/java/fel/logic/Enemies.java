@@ -1,17 +1,14 @@
 package fel.logic;
 
 import ch.qos.logback.classic.Logger;
-import com.badlogic.gdx.graphics.g3d.particles.ParticleSorter;
 
+/**
+ * Enemy class that represents the enemies in the game
+ */
 public class Enemies extends NPC{
-
 
     public Enemies(String name, int health, int attackDamage, boolean isAlive,  boolean isHostile) {
         super(name, 100, attackDamage, isAlive, true);
-    }
-
-    public int Attack(){
-        return getAttackDamage();
     }
 
     public void takeDamage(int damage, Logger logger){

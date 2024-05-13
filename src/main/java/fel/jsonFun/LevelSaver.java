@@ -6,6 +6,11 @@ import com.badlogic.gdx.files.FileHandle;
 
 import java.io.IOException;
 
+/**
+ * Class that saves a level to a JSON file
+ * The LevelConfig object is converted to a JSON string
+ * The JSON string is then written to a new file
+ */
 public class LevelSaver {
 
     private ObjectMapper mapper;
@@ -17,9 +22,7 @@ public class LevelSaver {
     public void saveLevel(LevelConfig level, String newPath) {
         FileHandle file = Gdx.files.local(newPath);
         try {
-            // Convert the level object to a JSON string
             String json = mapper.writeValueAsString(level);
-            // Write the JSON string to a new file
             file.writeString(json, false);
         } catch (IOException e) {
             e.printStackTrace();

@@ -6,6 +6,11 @@ import com.badlogic.gdx.files.FileHandle;
 
 import java.io.IOException;
 
+/**
+ * Class that saves a player to a JSON file
+ * The PlayerConfig object is converted to a JSON string
+ * The JSON string is then written to a new file
+ */
 public class PlayerSaver {
 
     private ObjectMapper mapper;

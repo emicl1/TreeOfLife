@@ -6,6 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
+/**
+ * Class that saves an inventory to a JSON file
+ * The InventoryConfig object is converted to a JSON string
+ * The JSON string is then written to a new file
+ */
 public class InventorySaver {
 
     private ObjectMapper mapper;

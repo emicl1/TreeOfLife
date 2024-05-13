@@ -3,6 +3,11 @@ package fel.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Scenes class that represents the scenes in the game (equals to screens in GUI)
+ * The scenes have a name, description, small bugs, big bugs, items, and friendly NPCs
+ * The scenes can also have items and friendly NPCs
+ */
 public class Scenes {
     private String name;
     private String description;
@@ -24,10 +29,6 @@ public class Scenes {
 
     public String getName() {
         return name;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
 
@@ -55,96 +56,11 @@ public class Scenes {
         this.name = name;
     }
 
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
-    public void setSmallBugs(List<Enemies> smallBugs) {
-        this.smallBugs = smallBugs;
-    }
-
-
-    public void setBigBugs(List<Enemies> bigBugs) {
-        this.bigBugs = bigBugs;
-    }
-
-
     public void setItems(List<Items> items) {
         this.items = items;
     }
 
-
-    public void setFriendlyNPCs(List<FriendlyNPC> friendlyNPCs) {
-        this.friendlyNPCs = friendlyNPCs;
-    }
-
-
-    public void addSmallBug(Enemies smallBug) {
-        smallBugs.add(smallBug);
-    }
-
-
-    public void addBigBug(Enemies bigBug) {
-        bigBugs.add(bigBug);
-    }
-
-
-    public void addItem(Items item) {
-        items.add(item);
-    }
-
-
-    public void addFriendlyNPC(FriendlyNPC friendlyNPC) {
-        friendlyNPCs.add(friendlyNPC);
-    }
-
-
-    public void removeSmallBug(Enemies smallBug) {
-        smallBugs.remove(smallBug);
-    }
-
-
-    public void removeBigBug(Enemies bigBug) {
-        bigBugs.remove(bigBug);
-    }
-
-
     public void removeItem(Items item) {
         items.remove(item);
-    }
-
-
-    public void removeFriendlyNPC(FriendlyNPC friendlyNPC) {
-        friendlyNPCs.remove(friendlyNPC);
-    }
-
-
-    public void clearSmallBugs() {
-        smallBugs.clear();
-    }
-
-
-    public void clearBigBugs() {
-        bigBugs.clear();
-    }
-
-
-    public void clearItems() {
-        items.clear();
-    }
-
-
-    public void clearFriendlyNPCs() {
-        friendlyNPCs.clear();
-    }
-
-
-    public void clearAll() {
-        smallBugs.clear();
-        bigBugs.clear();
-        items.clear();
-        friendlyNPCs.clear();
     }
 }

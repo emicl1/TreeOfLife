@@ -10,14 +10,20 @@ import com.badlogic.gdx.utils.Array;
 import fel.jsonFun.FriendlyNPCConfig;
 import org.slf4j.Logger;
 
+/**
+ * Represents a friendly NPC in the game in GUI
+ * The NPC can interact with the player
+ * by giving hints or items
+ * can be extended by object because it differs just in
+ * animations
+ */
+
 public class FriendlyNPC extends Object{
-    public Animation<TextureRegion> Animation;
-    public World world;
-    public Body body;
-    public String name;
-    public String [] pathToAnimations;
-    public float boxWidth = 1.6f;
-    public float boxHeight = 0.95f;
+    private Animation<TextureRegion> Animation;
+    private World world;
+    private Body body;
+    private String name;
+    private String [] pathToAnimations;
     public float x;
     public float y;
 
@@ -48,6 +54,9 @@ public class FriendlyNPC extends Object{
 
     }
 
+    /**
+     * Load the animations for the NPC
+     */
     public void loadAnimations() {
         log.info("Loading animations for: " + name);
         Array<TextureRegion> frames = new Array<>();
@@ -62,8 +71,13 @@ public class FriendlyNPC extends Object{
         Animation = new Animation(1f/3f, frames, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP);
     }
 
+    /**
+     * Draw the NPC
+     * @param batch The sprite batch
+     * @param stateTime The time
+     * @param PPM The pixels per meter
+     */
     public void draw(SpriteBatch batch, float stateTime, float PPM){
-
         TextureRegion currentFrame = Animation.getKeyFrame(stateTime);
         float npcX = body.getPosition().x - currentFrame.getRegionWidth() * 0.5f / PPM;
         float npcY = body.getPosition().y - currentFrame.getRegionHeight() * 0.5f / PPM;

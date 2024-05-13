@@ -6,6 +6,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 import org.slf4j.Logger;
 
+/**
+ * Object class that is used to create objects in the game
+ * This is class used mainly to be inherited by other classes
+ * to create objects in the game, it contains methods to create
+ * body and fixture for the object of different types
+ */
 public class Object {
     public String path;
     public float x;
@@ -25,6 +31,9 @@ public class Object {
         this.log = log;
     }
 
+    /**
+     * This method is used to load the sprite from the path
+     */
     public void loadSprite() {
         log.info("Loading sprite: " + path);
         try {
@@ -38,6 +47,12 @@ public class Object {
         }
     }
 
+    /**
+     * This method is used to create the body of the object
+     * This method should be overwritten by the child class
+     * it help to create the bodies and fixtures efficiently
+     * @param world The world in which the object is created
+     */
     public void createBody(World world) {
         this.world = world;
         BodyDef bodyDef = makeBodyDef(true);
@@ -47,6 +62,11 @@ public class Object {
         shape.dispose();
     }
 
+    /**
+     * This method is used to create the body definition of the object
+     * @param isDynamic boolean to check if the object is dynamic or static
+     * @return BodyDef The body definition of the object
+     */
     public BodyDef makeBodyDef(boolean isDynamic) {
         BodyDef bodyDef = new BodyDef();
         if (isDynamic) {
@@ -59,6 +79,13 @@ public class Object {
         return bodyDef;
     }
 
+    /**
+     * This method is used to create the fixture definition of the object
+     * @param isDynamic boolean to check if the object is dynamic or static
+     * @param density The density of the object
+     * @param isSensor boolean to check if the object is a sensor
+     * @return FixtureDef The fixture definition of the object
+     */
     public FixtureDef makeFixtureDef(boolean isDynamic, float density, boolean isSensor) {
         log.info("Creating fixture def");
         if (sprite == null) {
@@ -87,9 +114,11 @@ public class Object {
         }
     }
 
-
+    /**
+     * This method is used to draw the object in the game
+     * @param batch The sprite batch to draw the object
+     */
     public void draw(SpriteBatch batch) {
-
         if (sprite != null ) { //&& body != null)
             sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
             sprite.draw(batch);

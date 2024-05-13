@@ -1,7 +1,10 @@
 package fel;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+/**
+ * Main class that launches the game
+ * It's here just for convenience
+ * DesktopLauncher is the actual main class
+ */
 public class Main {
     public static void main(String[] args) {
         DesktopLauncher.main(args);

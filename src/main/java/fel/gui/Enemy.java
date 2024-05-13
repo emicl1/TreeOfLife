@@ -5,31 +5,35 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Objects;
 
+
+/**
+ * Represents an enemy in the game in GUI
+ * The enemy can patrol between two points or follow the player
+ */
 public class Enemy{
     public Animation<TextureRegion> walkAnimation;
 
     public Body body;
-    public String name;
+    private String name;
     public String currentState;
-    public float leftBoundary;
-    public float rightBoundary;
-    public String [] pathToAnimations;
+    private float leftBoundary;
+    private float rightBoundary;
+    private String [] pathToAnimations;
     public boolean isFacingRight = true;
 
-    public float speedPatrol = 2.0f;
-    public float speedFollow = 4.0f;
-    public float speedPatrolOriginal = 2.0f;
-    public float speedFollowOriginal = 4.0f;
+    private float speedPatrol = 2.0f;
+    private float speedFollow = 4.0f;
+    private float speedPatrolOriginal = 2.0f;
+    private float speedFollowOriginal = 4.0f;
 
 
-    public float boxWidth = 1.6f;
-    public float boxHeight = 0.95f;
+    private float boxWidth = 1.6f;
+    private float boxHeight = 0.95f;
 
     public Enemy(World world, String name, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary) {
         this.pathToAnimations = pathToAnimations;
@@ -37,6 +41,7 @@ public class Enemy{
         this.rightBoundary = rightBoundary;
         this.name = name;
         this.currentState = "PATROLLING";
+        //Create the body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(startPosition);
@@ -52,9 +57,7 @@ public class Enemy{
         body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
 
-
         body.setActive(true);
-
     }
 
     public Enemy(World world, String name,String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight) {
@@ -63,6 +66,7 @@ public class Enemy{
         this.rightBoundary = rightBoundary;
         this.currentState = "PATROLLING";
         this.name = name;
+        //Create the body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(startPosition);
@@ -79,7 +83,6 @@ public class Enemy{
         body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
 
-
         body.setActive(true);
     }
 
@@ -91,6 +94,7 @@ public class Enemy{
         this.currentState = "PATROLLING";
         this.speedPatrolOriginal = speedPatrol;
         this.speedFollowOriginal = speedFollow;
+        //Create the body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(startPosition);
@@ -106,12 +110,12 @@ public class Enemy{
         body.createFixture(fixtureDef).setUserData(this);
         shape.dispose();
 
-
         body.setActive(true);
-
     }
 
-
+    /**
+     * Loads the enemy's animation
+     */
     public void loadAnimationEnemy() {
         Array<TextureRegion> frames = new Array<>();
 
@@ -123,8 +127,11 @@ public class Enemy{
         walkAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
     }
 
+    /**
+     * Updates the enemy's position and state
+     * @param playerPosition The player's position
+     */
     public void update( Vector2 playerPosition) {
-
         checkIfPlayerIsInBoundery(playerPosition);
 
         if (Objects.equals(currentState, "PATROLLING")){
@@ -157,8 +164,12 @@ public class Enemy{
         body.setLinearVelocity(speedFollow, body.getLinearVelocity().y);
     }
 
+    /**
+     * Draws the enemy
+     * @param batch The sprite batch to draw the enemy
+     * @param stateTime The time the enemy has been in its current state
+     */
     public void draw(SpriteBatch batch, float stateTime) {
-
         TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime);
         float PPM = 250f; // Pixels per meter for drawing
         float playerX = body.getPosition().x - currentFrame.getRegionWidth() * 0.5f / PPM;
@@ -170,14 +181,13 @@ public class Enemy{
             batch.draw(currentFrame, playerX + width, playerY, -width, height);
         } else
             batch.draw(currentFrame, playerX, playerY, width, height);
-
     }
 
-    public void setState(String state) {
+    private void setState(String state) {
         this.currentState = state;
     }
 
-    public void checkIfPlayerIsInBoundery(Vector2 playerPosition) {
+    private void checkIfPlayerIsInBoundery(Vector2 playerPosition) {
         if (playerPosition.x > leftBoundary && playerPosition.x < rightBoundary) {
             setState("FOLLOWING");
         } else {
@@ -198,8 +208,7 @@ public class Enemy{
         return name;
     }
 
-
-    private void die() {
+    public void die() {
         body.setActive(false);
     }
 

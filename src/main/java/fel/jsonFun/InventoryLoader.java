@@ -5,6 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
+/**
+ * Class that loads an inventory from a JSON file
+ * The JSON file is converted to an InventoryConfig object
+ * The InventoryConfig object is then returned
+ */
 public class InventoryLoader {
     private ObjectMapper mapper;
 

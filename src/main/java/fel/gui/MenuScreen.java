@@ -69,6 +69,7 @@ public class MenuScreen implements Screen {
                 String workingDir = System.getProperty("user.dir");
                 deleteRecursively(new File(workingDir + "/src/main/resources/saveLevels"));
                 deleteRecursively(new File(workingDir + "/src/main/resources/savePlayer"));
+                game.loadManager();
                 game.setScreen(new BaseScreen(game, 15, 4, "levels/BaseScreen.json"));
             }
         });
@@ -135,7 +136,7 @@ public class MenuScreen implements Screen {
         skin.dispose();
     }
 
-    public void deleteRecursively(File file) {
+    private void deleteRecursively(File file) {
         // Check if the file is read-only and try to make it writable
         if (!file.canWrite()) {
             file.setWritable(true);

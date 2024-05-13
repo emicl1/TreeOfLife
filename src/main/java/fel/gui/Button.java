@@ -8,9 +8,14 @@ import fel.jsonFun.ButtonConfig;
 import fel.jsonFun.DoorConfig;
 import org.slf4j.Logger;
 
+/**
+ * Button class that extends Object class
+ * This class is used to create a button object in the game
+ * which can be pressed by the player or dynamic object to open doors
+ */
 public class Button extends Object{
 
-    public Array<Door> doors;
+    private Array<Door> doors;
     public boolean isNotPressed = false;
     public Logger log;
 
@@ -29,7 +34,6 @@ public class Button extends Object{
 
     }
 
-
     @Override
     public void createBody(World world) {
 
@@ -45,13 +49,12 @@ public class Button extends Object{
         createDoors(world);
     }
 
-    //return list of doors
     public Array<Door> getDoors() {
         return doors;
     }
 
 
-    public void createDoors(World world) {
+    private void createDoors(World world) {
         if (doors == null) {
             return;
         }
@@ -71,6 +74,4 @@ public class Button extends Object{
             door.dispose();
         }
     }
-
-
 }

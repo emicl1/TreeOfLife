@@ -1,13 +1,17 @@
 package fel.logic;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
+/**
+ * Locations class that represents the locations in the game
+ * The locations have a name, scenes, and can be locked or unlocked
+ * The locations can also have an item needed to unlock them
+ */
 public class Locations{
     private String name;
     private List<Scenes>  scenes;
     private boolean isLocked;
-    private boolean isVisited;
     private String itemNeededToUnlock;
 
     public Locations(String name, List<Scenes> scenes, boolean isLocked, String itemNeededToUnlock) {
@@ -16,6 +20,7 @@ public class Locations{
         this.isLocked = isLocked;
         this.itemNeededToUnlock = itemNeededToUnlock;
     }
+
 
     public String getName() {
         return name;
@@ -27,11 +32,6 @@ public class Locations{
     }
 
 
-    public boolean getIsVisited() {
-        return isVisited;
-    }
-
-
     public void setName(String name) {
         this.name = name;
     }
@@ -39,11 +39,6 @@ public class Locations{
 
     public void setIsLocked(boolean isLocked) {
         this.isLocked = isLocked;
-    }
-
-
-    public void setIsVisited(boolean isVisited) {
-        this.isVisited = isVisited;
     }
 
 
@@ -59,16 +54,5 @@ public class Locations{
 
     public String getItemNeededToUnlock() {
         return itemNeededToUnlock;
-    }
-
-    public void setItemNeededToUnlock(String itemNeededToUnlock) {
-        this.itemNeededToUnlock = itemNeededToUnlock;
-    }
-
-
-    public void unlockLocation(String item) {
-        if (item.equals(itemNeededToUnlock)) {
-            isLocked = false;
-        }
     }
 }

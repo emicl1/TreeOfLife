@@ -1,9 +1,12 @@
 package fel.logic;
 
-
 import java.util.List;
-import fel.jsonFun.ItemConfig;
 
+/**
+ * PlayerChar class that represents the player character in the game
+ * The player character has a name, health, attack damage, and can explore locations
+ * The player character can also have an inventory of items
+ */
 public class PlayerChar extends Character{
 
     private Locations[] exploredLocations;
@@ -15,36 +18,6 @@ public class PlayerChar extends Character{
         this.inventory = inventory;
     }
 
-    public Locations[] getExploredLocations() {
-        return exploredLocations;
-    }
-
-    public void setExploredLocations(Locations[] exploredLocations) {
-        this.exploredLocations = exploredLocations;
-    }
-
-    public List<Items> getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(List<Items> inventory) {
-        this.inventory = inventory;
-    }
-
-    public void addLocation(Locations location) {
-        if (exploredLocations == null) {
-            exploredLocations = new Locations[1];
-            exploredLocations[0] = location;
-        } else {
-            Locations[] temp = new Locations[exploredLocations.length + 1];
-            for (int i = 0; i < exploredLocations.length; i++) {
-                temp[i] = exploredLocations[i];
-            }
-            temp[exploredLocations.length] = location;
-            exploredLocations = temp;
-        }
-    }
-
     public void addItem(Items item) {
         inventory.add(item);
     }
@@ -52,12 +25,4 @@ public class PlayerChar extends Character{
     public void removeItem(Items item) {
         inventory.remove(item);
     }
-
-    public void takeDamage(int damage){
-        this.setHealth(this.getHealth() - damage);
-        if (this.getHealth() <= 0){
-            this.setIsAlive(false);
-        }
-    }
-
 }

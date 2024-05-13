@@ -12,32 +12,39 @@ import fel.jsonFun.PlayerConfig;
 import fel.jsonFun.PlayerLoader;
 import org.slf4j.Logger;
 
+
+/**
+ * Player class that represents the player in the game
+ * The player has a body, animations, and can move around the world
+ * The player can also jump ,attack with a sword and have a sword attached to them
+ *
+ */
 public class Player {
 
-    public World world;
+    private World world;
     public Body playerBody;
-    public float x;
-    public float y;
-    public float speed = 80;
-    public float jumpSpeed = 55;
-    public float boxWidth;
-    public float boxHeight;
+    private float x;
+    private float y;
+    private float speed = 80;
+    private float jumpSpeed = 55;
+    private float boxWidth;
+    private float boxHeight;
     public float PPM = 160;
-    public float density = 2f;
-    public float swordWidth;
-    public float swordHeight;
+    private float density = 2f;
+    private float swordWidth;
+    private float swordHeight;
 
     public Sword sword;
     public boolean hasSword = false;
 
-    public Animation<TextureRegion> walkAnimation;
-    public Animation<TextureRegion> standingAnimation;
-    public Animation<TextureRegion> walkingWithSwordAnimation;
-    public Animation<TextureRegion> standingWithSwordAnimation;
-    public Animation<TextureRegion> AttackAnimation;
-    PlayerConfig config;
+    private Animation<TextureRegion> walkAnimation;
+    private Animation<TextureRegion> standingAnimation;
+    private Animation<TextureRegion> walkingWithSwordAnimation;
+    private Animation<TextureRegion> standingWithSwordAnimation;
+    private Animation<TextureRegion> AttackAnimation;
+    public  PlayerConfig config;
 
-    public Logger log;
+    private Logger log;
 
 
     public Player(World world, float x, float y, String PlayerConfigPath, Logger log) {
@@ -64,9 +71,7 @@ public class Player {
         config = playerLoader.loadPlayer(PlayerConfigPath);
     }
 
-
-
-    public void createPlayer(){
+    private void createPlayer(){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
@@ -94,7 +99,7 @@ public class Player {
 
     }
 
-    public void loadWalkingAnimation(PlayerConfig config){
+    private void loadWalkingAnimation(PlayerConfig config){
         Array<TextureRegion> frames = new Array<>();
         for (String walkingPath : config.walking){
             frames.add(new TextureRegion(new Texture(walkingPath)));
@@ -102,7 +107,7 @@ public class Player {
         walkAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
     }
 
-    public void loadStandingAnimation(PlayerConfig config){
+    private void loadStandingAnimation(PlayerConfig config){
         Array<TextureRegion> frames = new Array<>();
         for (String standingPath : config.standing){
             frames.add(new TextureRegion(new Texture(standingPath)));
@@ -110,7 +115,7 @@ public class Player {
         standingAnimation = new Animation<>(0.3f, frames, Animation.PlayMode.LOOP);
     }
 
-    public void loadWalkingWithSwordAnimation(PlayerConfig config){
+    private void loadWalkingWithSwordAnimation(PlayerConfig config){
         Array<TextureRegion> frames = new Array<>();
         for (String walkingWithSwordPath : config.walkingWithSword){
             frames.add(new TextureRegion(new Texture(walkingWithSwordPath)));
@@ -118,7 +123,7 @@ public class Player {
         walkingWithSwordAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
     }
 
-    public void loadStandingWithSwordAnimation(PlayerConfig config){
+    private void loadStandingWithSwordAnimation(PlayerConfig config){
         Array<TextureRegion> frames = new Array<>();
         for (String standingWithSwordPath : config.standingWithSword){
             frames.add(new TextureRegion(new Texture(standingWithSwordPath)));
@@ -126,7 +131,7 @@ public class Player {
         standingWithSwordAnimation = new Animation<>(0.3f, frames, Animation.PlayMode.LOOP);
     }
 
-    public void loadAttackAnimation(PlayerConfig config){
+    private void loadAttackAnimation(PlayerConfig config){
         Array<TextureRegion> frames = new Array<>();
         for (String attackPath : config.attacking){
             frames.add(new TextureRegion(new Texture(attackPath)));
@@ -134,6 +139,11 @@ public class Player {
         AttackAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
     }
 
+    /**
+     * Load all the animations for the player
+     * Standing, walking, standing with sword, walking with sword, and attacking
+     * @param config PlayerConfig object that contains the paths to the animations
+     */
     public void loadPlayerAnimations(PlayerConfig config){
         loadWalkingAnimation(config);
         loadStandingAnimation(config);
@@ -143,7 +153,6 @@ public class Player {
     }
 
     private TextureRegion getCurrentFrame(float stateTime, boolean isMoving, boolean isAttacking){
-
         TextureRegion currentFrame;
         if (isAttacking){
             currentFrame = AttackAnimation.getKeyFrame(stateTime);
@@ -163,6 +172,14 @@ public class Player {
         return currentFrame;
     }
 
+    /**
+     * Draw the player on the screen
+     * @param batch SpriteBatch to draw the player
+     * @param stateTime Time to get the current frame
+     * @param isMoving Boolean to check if the player is moving
+     * @param isAttacking Boolean to check if the player is attacking
+     * @param isFacingRight Boolean to check if the player is facing right
+     */
     public void drawPlayer(SpriteBatch batch, float stateTime, boolean isMoving, boolean isAttacking, boolean isFacingRight){
         TextureRegion currentFrame = getCurrentFrame(stateTime, isMoving, isAttacking);
         float playerX = playerBody.getPosition().x - currentFrame.getRegionWidth() * 0.5f / PPM;
@@ -183,34 +200,51 @@ public class Player {
         return playerBody.getPosition();
     }
 
+    /**
+     * Jump with the player by applying a linear impulse
+     */
     public void jump(){
         playerBody.applyLinearImpulse(0, jumpSpeed, playerBody.getWorldCenter().x, playerBody.getWorldCenter().y, true);
     }
 
+    /**
+     * Move the player to the left by applying a force to the center of the player
+     */
     public void moveLeft(){
         playerBody.applyForceToCenter(-speed, 0, true);
     }
 
+    /**
+     * Move the player to the right by applying a force to the center of the player
+     */
     public void moveRight(){
         playerBody.applyForceToCenter(speed, 0, true);
     }
 
+    /**
+     * create and attach a sword to the player
+     */
     public void initSword(){
         System.out.println("x " + playerBody.getPosition().x + " y " + playerBody.getPosition().y);
         sword = new Sword(playerBody.getPosition().x, playerBody.getPosition().y);
         sword.createAndAttachSword(world, playerBody, swordWidth, swordHeight, boxHeight);
-
         hasSword = true;
         log.info("Sword created and attached");
     }
+
 
     public boolean hasSword(){
         return hasSword;
     }
 
+    /**
+     * Attack with the sword by applying a torque to the sword
+     * Once the sword rotates more than 179 degrees, dispose of the sword
+     * If there is no sword, log a warning
+     */
     public void attack() {
         if (sword != null) {
-            float currentAngle = sword.getAngle() % (2 * MathUtils.PI); // Normalize the angle
+            float currentAngle = sword.getAngle() % (2 * MathUtils.PI);
 
             float targetAngle = 179 * MathUtils.degreesToRadians;
 
@@ -220,7 +254,7 @@ public class Player {
 
             // Once the sword rotates slightly more than 179 degrees, dispose of it
             if (Math.abs(currentAngle) >= targetAngle) {
-                sword.dispose(); // Dispose of the sword and remove it
+                sword.dispose();
                 sword = null; // Make sure to nullify the reference
             }
         } else {
