@@ -243,7 +243,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
     private void createCamera() {
         float w = 30;
-        float h = 30 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth());
+        float h = 30* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth());
 
         camera = new OrthographicCamera(w, h);
         viewport = new FitViewport(w, h, camera);
@@ -328,6 +328,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         }
 
         shape.dispose();
+
     }
 
 
@@ -517,6 +518,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             inventoryConfig.items.add(itemConfig);
         }
         inventorySaver.saveInventory(inventoryConfig, "src/main/resources/savePlayer/inventory.json");
+        log.info("Game saved");
     }
 
 
@@ -537,6 +539,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
                     String craftedItemName = game.craftItem(item1.getName(), item2.getName());
                     Item item = createNewItemFromCrafting(craftedItemName);
+                    log.info("Crafted new item in BaseScreen: {}", craftedItemName);
                     if (item != null) {
                         toAdd.add(item);
                     }
@@ -565,6 +568,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                         toAdd.add(newItem);
                         toRemove.add(item);
                         if (Objects.equals(newItem.name, "sword")) {
+                            log.info("Player got sword in the BaseScreen");
                             player.hasSword = true;
                         }
                     }
@@ -574,8 +578,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             String dialog = game.interactWithFriendlyNPC(friendlyNPC.getName());
             currentDialogue = dialog;
             showDialogue = true;
-            System.out.println("x " + friendlyNPC.x + " y " + friendlyNPC.y);
-            System.out.println("dialog: " + dialog);
+            log.info("Dialogue: " + dialog);
             // Position of label set relative to the friendlyNPC, so it appears above them slightly to the left
             label.setPosition( (float)((friendlyNPC.x/30) * Gdx.graphics.getWidth() - 2.5* (friendlyNPC.width/30) * Gdx.graphics.getWidth()), (float) (((friendlyNPC.y/20) * Gdx.graphics.getHeight()) +2.5*(friendlyNPC.height/20* Gdx.graphics.getHeight())));
         }
@@ -646,6 +649,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         // Set background sprite to cover the screen
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
+        log.info("Show method passed in GUI");
     }
 
 
@@ -731,6 +735,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         itemsToPutInInventory.clear();
 
         if (!game.isPlayerAlive()){
+            log.info("Player is dead, going to base screen");
             game.setScreen(new BaseScreen(game, 15, 4, "levels/BaseScreen.json"));
             game.setPlayerAlive(true);
 
@@ -944,6 +949,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
                 if (smallBugConfig.name.equals(enemy.getName())) {
                     iterator.remove();  // Safely remove using iterator
+                    log.info("Small bug removed from GUI: " + smallBugConfig.name);
                 }
             }
         } else if (enemy instanceof EnemyBigBug) {
@@ -954,6 +960,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 BigBugConfig bigBugConfig = iterator.next();
                 if (bigBugConfig.name.equals(enemy.getName())) {
                     iterator.remove();  // Safely remove using iterator
+                    log.info("Big bug removed from GUI: " + bigBugConfig.name);
                 }
             }
         }
@@ -1023,4 +1030,13 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             enemy.dispose();
         }
     }
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
 }

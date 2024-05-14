@@ -21,9 +21,9 @@ public class LogicManager {
     public PlayerChar player;
 
     private List<Items> inventory = new ArrayList<>();
-    private final List<ItemsCrafted> itemsToCraft = new ArrayList<>();
+    private List<ItemsCrafted> itemsToCraft = new ArrayList<>();
 
-    private final Logger logger;
+    private Logger logger;
 
     public LogicManager(String[] pathsToJsons, Universe universe, String pathToPlayerJson, String pathToItemsToCraftJson, Logger logger) {
         this.pathsToJsons = pathsToJsons;
@@ -374,7 +374,7 @@ public class LogicManager {
         for (ItemsCrafted item : itemsToCraft){
 
             if (item.canBeCrafted(item1, item2)){
-                logger.info("item" + item.getName() + " can be crafted from" + item1.getName() + " and " + item2.getName());
+                logger.info("item " + item.getName() + " can be crafted from " + item1.getName() + " and " + item2.getName());
                 return true;
             }
         }
@@ -422,6 +422,10 @@ public class LogicManager {
      */
     public List<Items> getInventory() {
         return inventory;
+    }
+
+    public void setInventory(List<Items> inventory) {
+        this.inventory = inventory;
     }
 
     /**
@@ -480,7 +484,6 @@ public class LogicManager {
             return itemToGive.getName();
         }else
             return "";
-
     }
 
     /**
@@ -497,18 +500,24 @@ public class LogicManager {
         return false;
     }
 
-
-    private boolean canItemUnlockLocation(String itemName){
+    /**
+     * Method to check if item can unlock location
+     * by going through all locations
+     * it is public for testing purposes
+     * @param itemName String
+     * @return boolean
+     */
+    public boolean canItemUnlockLocation(String itemName){
         for (Locations location : universe.getLocations()){
-            if (Objects.equals(location.getName(), location.getName())){
-                if (Objects.equals(location.getItemNeededToUnlock(), itemName)){
-                    logger.info("Item " + itemName + " can unlock location " + location.getName());
-                    return true;
-                }
+            System.out.println("uwu4");
+            if (Objects.equals(location.getItemNeededToUnlock(), itemName)){
+                logger.info("Item " + itemName + " can unlock location " + location.getName());
+                return true;
             }
         }
         return false;
     }
+
 
     /**
      * Method to unlock location
@@ -539,8 +548,13 @@ public class LogicManager {
         return false;
     }
 
-
-    private void unlockLocationsWithItemsInInventory(){
+    /**
+     * Method to unlock location
+     * with items in inventory
+     * this is used when loading game to be sure
+     * it is public for testing purposes
+     */
+    public void unlockLocationsWithItemsInInventory(){
         for (Items item : inventory){
             if (canItemUnlockLocation(item.getName())){
                 unlockLocation(item.getName());
@@ -548,9 +562,16 @@ public class LogicManager {
         }
     }
 
+    //SETTERS AND GETTERS for testing purposes mainly
     public Logger getLogger() {
         return logger;
     }
+
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
 
     public void setUniverse(Universe universe) {
         this.universe = universe;
@@ -561,4 +582,8 @@ public class LogicManager {
         this.config = config;
     }
 
+
+    public void setItemsToCraft(List<ItemsCrafted> itemsToCraft) {
+        this.itemsToCraft = itemsToCraft;
+    }
 }

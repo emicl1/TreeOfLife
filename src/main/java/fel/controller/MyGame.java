@@ -288,4 +288,7 @@ public class MyGame extends Game {
     }
 
 
+    public Object getLogicManager() {
+        return logicManager;
+    }
 }

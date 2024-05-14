@@ -15,13 +15,14 @@ public class Universe {
         this.locations = locations;
     }
 
+    public List<Locations> getLocations() {
+        return locations;
+    }
+
     public String getName() {
         return name;
     }
 
-    public List<Locations> getLocations() {
-        return locations;
-    }
 
     public void addLocation(Locations location){
         locations.add(location);
