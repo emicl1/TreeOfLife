@@ -1,8 +1,8 @@
 {
   "name": "WestWoodsPuzzle",
   "locationName": "WestWoods",
-  "background": "westwoods/badforest.jpg",
-  "groundImage": "eastwoods/kamen.png",
+  "background": "westwoods/deadwoods.png",
+  "groundImage": "westwoods/deadblock.png",
   "ground": [
     {"x": -1, "y": 0, "width": 32, "height": 2},
 

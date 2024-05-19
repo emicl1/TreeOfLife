@@ -1,8 +1,8 @@
 {
   "name": "WestWoodsFinal",
   "locationName": "WestWoods",
-  "background": "westwoods/badforest.jpg",
-  "groundImage": "eastwoods/kamen.png",
+  "background": "westwoods/deadwoods.png",
+  "groundImage": "westwoods/deadblock.png",
   "ground": [{
     "x": 0,
     "y": 0,

@@ -1,8 +1,8 @@
 {
   "name": "WestWoodsBase",
   "locationName": "WestWoods",
-  "background": "westwoods/badforest.jpg",
-  "groundImage": "eastwoods/kamen.png",
+  "background": "westwoods/deadwoods.png",
+  "groundImage": "westwoods/deadblock.png",
   "ground": [
     {"x": -3, "y": 0, "width": 29, "height": 2},
     {"x": 26, "y": 0, "width": 4, "height": 12},

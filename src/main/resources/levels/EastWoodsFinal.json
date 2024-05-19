@@ -1,8 +1,8 @@
 {
   "name": "EastWoodsFinal",
   "locationName": "EastWoods",
-  "background": "eastwoods/redforestdeeper.jpg",
-  "groundImage": "eastwoods/kamen.png",
+  "background": "eastwoods/redwood1.png",
+  "groundImage": "eastwoods/redblock.png",
   "ground": [{
     "x": 0,
     "y": 0,

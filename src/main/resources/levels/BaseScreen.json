@@ -1,8 +1,8 @@
 {
   "name": "BaseScreen",
   "locationName": "Base",
-  "background": "homelocation/treetrunk.jpg",
-  "groundImage": "eastwoods/kamen.png",
+  "background": "homelocation/strom.png",
+  "groundImage": "homelocation/baseblock.png",
      "ground": [{
        "x": 0,
        "y": 0,
