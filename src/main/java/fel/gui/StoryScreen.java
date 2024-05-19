@@ -40,28 +40,27 @@ public class StoryScreen implements Screen{
         table.setFillParent(true);
         stage.addActor(table);
 
-        String storyText = "The world has been dying for years, a wolf came from afar years ago, and has been plaguing the whole groaning forest ever since. He poisoned\n" +
-                "its waters and degraded its soil, so he has power over the forest and can torment it as he\n" +
-                "his thoughts of his lost daughter who disappeared in these woods.\n" +
-                "There is a legend among the beings who inhabit the groaning forest that one day there will come\n" +
-                "the heir to the soul of the forest, and he will drive out the wolf and restore the forest to its strength.\n" +
-                "One stormy night, an owl sits in its shelter, and sees a shooting star, which falls a short distance from its\n" +
-                "she quickly runs after it, she notices that it is not a star but a soul, which used to be\n" +
-                "and brings it to his house, where he lets it recover for another day. The soul has wandered out of the next forest and\n" +
-                "now wants to escape, but it can't do that with thorns and rotten water everywhere, so it hears a story from an owl and about\n" +
-                "forest, so she decides to help the forest so she can get home. She sees the state the Forest of Life is in,\n" +
-                "all dried up and half dead, so she asks the owl what to do, he says he has to restore the water and bring nutrients to the forest.\n" +
-                "So the hero goes to the Eastern Forest, where he solves two puzzles with which he gets a handle and\n" +
-                "stick, which he uses to make a lever to run the old mill, which will restore the flow of water, and\n" +
-                "the water is made drinkable again.  The local creatures will notice. And they advise him that at the beginning\n" +
-                "...there's a cave where a sword is hidden, the hero goes to get it and follows the owl,\n" +
-                "and he learns that there are nutrients in the western forest, which are divided into three parts. The hero goes to collect them,\n" +
-                "but there are two types of enemies. Big bugs that run fast but are clumsy, and smaller ones\n" +
-                "mosquitoes that attack quickly but die quickly. After getting the three parts and combining them. The hero recovers\n" +
-                "the forest, but the wolf notices him and takes his savior, an owl, and climbs a tree with him, where he wants to\n" +
-                "to kill it. Down below, one of the creatures quickly gives him a fireball, which he must put in the wolf's throat to\n" +
-                "to kill him. He climbs up as fast as he can to overpower the wolf, but in the end he doesn't kill it, the wolf realizes his\n" +
-                "blindness and runs away from the woods, and the Standing Les regains his old glory.";
+        String storyText = "The world has been dying for years, a wolf came from afar years ago, and has been plaguing the Whispering Woods ever since. He poisoned" +
+                "its waters and degraded its soil, so he has power over the forest and can torment it, in order to avenge" +
+                "his lost daughter who disappeared there.\n" +
+                "There is a legend among the beings who inhabit the Whispering Woods that one day there will come" +
+                "the heir to the soul of the forest, and he will drive out the wolf and restore the forest to its former strength.\n" +
+                "One stormy night, an owl sits in its shelter, and sees a shooting star, which falls a short distance from her." +
+                " She quickly runs after it and notices that it's not a star but a soul and brings it to her house, " +
+                "where she lets it recover for another day.\nThe soul had wandered out of the neighbouring forest and" +
+                "wanted to escape from it, but couldn't because of the thorns and filthy water everywhere. It hears out story about the forest from the owl known as Ori." +
+                "It decides to help the forest so it can get home. It sees the state the Whispering Woods are in," +
+                "all dried up and almost lifeless. When asked, Ori shares what to do. It has to restore the water and bring nutrients to the forest. The soul becomes" +
+                "the hero of our story and goes to the Eastern Forest, where he solves two puzzles and obtains a handle and" +
+                "a stick, which he uses to make a lever needed to run the old mill that will restore the flow of water, make it potable again.\n" +
+                "The inhabitants notice the change and they give him advice that there's a cave where is a hidden sword. The hero goes to retrieve it and follows Ori," +
+                "while he learns that there are nutrients in the Western Forest, which are divided into three parts. The hero sets off to collect them," +
+                "but encounters two types of enemies. There are big bugs that run fast but are clumsy, and small" +
+                "mosquitoes that attack quickly but can be killed easily. After getting the three parts and combining them, the hero restores" +
+                "the forest.\nThe wolf notices him and kidnaps his savior, Ori, and takes her up a tree, where he wants to" +
+                "to kill her. Down below, one of the creatures quickly gives him a fireball, which he must put down the wolf's throat in order to" +
+                "finish him. He climbs up as fast as he can, overpowers the wolf, but in the end he doesn't eliminate him, because the wolf realizes his" +
+                "weakness and runs away from the woods, and the Whispering Woods regain their former glory.";
         Label storyLabel = new Label(storyText, skin);
         storyLabel.setWrap(true);
 

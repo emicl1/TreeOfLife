@@ -12,6 +12,7 @@ public class WinScreen extends MenuScreen {
         super(game);
     }
 
+
     @Override
     public void createUI() {
         Table table = new Table();
@@ -23,12 +24,11 @@ public class WinScreen extends MenuScreen {
                 "have grown strong enough to leave the forest\n" +
                 "Credits: \n" +
                 "Develop by: Alex Olivier Michaud\n" +
-                "Graphics by: Caroline Iva Michaud alias Alfons\n", skin);
-
+                "Graphics by: Caroline Iva Michaud alias Alfons\n" +
+                "Proof reading by: Bará Metelcová", skin);
 
         table.row().pad(10, 0, 10, 0);
         table.add(control).fillX().uniformX();
-
     }
 
 
@@ -43,6 +43,5 @@ public class WinScreen extends MenuScreen {
             game.setScreen(new MenuScreen(game));
         }
     }
-
 
 }

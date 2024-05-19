@@ -1,7 +1,7 @@
 {
   "name": "WestWoodsFinal",
   "locationName": "WestWoods",
-  "background": "westwoods/deadwoods.png",
+  "background": "westwoods/deadmill.png",
   "groundImage": "westwoods/deadblock.png",
   "ground": [{
     "x": 0,
@@ -24,10 +24,10 @@
     "itemToGive": "sword",
     "itemToReceive": "paka",
     "itemToReceive2": "",
-    "dialogueBeforeReceiving": ["Give me a Lever, so I can repair the mill!",
-      "Why are you staring at me? I need the Lever!"],
-    "dialogueAfterReceiving": ["Thank you for the Lever! Now I can repair the mill!",
-      "I have repaired the mill, now you can go to the next location!"],
+    "dialogueBeforeReceiving": ["Give me a lever, so I can repair the mill!",
+      "Why are you staring at me? I need the lever!"],
+    "dialogueAfterReceiving": ["Thank you for the lever! Now I can repair the mill!",
+      "I have repaired the mill, you can go to the next location now!"],
     "boxWidth": 1,
     "boxHeight": 2
   }]

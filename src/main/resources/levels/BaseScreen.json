@@ -24,7 +24,7 @@
     "itemToGive": "sword",
     "itemToReceive": "sword",
     "itemToReceive2": "",
-    "dialogueBeforeReceiving": ["Go to Westwoods and pick up two item and craft a handle with them and give to Ori.",
+    "dialogueBeforeReceiving": ["Go to Eastwoods, pick up two items and craft a lever from them, then give it to Ori.",
     "What are you waiting for? Save the forest!"],
     "dialogueAfterReceiving": ["Thank you! Now you can go to the Westwoods and kill the enemies and bring back nutrients to the forest."],
     "boxWidth": 1,
