@@ -18,7 +18,7 @@ import org.slf4j.Logger;
  * animations
  */
 
-public class FriendlyNPC extends Object{
+public class FriendlyNPC extends GameObject {
     private Animation<TextureRegion> Animation;
     private World world;
     private Body body;

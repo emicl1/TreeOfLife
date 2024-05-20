@@ -25,7 +25,7 @@ public class WinScreen extends MenuScreen {
                 "Credits: \n" +
                 "Develop by: Alex Olivier Michaud\n" +
                 "Graphics by: Caroline Iva Michaud alias Alfons\n" +
-                "Proof reading by: Bará Metelcová", skin);
+                "Proof reading by: Bara Metelcova", skin);
 
         table.row().pad(10, 0, 10, 0);
         table.add(control).fillX().uniformX();

@@ -1,5 +1,6 @@
 package fel.gui;
 
+import fel.constants.Constants;
 import fel.controller.MyGame;
 
 import java.nio.file.Path;
@@ -16,16 +17,17 @@ public class EastWoods1 extends EastWoodsBase{
 
     @Override
     public void goToFunctions() {
+        handleSaving();
         goToEastWoodsBase();
         goToEastWoodsFinal();
     }
 
     private void goToEastWoodsBase() {
         if (player.getPosition().x > 29 && player.getPosition().y > 2) {
-            Path path = Paths.get("src/main/resources/saveLevels/EastWoodsBase.json");
+            Path path = Paths.get(Constants.pathToSave + "EastWoodsBase.json");
             if (path.toFile().exists()) {
                 log.info("Loading East Woods Base saved level");
-                game.setScreen(new EastWoodsBase(game, 2, 7, "src/main/resources/saveLevels/EastWoodsBase.json"));
+                game.setScreen(new EastWoodsBase(game, 2, 7, Constants.pathToSave + "EastWoodsBase.json"));
             } else {
                 log.info("Loading East Woods Base new level");
             game.setScreen(new EastWoodsBase(game, 2, 7, "levels/EastWoodsBase.json"));
@@ -35,10 +37,10 @@ public class EastWoods1 extends EastWoodsBase{
 
     private void goToEastWoodsFinal() {
         if (player.getPosition().x < 2 && player.getPosition().y < 7) {
-            Path path = Paths.get("src/main/resources/saveLevels/EastWoodsFinal.json");
+            Path path = Paths.get(Constants.pathToSave + "EastWoodsFinal.json");
             if (path.toFile().exists()) {
                 log.info("Loading East Woods Final saved level");
-                game.setScreen(new EastWoodsFinal(game, 27, 3, "src/main/resources/saveLevels/EastWoodsFinal.json"));
+                game.setScreen(new EastWoodsFinal(game, 27, 3, Constants.pathToSave + "EastWoodsFinal.json"));
             } else {
                 log.info("Loading East Woods Final new level");
                 game.setScreen(new EastWoodsFinal(game, 27, 3, "levels/EastWoodsFinal.json"));

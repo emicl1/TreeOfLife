@@ -48,6 +48,7 @@ public class MyGame extends Game {
         }
         rootLogger.info("Logging enabled: " + loggingEnabled);
         rootLogger.info("Logger Created :]");
+
     }
 
 

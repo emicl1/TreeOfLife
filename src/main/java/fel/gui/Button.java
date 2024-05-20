@@ -13,7 +13,7 @@ import org.slf4j.Logger;
  * This class is used to create a button object in the game
  * which can be pressed by the player or dynamic object to open doors
  */
-public class Button extends Object{
+public class Button extends GameObject {
 
     private Array<Door> doors;
     public boolean isNotPressed = false;

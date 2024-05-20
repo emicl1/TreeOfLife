@@ -12,7 +12,7 @@ import org.slf4j.Logger;
  * which can be opened by pressing a button
  */
 
-public class Door extends Object{
+public class Door extends GameObject {
 
     public Door(DoorConfig config, Logger log) {
         super(log);

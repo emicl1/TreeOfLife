@@ -11,7 +11,7 @@ import org.slf4j.Logger;
  * This class is used to create an item object in the game
  * which can be collected by the player used for crafting or other purposes
  */
-public class Item extends Object{
+public class Item extends GameObject {
 
     public final String name;
     public boolean isCollectable = false;

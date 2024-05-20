@@ -1,5 +1,6 @@
 package fel.gui;
 
+import fel.constants.Constants;
 import fel.controller.MyGame;
 
 import java.nio.file.Path;
@@ -23,10 +24,10 @@ public class EastWoodsFinal extends EastWoodsBase{
 
     private void goToEastWoods1(){
         if (player.getPosition().x >28  && player.getPosition().y < 5) {
-            Path path = Paths.get("src/main/resources/saveLevels/EastWoods1.json");
+            Path path = Paths.get(Constants.pathToSave + "EastWoods1.json");
             if (path.toFile().exists()) {
                 log.info("Loading East Woods 1 saved level");
-                game.setScreen(new EastWoods1(game, 2, 7, "src/main/resources/saveLevels/EastWoods1.json"));
+                game.setScreen(new EastWoods1(game, 2, 7, Constants.pathToSave + "EastWoods1.json"));
             } else {
                 log.info("Loading East Woods 1 new level");
                 game.setScreen(new EastWoods1(game, 2, 7, "levels/EastWoods1.json"));

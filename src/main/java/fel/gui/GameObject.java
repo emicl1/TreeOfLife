@@ -12,7 +12,7 @@ import org.slf4j.Logger;
  * to create objects in the game, it contains methods to create
  * body and fixture for the object of different types
  */
-public class Object {
+public class GameObject {
     public String path;
     public float x;
     public float y;
@@ -27,7 +27,7 @@ public class Object {
 
     public Logger log;
 
-    public Object(Logger log) {
+    public GameObject(Logger log) {
         this.log = log;
     }
 

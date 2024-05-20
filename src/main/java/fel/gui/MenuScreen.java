@@ -12,9 +12,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import fel.constants.Constants;
 import fel.controller.MyGame;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MenuScreen implements Screen {
     public Stage stage;
@@ -66,8 +69,8 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 String workingDir = System.getProperty("user.dir");
-                deleteRecursively(new File(workingDir + "/src/main/resources/saveLevels"));
-                deleteRecursively(new File(workingDir + "/src/main/resources/savePlayer"));
+                deleteRecursively(new File(workingDir + "/"+ Constants.pathToSave));
+                deleteRecursively(new File(workingDir + Constants.pathToPlayer.substring(0, Constants.pathToPlayer.length() -1)));
                 game.loadManager();
                 game.setScreen(new BaseScreen(game, 15, 4, "levels/BaseScreen.json"));
             }
@@ -76,15 +79,19 @@ public class MenuScreen implements Screen {
         SavedGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
-                game.setScreen(new BaseScreen(game, 15, 4, "levels/BaseScreen.json"));
+                    Path path = Paths.get(Constants.pathToSave + "BaseScreen.json");
+                    if (path.toFile().exists()) {
+                        game.setScreen(new BaseScreen(game, 15, 4, Constants.pathToSave + "BaseScreen.json"));
+                    }else {
+                        game.setScreen(new BaseScreen(game, 28, 10, "levels/BaseScreen.json"));
+                    }
             }
         });
 
         HelpButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new HelpScreen(game, new MenuScreen(game)));
+                game.setScreen(new HelpScreen(game, MenuScreen.class));
             }
         });
 
@@ -105,6 +112,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         Gdx.input.setInputProcessor(stage);
     }
 

@@ -1,6 +1,7 @@
 package fel.gui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -34,6 +35,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.*;
+
+import fel.constants.Constants;
 
 /**
  * Base screen for the game
@@ -241,9 +244,15 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
     }
 
 
+    private void setFullScreen() {
+        Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
+        Gdx.graphics.setFullscreenMode(displayMode);
+    }
+
+
     private void createCamera() {
-        float w = 30;
-        float h = 30* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth());
+        float w = Constants.ScreenHeightInMeters;
+        float h = Constants.ScreenWidthInMeters/ Constants.aspectRatio;
 
         camera = new OrthographicCamera(w, h);
         viewport = new FitViewport(w, h, camera);
@@ -468,7 +477,14 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new HelpScreen(game, this));
+            handleSaving();
+
+            String newPath = Constants.pathToSave + jsonPath.substring(7);
+            if (newPath.contains(jsonPath)) {
+                game.setScreen(new HelpScreen(game, this.getClass(), new Object[]{game, x, y, newPath}));
+            }else{
+                game.setScreen(new HelpScreen(game, this.getClass(), new Object[]{game, x, y, jsonPath}));
+            }
         }
     }
 
@@ -494,8 +510,10 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         inventory.removeAll(toRemove);
     }
 
-
-    private void handleSaving(){
+    /**
+     * handle saving of all the items, enemies and player
+     */
+    public void handleSaving(){
         game.saveGame(config, player.config);
         InventorySaver inventorySaver = new InventorySaver();
         if (inventoryConfig == null){
@@ -581,6 +599,8 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             log.info("Dialogue: " + dialog);
             // Position of label set relative to the friendlyNPC, so it appears above them slightly to the left
             label.setPosition( (float)((friendlyNPC.x/30) * Gdx.graphics.getWidth() - 2.5* (friendlyNPC.width/30) * Gdx.graphics.getWidth()), (float) (((friendlyNPC.y/20) * Gdx.graphics.getHeight()) +2.5*(friendlyNPC.height/20* Gdx.graphics.getHeight())));
+            log.debug("Setting Position of x Label " + ((friendlyNPC.x/30) * Gdx.graphics.getWidth() - 2.5* (friendlyNPC.width/30) * Gdx.graphics.getWidth()));
+            log.debug("Setting Position of y Label " + (float) (((friendlyNPC.y/20) * Gdx.graphics.getHeight()) +2.5*(friendlyNPC.height/20* Gdx.graphics.getHeight())));
         }
         inventory.removeAll(toRemove);
         inventory.addAll(toAdd);
@@ -622,6 +642,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         LevelLoader levelLoader = new LevelLoader();
         config = levelLoader.loadLevel(jsonPath);
 
+        setFullScreen();
         createCamera();
         createWorld(config.gravityX, config.gravityY);
         createBackgroundAndGround(config);
@@ -645,7 +666,8 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         log.info("Ratio of height and width: " + (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
         //hard code values for better calculations of the world bounds
-        createWorldBounds(31, 32 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+        // +1 and +2 so that player can go little bit beyond the screen
+        createWorldBounds(Constants.ScreenWidthInMeters +1, (Constants.ScreenHeightInMeters +2) * (Constants.aspectRatio));
 
         // Set background sprite to cover the screen
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
@@ -661,6 +683,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         // functions that enable you to go to other levels should be overwritten in the subclass
+
         goToFunctions();
 
 
@@ -839,10 +862,10 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
                 return;
             }
 
-            Path path = Paths.get("src/main/resources/saveLevels/EastWoodsBase.json");
+            Path path = Paths.get(Constants.pathToSave  + "EastWoodsBase.json");
             if (path.toFile().exists()) {
                 log.info("Going to east woods from loaded file");
-                game.setScreen(new EastWoodsBase(game, 28, 10, "src/main/resources/saveLevels/EastWoodsBase.json"));
+                game.setScreen(new EastWoodsBase(game, 28, 10, Constants.pathToSave  + "EastWoodsBase.json"));
             }else {
                 log.info("Going to east woods");
                 game.setScreen(new EastWoodsBase(game, 28, 10, "levels/EastWoodsBase.json"));
@@ -858,11 +881,11 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
             if (game.isLocationLocked("WestWoods")) {
                 return;
             }
-            Path path = Paths.get("src/main/resources/saveLevels/WestWoodsBase.json");
+            Path path = Paths.get(Constants.pathToSave + "WestWoodsBase.json");
 
             if (path.toFile().exists()) {
                 log.info("Going to west woods from loaded file");
-                game.setScreen(new WestWoodsBase(game, 2, 2, "src/main/resources/saveLevels/WestWoodsBase.json"));
+                game.setScreen(new WestWoodsBase(game, 2, 2, Constants.pathToSave + "WestWoodsBase.json"));
             }else {
                 log.info("Going to west woods");
                 game.setScreen(new WestWoodsBase(game, 2, 2, "levels/WestWoodsBase.json"));
@@ -902,6 +925,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
     @Override
     public void addItemToInventory(Item item){
+        handleSaving();
         itemsToPutInInventory.add(item);
 
         if (inventoryConfig == null) {
@@ -925,7 +949,7 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         log.info("Item added to inventory in JSON file: " + item.getName());
 
         InventorySaver inventorySaver = new InventorySaver();
-        inventorySaver.saveInventory(inventoryConfig, "src/main/resources/savePlayer/inventory.json");
+        inventorySaver.saveInventory(inventoryConfig, Constants.pathToPlayer + "inventory.json");
     }
 
     @Override

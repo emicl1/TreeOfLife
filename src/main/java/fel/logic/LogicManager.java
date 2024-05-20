@@ -509,7 +509,6 @@ public class LogicManager {
      */
     public boolean canItemUnlockLocation(String itemName){
         for (Locations location : universe.getLocations()){
-            System.out.println("uwu4");
             if (Objects.equals(location.getItemNeededToUnlock(), itemName)){
                 logger.info("Item " + itemName + " can unlock location " + location.getName());
                 return true;

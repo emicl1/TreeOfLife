@@ -10,7 +10,7 @@ import fel.jsonFun.MoveableObjConfig;
  * Usually used to create objects that can be moved by the player.
  * and step on buttons.
  */
-public class MoveableObj extends Object{
+public class MoveableObj extends GameObject {
 
     public float density;
 

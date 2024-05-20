@@ -1,5 +1,6 @@
 package fel.gui;
 
+import fel.constants.Constants;
 import fel.controller.MyGame;
 
 import java.nio.file.Path;
@@ -22,10 +23,10 @@ public class WestWoodsFinal extends WestWoodsBase{
 
     private void goToWestWoodsPuzzle(){
         if (player.getPosition().x < 2 && player.getPosition().y < 7) {
-            Path path = Paths.get("src/main/resources/saveLevels/WestWoodsPuzzle.json");
+            Path path = Paths.get(Constants.pathToSave + "WestWoodsPuzzle.json");
             if (path.toFile().exists()) {
                 log.info("Loading WestWoodsPuzzle saved file");
-                game.setScreen(new WestWoodsPuzzle(game, 28, 14, "src/main/resources/saveLevels/WestWoodsPuzzle.json"));
+                game.setScreen(new WestWoodsPuzzle(game, 28, 14, Constants.pathToSave + "WestWoodsPuzzle.json"));
             } else {
                 log.info("Loading WestWoodsPuzzle default file");
                 game.setScreen(new WestWoodsPuzzle(game, 28, 14, "levels/WestWoodsPuzzle.json"));

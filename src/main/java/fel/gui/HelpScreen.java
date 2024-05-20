@@ -14,11 +14,13 @@ import fel.controller.MyGame;
  * HelpScreen class is a screen that displays the controls of the game.
  */
 public class HelpScreen extends MenuScreen {
-    private Screen previousScreen;
+    private Class<? extends Screen> previousScreenClass;
+    private Object[] previousScreenParams;
 
-    public HelpScreen(MyGame game, Screen previousScreen) {
+    public HelpScreen(MyGame game, Class<? extends Screen> previousScreenClass,  Object... previousScreenParams) {
         super(game);
-        this.previousScreen = previousScreen;
+        this.previousScreenClass = previousScreenClass;
+        this.previousScreenParams = previousScreenParams;
     }
 
     @Override
@@ -27,7 +29,8 @@ public class HelpScreen extends MenuScreen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        TextButton backButton = new TextButton("Back", skin);
+        TextButton backButton = new TextButton("Back to Game", skin);
+        TextButton backToMenuButton = new TextButton("Back to Menu", skin);
         Label control = new Label("Controls: \n" +
                 "W - move up\n" +
                 "A - move left\n" +
@@ -38,17 +41,30 @@ public class HelpScreen extends MenuScreen {
                 "ESC - pause game", skin);
 
 
+
+        table.row().pad(10, 0, 10, 0);
+        table.add(control).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(backButton).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
-        table.add(control).fillX().uniformX();
-
+        table.add(backToMenuButton).fillX().uniformX();
 
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                try {
+                    Screen previousScreen = previousScreenClass.getDeclaredConstructor(getParameterTypes(previousScreenParams)).newInstance(previousScreenParams);
+                    game.setScreen(previousScreen);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
-                game.setScreen(previousScreen);
+        backToMenuButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MenuScreen(game));
             }
         });
     }
@@ -60,7 +76,32 @@ public class HelpScreen extends MenuScreen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(previousScreen); // Or keep a reference to the paused game screen if necessary
+            try {
+                Screen previousScreen = previousScreenClass.getDeclaredConstructor(getParameterTypes(previousScreenParams)).newInstance(previousScreenParams);
+                game.setScreen(previousScreen);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    private Class<?>[] getParameterTypes(Object[] params) {
+        Class<?>[] types = new Class<?>[params.length];
+        for (int i = 0; i < params.length; i++) {
+            types[i] = getWrapperClass(params[i].getClass());
+        }
+        return types;
+    }
+
+    private Class<?> getWrapperClass(Class<?> clazz) {
+        if (clazz == Integer.class) return int.class;
+        if (clazz == Float.class) return float.class;
+        if (clazz == Double.class) return double.class;
+        if (clazz == Boolean.class) return boolean.class;
+        if (clazz == Long.class) return long.class;
+        if (clazz == Short.class) return short.class;
+        if (clazz == Byte.class) return byte.class;
+        if (clazz == Character.class) return char.class;
+        return clazz;
     }
 }
