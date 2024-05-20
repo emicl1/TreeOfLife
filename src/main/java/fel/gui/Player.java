@@ -225,7 +225,7 @@ public class Player {
      * create and attach a sword to the player
      */
     public void initSword() {
-        System.out.println("x " + playerBody.getPosition().x + " y " + playerBody.getPosition().y);
+        log.debug("x " + playerBody.getPosition().x + " y " + playerBody.getPosition().y);
         sword = new Sword(playerBody.getPosition().x, playerBody.getPosition().y);
         sword.createAndAttachSword(world, playerBody, swordWidth, swordHeight, boxHeight);
         hasSword = true;

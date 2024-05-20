@@ -59,7 +59,7 @@ public class Button extends GameObject {
             return;
         }
         for (Door door : doors) {
-            System.out.println("Creating door");
+            log.info("Creating door");
             door.loadSprite();
             door.createBody(world);
         }

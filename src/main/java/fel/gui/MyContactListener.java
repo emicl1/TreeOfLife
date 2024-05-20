@@ -62,7 +62,6 @@ public class MyContactListener implements ContactListener {
         if ((isFixtureSword(fixA) && isFixtureEnemy(fixB))) {
             log.info("Sword touched enemy");
             String name = ((Enemy) fixB.getUserData()).getName();
-            System.out.println(name);
             game.playerAttack(name);
             if (!game.isEnemyAlive(name)) {
                 game.removeEnemy(name);
@@ -74,7 +73,6 @@ public class MyContactListener implements ContactListener {
         if ((isFixtureSword(fixB) && isFixtureEnemy(fixA))) {
             log.info("Sword touched enemy");
             String name = ((Enemy) fixA.getUserData()).getName();
-            System.out.println(name);
             game.playerAttack(name);
             if (!game.isEnemyAlive(name)) {
                 game.removeEnemy(name);
