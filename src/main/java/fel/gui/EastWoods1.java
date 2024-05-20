@@ -11,13 +11,13 @@ import java.nio.file.Paths;
  * This class is used to create level of the East Woods
  */
 public class EastWoods1 extends EastWoodsBase{
+
     public EastWoods1(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
     }
 
     @Override
     public void goToFunctions() {
-        handleSaving();
         goToEastWoodsBase();
         goToEastWoodsFinal();
     }

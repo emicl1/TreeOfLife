@@ -478,11 +478,12 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             handleSaving();
-
-            String newPath = Constants.pathToSave + jsonPath.substring(7);
-            if (newPath.contains(jsonPath)) {
-                game.setScreen(new HelpScreen(game, this.getClass(), new Object[]{game, x, y, newPath}));
+            if (jsonPath.contains(Constants.pathToSave)) {
+                log.info("Saved path to Json " + jsonPath);
+                game.setScreen(new HelpScreen(game, this.getClass(), new Object[]{game, x, y, jsonPath}));
             }else{
+                String newPath = Constants.pathToSave + jsonPath.substring(7);
+                log.info("New path to Json " + newPath);
                 game.setScreen(new HelpScreen(game, this.getClass(), new Object[]{game, x, y, jsonPath}));
             }
         }
@@ -666,8 +667,9 @@ public class BaseScreen implements Screen, BodyDoorItemRemoveManager {
         log.info("Ratio of height and width: " + (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
         //hard code values for better calculations of the world bounds
-        // +1 and +2 so that player can go little bit beyond the screen
-        createWorldBounds(Constants.ScreenWidthInMeters +1, (Constants.ScreenHeightInMeters +2) * (Constants.aspectRatio));
+        // +1 and +4 so that player can go a little bit beyond the screen
+        createWorldBounds(Constants.ScreenWidthInMeters +1, (Constants.ScreenHeightInMeters ) /2 + 4 );
+        log.info("World height" + (Constants.ScreenHeightInMeters ) * (Constants.aspectRatio));
 
         // Set background sprite to cover the screen
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);

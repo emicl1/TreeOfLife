@@ -21,6 +21,7 @@ public class HelpScreen extends MenuScreen {
         super(game);
         this.previousScreenClass = previousScreenClass;
         this.previousScreenParams = previousScreenParams;
+        createLogger();
     }
 
     @Override
@@ -39,7 +40,7 @@ public class HelpScreen extends MenuScreen {
                 "S - save game\n" +
                 "C - craft\n" +
                 "ESC - pause game", skin);
-
+        log.info("Labels and buttons set in HelpScreen");
 
 
         table.row().pad(10, 0, 10, 0);
@@ -48,6 +49,7 @@ public class HelpScreen extends MenuScreen {
         table.add(backButton).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(backToMenuButton).fillX().uniformX();
+        log.info("Buttons in HelpScreen created");
 
         backButton.addListener(new ChangeListener() {
             @Override
@@ -64,6 +66,7 @@ public class HelpScreen extends MenuScreen {
         backToMenuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                log.info("From HelpScreen to Menu Screen");
                 game.setScreen(new MenuScreen(game));
             }
         });

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fel.constants.Constants;
 import fel.controller.MyGame;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -23,13 +24,14 @@ public class MenuScreen implements Screen {
     public Stage stage;
     public Skin skin ;
     public MyGame game;
+    public Logger log;
 
 
     public MenuScreen(MyGame game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         skin = new Skin();
-
+        createLogger();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
@@ -39,7 +41,16 @@ public class MenuScreen implements Screen {
         skin.load(Gdx.files.internal("menuuiskin.json"));
         Gdx.input.setInputProcessor(stage);
         createUI();
+
     }
+
+    /**
+     * logger :)
+     */
+    public void createLogger() {
+        log = game.getRootLogger();
+    }
+
 
     public void createUI() {
         Table table = new Table();
@@ -52,6 +63,7 @@ public class MenuScreen implements Screen {
         TextButton HelpButton = new TextButton("Help", skin);
         TextButton StoryScreen = new TextButton("Lore", skin);
         TextButton exitButton = new TextButton("Exit", skin);
+        log.info("Created Buttons");
 
         table.add(NewGameButton).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
@@ -63,6 +75,7 @@ public class MenuScreen implements Screen {
 
         table.row().pad(10, 0, 10, 0);
         table.add(exitButton).fillX().uniformX();
+        log.info("Buttons put into place");
 
         // Add listeners to buttons
         NewGameButton.addListener(new ChangeListener() {
@@ -163,12 +176,12 @@ public class MenuScreen implements Screen {
 
         // Attempt to delete the file or directory
         if (file.delete()) {
-            System.out.println("Deleted: " + file.getPath());
+            log.info("Deleted: " + file.getPath());
         } else {
-            System.out.println("Failed to delete: " + file.getPath());
+            log.debug("Failed to delete: " + file.getPath());
             // Optional: Check why it failed
             if (file.exists()) {
-                System.out.println("File still exists (possibly locked or in use)");
+                log.debug("File still exists (possibly locked or in use)");
             }
         }
     }
