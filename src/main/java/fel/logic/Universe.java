@@ -24,7 +24,7 @@ public class Universe {
     }
 
 
-    public void addLocation(Locations location){
+    public void addLocation(Locations location) {
         locations.add(location);
     }
 }

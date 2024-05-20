@@ -24,8 +24,9 @@ public class MyContactListener implements ContactListener {
         createLogger();
     }
 
-    private void createLogger(){
-        log = game.getRootLogger();;
+    private void createLogger() {
+        log = game.getRootLogger();
+        ;
     }
 
 
@@ -34,13 +35,11 @@ public class MyContactListener implements ContactListener {
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
 
-        if (isFixturePlayer(contact.getFixtureA()) && isFixtureGround(contact.getFixtureB()) ||
-                isFixturePlayer(contact.getFixtureB()) && isFixtureGround(contact.getFixtureA())) {
+        if (isFixturePlayer(contact.getFixtureA()) && isFixtureGround(contact.getFixtureB()) || isFixturePlayer(contact.getFixtureB()) && isFixtureGround(contact.getFixtureA())) {
             groundContacts++;
             bodyDoorItemRemoveManager.changeOnGround(true);
         }
-        if ((isFixturePlayer(fixA) && isFixtureItem(fixB)) ||
-                (isFixturePlayer(fixB) && isFixtureItem(fixA))) {
+        if ((isFixturePlayer(fixA) && isFixtureItem(fixB)) || (isFixturePlayer(fixB) && isFixtureItem(fixA))) {
             handleItemCollection(fixA, fixB);
         }
 
@@ -52,10 +51,10 @@ public class MyContactListener implements ContactListener {
 
         }
 
-        if ((isFixtureEnemy(fixA) || isFixtureEnemy(fixB)) && (isFixturePlayer(fixA) || isFixturePlayer(fixB))){
+        if ((isFixtureEnemy(fixA) || isFixtureEnemy(fixB)) && (isFixturePlayer(fixA) || isFixturePlayer(fixB))) {
             log.info("Enemy touched player");
             game.playerTakeDamage(20);
-            if (game.getPlayerHealth() <= 0){
+            if (game.getPlayerHealth() <= 0) {
                 game.setPlayerAlive(false);
             }
         }
@@ -65,7 +64,7 @@ public class MyContactListener implements ContactListener {
             String name = ((Enemy) fixB.getUserData()).getName();
             System.out.println(name);
             game.playerAttack(name);
-            if (!game.isEnemyAlive(name)){
+            if (!game.isEnemyAlive(name)) {
                 game.removeEnemy(name);
                 bodyDoorItemRemoveManager.removeEnemy((Enemy) fixA.getUserData());
                 bodyDoorItemRemoveManager.removeBody(fixB.getBody());
@@ -77,15 +76,14 @@ public class MyContactListener implements ContactListener {
             String name = ((Enemy) fixA.getUserData()).getName();
             System.out.println(name);
             game.playerAttack(name);
-            if (!game.isEnemyAlive(name)){
+            if (!game.isEnemyAlive(name)) {
                 game.removeEnemy(name);
                 bodyDoorItemRemoveManager.removeEnemy((Enemy) fixA.getUserData());
                 bodyDoorItemRemoveManager.removeBody(fixA.getBody());
             }
         }
 
-        if ((isFixturePlayer(fixA) && isFixtureFriendlyNPC(fixB)) ||
-                (isFixturePlayer(fixB) && isFixtureFriendlyNPC(fixA))) {
+        if ((isFixturePlayer(fixA) && isFixtureFriendlyNPC(fixB)) || (isFixturePlayer(fixB) && isFixtureFriendlyNPC(fixA))) {
             log.info("Friendly NPC touched player");
             FriendlyNPC friendlyNPC = (FriendlyNPC) (isFixtureFriendlyNPC(fixA) ? fixA.getUserData() : fixB.getUserData());
             bodyDoorItemRemoveManager.addFriendlyNPCsInContact(friendlyNPC);
@@ -95,8 +93,7 @@ public class MyContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-        if (isFixturePlayer(contact.getFixtureA()) && isFixtureGround(contact.getFixtureB()) ||
-                isFixturePlayer(contact.getFixtureB()) && isFixtureGround(contact.getFixtureA())) {
+        if (isFixturePlayer(contact.getFixtureA()) && isFixtureGround(contact.getFixtureB()) || isFixturePlayer(contact.getFixtureB()) && isFixtureGround(contact.getFixtureA())) {
             groundContacts--;
             if (groundContacts <= 0) {
                 bodyDoorItemRemoveManager.changeOnGround(false);
@@ -107,8 +104,7 @@ public class MyContactListener implements ContactListener {
             handleButtonRelease(contact.getFixtureA(), contact.getFixtureB());
         }
 
-        if ((isFixturePlayer(contact.getFixtureA()) && isFixtureFriendlyNPC(contact.getFixtureB())) ||
-                (isFixturePlayer(contact.getFixtureB()) && isFixtureFriendlyNPC(contact.getFixtureA()))) {
+        if ((isFixturePlayer(contact.getFixtureA()) && isFixtureFriendlyNPC(contact.getFixtureB())) || (isFixturePlayer(contact.getFixtureB()) && isFixtureFriendlyNPC(contact.getFixtureA()))) {
             log.info("Friendly NPC stopped touching player");
             FriendlyNPC friendlyNPC = (FriendlyNPC) (isFixtureFriendlyNPC(contact.getFixtureA()) ? contact.getFixtureA().getUserData() : contact.getFixtureB().getUserData());
             bodyDoorItemRemoveManager.removeFriendlyNPCsInContact(friendlyNPC);

@@ -17,7 +17,7 @@ public class WestWoodsBase extends BaseScreen {
 
 
     @Override
-    public void createPlayer(){
+    public void createPlayer() {
 
         Path path = Paths.get(Constants.pathToPlayer + "PlayerWestWoodsBase.json");
 

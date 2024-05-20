@@ -21,10 +21,11 @@ public class Sword {
 
     /**
      * Create and attach the sword to the player
-     * @param world The world to create the sword in
-     * @param playerBody The player's body to attach the sword to
-     * @param swordWidth The width of the sword
-     * @param swordHeight The height of the sword
+     *
+     * @param world        The world to create the sword in
+     * @param playerBody   The player's body to attach the sword to
+     * @param swordWidth   The width of the sword
+     * @param swordHeight  The height of the sword
      * @param playerHeight The height of the player
      */
     public void createAndAttachSword(World world, Body playerBody, float swordWidth, float swordHeight, float playerHeight) {
@@ -47,20 +48,20 @@ public class Sword {
         swordBody.createFixture(swordFixtureDef).setUserData(this);
         swordShape.dispose();
 
-        attachSwordToPlayer( playerHeight, playerBody);
+        attachSwordToPlayer(playerHeight, playerBody);
     }
 
 
-    private void attachSwordToPlayer( float playerHeight, Body playerBody) {
+    private void attachSwordToPlayer(float playerHeight, Body playerBody) {
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.bodyA = playerBody;
         jointDef.bodyB = swordBody;
         jointDef.collideConnected = false;
-        jointDef.localAnchorA.set(0, playerHeight*0.7f); // Attach point on the player
+        jointDef.localAnchorA.set(0, playerHeight * 0.7f); // Attach point on the player
         jointDef.localAnchorB.set(0, 0); // Center of the sword
         jointDef.enableLimit = true;
-        jointDef.lowerAngle =  MathUtils.PI; // -90 degrees in radians
-        jointDef.upperAngle =  MathUtils.PI; // 90 degrees in radians
+        jointDef.lowerAngle = MathUtils.PI; // -90 degrees in radians
+        jointDef.upperAngle = MathUtils.PI; // 90 degrees in radians
 
         world.createJoint(jointDef);
     }
@@ -70,7 +71,7 @@ public class Sword {
      */
     public void update() {
         //if sword isn't on player's body dispose it
-        if (swordBody.getPosition().y <2){
+        if (swordBody.getPosition().y < 2) {
             swordBody.setActive(false);
         }
         float targetAngle = MathUtils.PI * 190 / 180; // Target angle in radians (190 degrees)

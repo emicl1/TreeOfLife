@@ -25,6 +25,7 @@ public class Items {
 
     /**
      * check if the game can be won with this item
+     *
      * @return the description of the item
      */
     public boolean isWinningItem() {

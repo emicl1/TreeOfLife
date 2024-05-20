@@ -10,7 +10,7 @@ import java.nio.file.Paths;
  * East Woods 1 class that extends East Woods Base class
  * This class is used to create level of the East Woods
  */
-public class EastWoods1 extends EastWoodsBase{
+public class EastWoods1 extends EastWoodsBase {
 
     public EastWoods1(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
@@ -30,7 +30,7 @@ public class EastWoods1 extends EastWoodsBase{
                 game.setScreen(new EastWoodsBase(game, 2, 7, Constants.pathToSave + "EastWoodsBase.json"));
             } else {
                 log.info("Loading East Woods Base new level");
-            game.setScreen(new EastWoodsBase(game, 2, 7, "levels/EastWoodsBase.json"));
+                game.setScreen(new EastWoodsBase(game, 2, 7, "levels/EastWoodsBase.json"));
             }
         }
     }

@@ -8,9 +8,9 @@ import java.util.List;
  * The locations have a name, scenes, and can be locked or unlocked
  * The locations can also have an item needed to unlock them
  */
-public class Locations{
+public class Locations {
     private String name;
-    private List<Scenes>  scenes;
+    private List<Scenes> scenes;
     private boolean isLocked;
     private String itemNeededToUnlock;
 

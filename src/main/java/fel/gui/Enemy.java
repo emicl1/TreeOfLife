@@ -15,7 +15,7 @@ import java.util.Objects;
  * Represents an enemy in the game in GUI
  * The enemy can patrol between two points or follow the player
  */
-public class Enemy{
+public class Enemy {
     public Animation<TextureRegion> walkAnimation;
 
     public Body body;
@@ -23,7 +23,7 @@ public class Enemy{
     public String currentState;
     private float leftBoundary;
     private float rightBoundary;
-    private String [] pathToAnimations;
+    private String[] pathToAnimations;
     public boolean isFacingRight = true;
 
     private float speedPatrol = 2.0f;
@@ -35,7 +35,7 @@ public class Enemy{
     private float boxWidth = 1.6f;
     private float boxHeight = 0.95f;
 
-    public Enemy(World world, String name, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary) {
+    public Enemy(World world, String name, String[] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary) {
         this.pathToAnimations = pathToAnimations;
         this.leftBoundary = leftBoundary;
         this.rightBoundary = rightBoundary;
@@ -48,7 +48,7 @@ public class Enemy{
         this.body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox( boxWidth, boxHeight);
+        shape.setAsBox(boxWidth, boxHeight);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -60,7 +60,7 @@ public class Enemy{
         body.setActive(true);
     }
 
-    public Enemy(World world, String name,String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight) {
+    public Enemy(World world, String name, String[] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight) {
         this.pathToAnimations = pathToAnimations;
         this.leftBoundary = leftBoundary;
         this.rightBoundary = rightBoundary;
@@ -73,7 +73,7 @@ public class Enemy{
         this.body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox( boxWidth, boxHeight);
+        shape.setAsBox(boxWidth, boxHeight);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -86,7 +86,7 @@ public class Enemy{
         body.setActive(true);
     }
 
-    public Enemy(World world, String name, String [] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight, float speedPatrol, float speedFollow) {
+    public Enemy(World world, String name, String[] pathToAnimations, Vector2 startPosition, float leftBoundary, float rightBoundary, float boxWidth, float boxHeight, float speedPatrol, float speedFollow) {
         this.pathToAnimations = pathToAnimations;
         this.leftBoundary = leftBoundary;
         this.rightBoundary = rightBoundary;
@@ -101,7 +101,7 @@ public class Enemy{
         this.body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox( boxWidth, boxHeight);
+        shape.setAsBox(boxWidth, boxHeight);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -129,25 +129,26 @@ public class Enemy{
 
     /**
      * Updates the enemy's position and state
+     *
      * @param playerPosition The player's position
      */
-    public void update( Vector2 playerPosition) {
+    public void update(Vector2 playerPosition) {
         checkIfPlayerIsInBoundery(playerPosition);
 
-        if (Objects.equals(currentState, "PATROLLING")){
+        if (Objects.equals(currentState, "PATROLLING")) {
             updatePatrolling();
 
-        } else if (Objects.equals(currentState, "FOLLOWING"))  {
+        } else if (Objects.equals(currentState, "FOLLOWING")) {
             updateFollowing(playerPosition);
         }
     }
 
     private void updatePatrolling() {
-        if (body.getPosition().x <= leftBoundary ) {
+        if (body.getPosition().x <= leftBoundary) {
             speedPatrol = speedPatrolOriginal;
             isFacingRight = true;
         } else if (body.getPosition().x >= rightBoundary) {
-            speedPatrol = -1*speedPatrolOriginal;
+            speedPatrol = -1 * speedPatrolOriginal;
             isFacingRight = false;
         }
         body.setLinearVelocity(speedPatrol, body.getLinearVelocity().y);
@@ -155,9 +156,9 @@ public class Enemy{
 
     private void updateFollowing(Vector2 playerPosition) {
         if (playerPosition.x < body.getPosition().x) {
-            speedFollow = -1*speedFollowOriginal; // Ensure the enemy moves towards the player
+            speedFollow = -1 * speedFollowOriginal; // Ensure the enemy moves towards the player
             isFacingRight = false;
-        }else {
+        } else {
             speedFollow = speedFollowOriginal;
             isFacingRight = true;
         }
@@ -166,7 +167,8 @@ public class Enemy{
 
     /**
      * Draws the enemy
-     * @param batch The sprite batch to draw the enemy
+     *
+     * @param batch     The sprite batch to draw the enemy
      * @param stateTime The time the enemy has been in its current state
      */
     public void draw(SpriteBatch batch, float stateTime) {

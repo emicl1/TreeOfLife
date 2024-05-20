@@ -18,7 +18,7 @@ public class Scenes {
     private List<FriendlyNPC> friendlyNPCs = new ArrayList<>();
 
 
-    public Scenes(String name, String description, List<Enemies> smallBugs, List<Enemies>  bigBugs,  List<Items> items,List<FriendlyNPC> friendlyNPCs) {
+    public Scenes(String name, String description, List<Enemies> smallBugs, List<Enemies> bigBugs, List<Items> items, List<FriendlyNPC> friendlyNPCs) {
         this.name = name;
         this.description = description;
         this.smallBugs = smallBugs;

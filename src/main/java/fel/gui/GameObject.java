@@ -51,6 +51,7 @@ public class GameObject {
      * This method is used to create the body of the object
      * This method should be overwritten by the child class
      * it help to create the bodies and fixtures efficiently
+     *
      * @param world The world in which the object is created
      */
     public void createBody(World world) {
@@ -64,6 +65,7 @@ public class GameObject {
 
     /**
      * This method is used to create the body definition of the object
+     *
      * @param isDynamic boolean to check if the object is dynamic or static
      * @return BodyDef The body definition of the object
      */
@@ -72,7 +74,7 @@ public class GameObject {
         if (isDynamic) {
             bodyDef.type = BodyDef.BodyType.DynamicBody;
             bodyDef.position.set(x, y);
-        }else {
+        } else {
             bodyDef.type = BodyDef.BodyType.StaticBody;
             bodyDef.position.set(x, y);
         }
@@ -81,9 +83,10 @@ public class GameObject {
 
     /**
      * This method is used to create the fixture definition of the object
+     *
      * @param isDynamic boolean to check if the object is dynamic or static
-     * @param density The density of the object
-     * @param isSensor boolean to check if the object is a sensor
+     * @param density   The density of the object
+     * @param isSensor  boolean to check if the object is a sensor
      * @return FixtureDef The fixture definition of the object
      */
     public FixtureDef makeFixtureDef(boolean isDynamic, float density, boolean isSensor) {
@@ -116,10 +119,11 @@ public class GameObject {
 
     /**
      * This method is used to draw the object in the game
+     *
      * @param batch The sprite batch to draw the object
      */
     public void draw(SpriteBatch batch) {
-        if (sprite != null ) { //&& body != null)
+        if (sprite != null) { //&& body != null)
             sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
             sprite.draw(batch);
 
@@ -135,15 +139,15 @@ public class GameObject {
         return body;
     }
 
-    public void setActive(){
+    public void setActive() {
         body.setActive(true);
     }
 
-    public void setInactive(){
+    public void setInactive() {
         body.setActive(false);
     }
 
-    public void setPosition(float x, float y){
-       body.setTransform(x, y, 0);
+    public void setPosition(float x, float y) {
+        body.setTransform(x, y, 0);
     }
 }

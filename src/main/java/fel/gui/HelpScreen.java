@@ -17,7 +17,7 @@ public class HelpScreen extends MenuScreen {
     private Class<? extends Screen> previousScreenClass;
     private Object[] previousScreenParams;
 
-    public HelpScreen(MyGame game, Class<? extends Screen> previousScreenClass,  Object... previousScreenParams) {
+    public HelpScreen(MyGame game, Class<? extends Screen> previousScreenClass, Object... previousScreenParams) {
         super(game);
         this.previousScreenClass = previousScreenClass;
         this.previousScreenParams = previousScreenParams;

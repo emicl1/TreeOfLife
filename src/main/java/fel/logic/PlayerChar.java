@@ -7,7 +7,7 @@ import java.util.List;
  * The player character has a name, health, attack damage, and can explore locations
  * The player character can also have an inventory of items
  */
-public class PlayerChar extends Character{
+public class PlayerChar extends Character {
 
     private Locations[] exploredLocations;
     public List<Items> inventory;

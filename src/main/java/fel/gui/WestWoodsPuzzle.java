@@ -10,7 +10,7 @@ import java.nio.file.Paths;
  * WestWoodsPuzzle class is the puzzle level of the West Woods.
  */
 
-public class WestWoodsPuzzle extends WestWoodsBase{
+public class WestWoodsPuzzle extends WestWoodsBase {
     public WestWoodsPuzzle(MyGame game, float x, float y, String jsonPath) {
         super(game, x, y, jsonPath);
     }

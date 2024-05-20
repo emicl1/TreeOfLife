@@ -1,4 +1,5 @@
 package fel.gui;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -22,7 +23,7 @@ import java.nio.file.Paths;
 
 public class MenuScreen implements Screen {
     public Stage stage;
-    public Skin skin ;
+    public Skin skin;
     public MyGame game;
     public Logger log;
 
@@ -81,9 +82,10 @@ public class MenuScreen implements Screen {
         NewGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                log.info("Entering a new Game");
                 String workingDir = System.getProperty("user.dir");
-                deleteRecursively(new File(workingDir + "/"+ Constants.pathToSave));
-                deleteRecursively(new File(workingDir + Constants.pathToPlayer.substring(0, Constants.pathToPlayer.length() -1)));
+                deleteRecursively(new File(workingDir + "/" + Constants.pathToSave));
+                deleteRecursively(new File(workingDir + Constants.pathToPlayer.substring(0, Constants.pathToPlayer.length() - 1)));
                 game.loadManager();
                 game.setScreen(new BaseScreen(game, 15, 4, "levels/BaseScreen.json"));
             }
@@ -92,18 +94,20 @@ public class MenuScreen implements Screen {
         SavedGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                    Path path = Paths.get(Constants.pathToSave + "BaseScreen.json");
-                    if (path.toFile().exists()) {
-                        game.setScreen(new BaseScreen(game, 15, 4, Constants.pathToSave + "BaseScreen.json"));
-                    }else {
-                        game.setScreen(new BaseScreen(game, 28, 10, "levels/BaseScreen.json"));
-                    }
+                log.info("Entering the Game from a saved file");
+                Path path = Paths.get(Constants.pathToSave + "BaseScreen.json");
+                if (path.toFile().exists()) {
+                    game.setScreen(new BaseScreen(game, 15, 4, Constants.pathToSave + "BaseScreen.json"));
+                } else {
+                    game.setScreen(new BaseScreen(game, 28, 10, "levels/BaseScreen.json"));
+                }
             }
         });
 
         HelpButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                log.info("Entering Help Screen");
                 game.setScreen(new HelpScreen(game, MenuScreen.class));
             }
         });
@@ -111,6 +115,7 @@ public class MenuScreen implements Screen {
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                log.info("Exiting the game");
                 Gdx.app.exit();
             }
         });
@@ -118,6 +123,7 @@ public class MenuScreen implements Screen {
         StoryScreen.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                log.info("Entering Story Screen");
                 game.setScreen(new StoryScreen(game));
             }
         });
@@ -142,13 +148,16 @@ public class MenuScreen implements Screen {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
     public void dispose() {

@@ -13,49 +13,49 @@ public class Character {
     private int attackDamage;
     private boolean isAlive;
 
-    public Character(String name, int health, int attackDamage, boolean isAlive){
+    public Character(String name, int health, int attackDamage, boolean isAlive) {
         this.name = name;
         this.health = health;
         this.attackDamage = attackDamage;
         this.isAlive = isAlive;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public int getHealth(){
+    public int getHealth() {
         return health;
     }
 
-    public int getAttackDamage(){
+    public int getAttackDamage() {
         return attackDamage;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setHealth(int health){
+    public void setHealth(int health) {
         this.health = health;
     }
 
-    public void setAttackDamage(int attackDamage){
+    public void setAttackDamage(int attackDamage) {
         this.attackDamage = attackDamage;
     }
 
-    public void setIsAlive(boolean isAlive){
+    public void setIsAlive(boolean isAlive) {
         this.isAlive = isAlive;
     }
 
-    public boolean getIsAlive(){
+    public boolean getIsAlive() {
         return isAlive;
     }
 
-    public void takeDamage(int damage, Logger logger){
+    public void takeDamage(int damage, Logger logger) {
         logger.info(name + " took " + damage + " damage.");
         health -= damage;
-        if(health <= 0){
+        if (health <= 0) {
             isAlive = false;
         }
     }

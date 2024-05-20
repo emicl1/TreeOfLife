@@ -17,7 +17,6 @@ import org.slf4j.Logger;
  * Player class that represents the player in the game
  * The player has a body, animations, and can move around the world
  * The player can also jump ,attack with a sword and have a sword attached to them
- *
  */
 public class Player {
 
@@ -42,7 +41,7 @@ public class Player {
     private Animation<TextureRegion> walkingWithSwordAnimation;
     private Animation<TextureRegion> standingWithSwordAnimation;
     private Animation<TextureRegion> AttackAnimation;
-    public  PlayerConfig config;
+    public PlayerConfig config;
 
     private Logger log;
 
@@ -66,12 +65,12 @@ public class Player {
     }
 
 
-    private void makeConfig(String PlayerConfigPath){
+    private void makeConfig(String PlayerConfigPath) {
         PlayerLoader playerLoader = new PlayerLoader();
         config = playerLoader.loadPlayer(PlayerConfigPath);
     }
 
-    private void createPlayer(){
+    private void createPlayer() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
@@ -96,44 +95,43 @@ public class Player {
         shape.dispose();
 
 
-
     }
 
-    private void loadWalkingAnimation(PlayerConfig config){
+    private void loadWalkingAnimation(PlayerConfig config) {
         Array<TextureRegion> frames = new Array<>();
-        for (String walkingPath : config.walking){
+        for (String walkingPath : config.walking) {
             frames.add(new TextureRegion(new Texture(walkingPath)));
         }
         walkAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
     }
 
-    private void loadStandingAnimation(PlayerConfig config){
+    private void loadStandingAnimation(PlayerConfig config) {
         Array<TextureRegion> frames = new Array<>();
-        for (String standingPath : config.standing){
+        for (String standingPath : config.standing) {
             frames.add(new TextureRegion(new Texture(standingPath)));
         }
         standingAnimation = new Animation<>(0.3f, frames, Animation.PlayMode.LOOP);
     }
 
-    private void loadWalkingWithSwordAnimation(PlayerConfig config){
+    private void loadWalkingWithSwordAnimation(PlayerConfig config) {
         Array<TextureRegion> frames = new Array<>();
-        for (String walkingWithSwordPath : config.walkingWithSword){
+        for (String walkingWithSwordPath : config.walkingWithSword) {
             frames.add(new TextureRegion(new Texture(walkingWithSwordPath)));
         }
         walkingWithSwordAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
     }
 
-    private void loadStandingWithSwordAnimation(PlayerConfig config){
+    private void loadStandingWithSwordAnimation(PlayerConfig config) {
         Array<TextureRegion> frames = new Array<>();
-        for (String standingWithSwordPath : config.standingWithSword){
+        for (String standingWithSwordPath : config.standingWithSword) {
             frames.add(new TextureRegion(new Texture(standingWithSwordPath)));
         }
         standingWithSwordAnimation = new Animation<>(0.3f, frames, Animation.PlayMode.LOOP);
     }
 
-    private void loadAttackAnimation(PlayerConfig config){
+    private void loadAttackAnimation(PlayerConfig config) {
         Array<TextureRegion> frames = new Array<>();
-        for (String attackPath : config.attacking){
+        for (String attackPath : config.attacking) {
             frames.add(new TextureRegion(new Texture(attackPath)));
         }
         AttackAnimation = new Animation<>(0.1f, frames, Animation.PlayMode.LOOP);
@@ -142,9 +140,10 @@ public class Player {
     /**
      * Load all the animations for the player
      * Standing, walking, standing with sword, walking with sword, and attacking
+     *
      * @param config PlayerConfig object that contains the paths to the animations
      */
-    public void loadPlayerAnimations(PlayerConfig config){
+    public void loadPlayerAnimations(PlayerConfig config) {
         loadWalkingAnimation(config);
         loadStandingAnimation(config);
         loadWalkingWithSwordAnimation(config);
@@ -152,18 +151,18 @@ public class Player {
         loadAttackAnimation(config);
     }
 
-    private TextureRegion getCurrentFrame(float stateTime, boolean isMoving, boolean isAttacking){
+    private TextureRegion getCurrentFrame(float stateTime, boolean isMoving, boolean isAttacking) {
         TextureRegion currentFrame;
-        if (isAttacking){
+        if (isAttacking) {
             currentFrame = AttackAnimation.getKeyFrame(stateTime);
-        } else if (isMoving){
-            if (hasSword){
+        } else if (isMoving) {
+            if (hasSword) {
                 currentFrame = walkingWithSwordAnimation.getKeyFrame(stateTime);
             } else {
                 currentFrame = walkAnimation.getKeyFrame(stateTime);
             }
         } else {
-            if (hasSword){
+            if (hasSword) {
                 currentFrame = standingWithSwordAnimation.getKeyFrame(stateTime);
             } else {
                 currentFrame = standingAnimation.getKeyFrame(stateTime);
@@ -174,13 +173,14 @@ public class Player {
 
     /**
      * Draw the player on the screen
-     * @param batch SpriteBatch to draw the player
-     * @param stateTime Time to get the current frame
-     * @param isMoving Boolean to check if the player is moving
-     * @param isAttacking Boolean to check if the player is attacking
+     *
+     * @param batch         SpriteBatch to draw the player
+     * @param stateTime     Time to get the current frame
+     * @param isMoving      Boolean to check if the player is moving
+     * @param isAttacking   Boolean to check if the player is attacking
      * @param isFacingRight Boolean to check if the player is facing right
      */
-    public void drawPlayer(SpriteBatch batch, float stateTime, boolean isMoving, boolean isAttacking, boolean isFacingRight){
+    public void drawPlayer(SpriteBatch batch, float stateTime, boolean isMoving, boolean isAttacking, boolean isFacingRight) {
         TextureRegion currentFrame = getCurrentFrame(stateTime, isMoving, isAttacking);
         float playerX = playerBody.getPosition().x - currentFrame.getRegionWidth() * 0.5f / PPM;
         float playerY = playerBody.getPosition().y - currentFrame.getRegionHeight() * 0.5f / PPM;
@@ -196,35 +196,35 @@ public class Player {
     }
 
 
-    public Vector2 getPosition(){
+    public Vector2 getPosition() {
         return playerBody.getPosition();
     }
 
     /**
      * Jump with the player by applying a linear impulse
      */
-    public void jump(){
+    public void jump() {
         playerBody.applyLinearImpulse(0, jumpSpeed, playerBody.getWorldCenter().x, playerBody.getWorldCenter().y, true);
     }
 
     /**
      * Move the player to the left by applying a force to the center of the player
      */
-    public void moveLeft(){
+    public void moveLeft() {
         playerBody.applyForceToCenter(-speed, 0, true);
     }
 
     /**
      * Move the player to the right by applying a force to the center of the player
      */
-    public void moveRight(){
+    public void moveRight() {
         playerBody.applyForceToCenter(speed, 0, true);
     }
 
     /**
      * create and attach a sword to the player
      */
-    public void initSword(){
+    public void initSword() {
         System.out.println("x " + playerBody.getPosition().x + " y " + playerBody.getPosition().y);
         sword = new Sword(playerBody.getPosition().x, playerBody.getPosition().y);
         sword.createAndAttachSword(world, playerBody, swordWidth, swordHeight, boxHeight);
@@ -233,7 +233,7 @@ public class Player {
     }
 
 
-    public boolean hasSword(){
+    public boolean hasSword() {
         return hasSword;
     }
 
@@ -262,20 +262,20 @@ public class Player {
         }
     }
 
-    public void dispose(){
-        for (TextureRegion region : walkAnimation.getKeyFrames()){
+    public void dispose() {
+        for (TextureRegion region : walkAnimation.getKeyFrames()) {
             region.getTexture().dispose();
         }
-        for (TextureRegion region : standingAnimation.getKeyFrames()){
+        for (TextureRegion region : standingAnimation.getKeyFrames()) {
             region.getTexture().dispose();
         }
-        for (TextureRegion region : walkingWithSwordAnimation.getKeyFrames()){
+        for (TextureRegion region : walkingWithSwordAnimation.getKeyFrames()) {
             region.getTexture().dispose();
         }
-        for (TextureRegion region : standingWithSwordAnimation.getKeyFrames()){
+        for (TextureRegion region : standingWithSwordAnimation.getKeyFrames()) {
             region.getTexture().dispose();
         }
-        for (TextureRegion region : AttackAnimation.getKeyFrames()){
+        for (TextureRegion region : AttackAnimation.getKeyFrames()) {
             region.getTexture().dispose();
         }
     }

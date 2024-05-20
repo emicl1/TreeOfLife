@@ -30,7 +30,7 @@ public class MyGame extends Game {
     public Universe universe;
     public String[] pathsToJsons = {"levels/BaseScreen.json", "levels/EastWoods1.json",
             "levels/EastWoodsBase.json", "levels/WestWoodsBase.json", "levels/WestWoodsPuzzle.json", "levels/WestWoodsFinal.json",
-    "levels/EastWoodsFinal.json"};
+            "levels/EastWoodsFinal.json"};
     public String pathToPlayerJson = "player/Player.json";
     public String pathToItemsToCraftJson = "itemsToCraft/itemsToCraft.json";
     public LevelSaver levelSaver = new LevelSaver();
@@ -61,36 +61,38 @@ public class MyGame extends Game {
         //this.setScreen(new BaseScreen(this, 15, 4, "levels/BaseScreen.json"));
     }
 
-    public boolean isPlayerAlive(){
+    public boolean isPlayerAlive() {
         return logicManager.isPlayerAlive();
     }
 
-    public void setPlayerAlive(boolean alive){
+    public void setPlayerAlive(boolean alive) {
         logicManager.setPlayerAlive(alive);
     }
 
-    public void setPlayerHealth(int health){
+    public void setPlayerHealth(int health) {
         logicManager.setPlayerHealth(health);
     }
 
-    public int getPlayerHealth(){
+    public int getPlayerHealth() {
         return logicManager.getPlayerHealth();
     }
 
 
     /**
      * This method is used to take damage from enemy
+     *
      * @param damage Amount of damage to take
      */
-    public void playerTakeDamage(int damage){
+    public void playerTakeDamage(int damage) {
         logicManager.playerTakeDamage(damage);
     }
 
     /**
      * This method is used to make the enemy take damage
+     *
      * @param enemyName Name of the enemy
      */
-    public void playerAttack(String enemyName){
+    public void playerAttack(String enemyName) {
         Enemies enemy = logicManager.findEnemyWithName(enemyName);
         logicManager.playerAttack(enemy);
     }
@@ -99,31 +101,34 @@ public class MyGame extends Game {
      * This method is used to check if the enemy is alive
      * by finding the enemy with the name in a scene and
      * checking if the enemy is alive
+     *
      * @param enemyName Name of the enemy
      * @return boolean if the enemy is alive
      */
-    public boolean isEnemyAlive(String enemyName){
+    public boolean isEnemyAlive(String enemyName) {
         Enemies enemy = logicManager.findEnemyWithName(enemyName);
         return logicManager.isEnemyAlive(enemy);
     }
 
     /**
      * This method is used to remove an enemy from the game
+     *
      * @param enemyName Name of the enemy
      */
-    public void removeEnemy(String enemyName){
+    public void removeEnemy(String enemyName) {
         Enemies enemy = logicManager.findEnemyWithName(enemyName);
         logicManager.removeEnemy(enemy);
     }
 
     /**
      * This method is used to add Item to the player
+     *
      * @param itemName Name of the item
      */
-    public void playerAddItem(String itemName){
+    public void playerAddItem(String itemName) {
         rootLogger.info("Adding item to player: " + itemName);
         Items item = logicManager.findItemWithName(itemName);
-        if (logicManager.playerAddItem(item)){
+        if (logicManager.playerAddItem(item)) {
             setScreen(new WinScreen(this));
         }
         logicManager.deleteItemFromScene(item);
@@ -131,16 +136,17 @@ public class MyGame extends Game {
 
     /**
      * This method is used to check if the player can craft an item
+     *
      * @param item1Name Name of the first item
      * @param item2Name Name of the second item
      * @return boolean if the player can craft the item
      */
-    public boolean canCraftItem(String item1Name, String item2Name){
+    public boolean canCraftItem(String item1Name, String item2Name) {
         Items item1 = logicManager.findItemWithNameInInvetory(item1Name);
         Items item2 = logicManager.findItemWithNameInInvetory(item2Name);
         logicManager.printInventory();
         rootLogger.debug("in the canCraftItem method");
-        if (item1 == null || item2 == null){
+        if (item1 == null || item2 == null) {
             return false;
         }
         logicManager.printInventory();
@@ -149,11 +155,12 @@ public class MyGame extends Game {
 
     /**
      * This method is used to craft an item in the game
+     *
      * @param item1Name Name of the first item
      * @param item2Name Name of the second item
      * @return String of name of the item crafted
      */
-    public String craftItem(String item1Name, String item2Name){
+    public String craftItem(String item1Name, String item2Name) {
         rootLogger.debug("Crafting item in MyGame item1: " + item1Name + " item2: " + item2Name);
         Items item1 = logicManager.findItemWithNameInInvetory(item1Name);
         Items item2 = logicManager.findItemWithNameInInvetory(item2Name);
@@ -167,96 +174,104 @@ public class MyGame extends Game {
 
     /**
      * This method is used to save the game
-     * @param levelConfig LevelConfig
+     *
+     * @param levelConfig  LevelConfig
      * @param playerConfig PlayerConfig
      */
-    public void saveGame(LevelConfig levelConfig, PlayerConfig playerConfig){
+    public void saveGame(LevelConfig levelConfig, PlayerConfig playerConfig) {
         levelSaver.saveLevel(levelConfig, "src/main/resources/saveLevels/" + levelConfig.name + ".json");
         playerSaver.savePlayer(playerConfig, "src/main/resources/savePlayer/" + playerConfig.name + ".json");
     }
 
     /**
      * This method is used to get the inventory of the player
+     *
      * @return List of items in the inventory
      */
-    public List<Items> getInventory(){
+    public List<Items> getInventory() {
         return logicManager.getInventory();
     }
 
     /**
      * This method is used to get the root logger
+     *
      * @return Logger of the root logger
      */
-    public Logger getRootLogger(){
+    public Logger getRootLogger() {
         return rootLogger;
     }
 
     /**
      * This method is used to move the player in the game
+     *
      * @param friendlyNPCName Name of the friendly NPC
      * @return String of the dialog from the friendly NPC
      */
-    public String interactWithFriendlyNPC(String friendlyNPCName){
+    public String interactWithFriendlyNPC(String friendlyNPCName) {
         return logicManager.getDialogFromFriendlyNPC(friendlyNPCName);
     }
 
     /**
      * This method is used to get the item from the friendly NPC
+     *
      * @param friendlyNPCName Name of the friendly NPC
-     * @param itemToReceive Name of the item to receive
+     * @param itemToReceive   Name of the item to receive
      * @return String of the item received
      */
-    public String getItemFromFriendlyNPC(String friendlyNPCName, String itemToReceive){
+    public String getItemFromFriendlyNPC(String friendlyNPCName, String itemToReceive) {
         return logicManager.getItemFromFriendlyNPC(friendlyNPCName, itemToReceive);
     }
 
     /**
      * This method is used to check if the location is locked
+     *
      * @param locationName Name of the location
      * @return boolean if the location is locked
      */
-    public boolean isLocationLocked(String locationName){
+    public boolean isLocationLocked(String locationName) {
         return logicManager.isLocationLocked(locationName);
     }
 
     /**
      * This method is used to check if the item is in the inventory
+     *
      * @param itemName Name of the item
      * @return boolean if the item is in the inventory
      */
-    public boolean isItemInInventory(String itemName){
+    public boolean isItemInInventory(String itemName) {
         return logicManager.isItemInInventory(itemName);
     }
 
     /**
      * This method is used to print the inventory of the logic manager
      */
-    public void printInventory(){
+    public void printInventory() {
         logicManager.printInventory();
     }
 
     /**
      * This method is used to check if the inventory in the logic manager
      * and the inventory in the game match
+     *
      * @param gameInventory List of items in the game
      * @return boolean if the inventories match
      */
-    public boolean checkIfLogicAndGameInventoryMatch(List<Item> gameInventory){
+    public boolean checkIfLogicAndGameInventoryMatch(List<Item> gameInventory) {
         List<Items> logicInventory = logicManager.getInventory();
 
-        if (gameInventory.size() != logicInventory.size()){
+        if (gameInventory.size() != logicInventory.size()) {
             return false;
         }
 
-        for (Items item : logicInventory){
+        for (Items item : logicInventory) {
             boolean found = false;
-            for (Item gameItem : gameInventory){
-                if (item.name.equals(gameItem.getName())){
+            for (Item gameItem : gameInventory) {
+                if (item.name.equals(gameItem.getName())) {
                     found = true;
                     break;
                 }
             }
-            if (!found){
+            if (!found) {
                 return false;
             }
         }
@@ -267,12 +282,13 @@ public class MyGame extends Game {
 
     /**
      * This method is used to get the inventory of the logic manager
+     *
      * @return List of strings of the names in the inventory
      */
-    public List<String> getLogicInventory(){
+    public List<String> getLogicInventory() {
         List<Items> logicInventory = logicManager.getInventory();
         List<String> LogicInventoryNames = new ArrayList<>();
-        for (Items item : logicInventory){
+        for (Items item : logicInventory) {
             LogicInventoryNames.add(item.name);
         }
         return LogicInventoryNames;
@@ -283,7 +299,7 @@ public class MyGame extends Game {
      * Intended to be used when creating new game so that it loads the
      * manager with correct JSONs
      */
-    public void loadManager(){
+    public void loadManager() {
         logicManager = new LogicManager(pathsToJsons, universe, pathToPlayerJson, pathToItemsToCraftJson, rootLogger);
         logicManager.create();
     }
